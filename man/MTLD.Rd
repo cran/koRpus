@@ -1,0 +1,58 @@
+\name{MTLD}
+\alias{MTLD}
+\title{Lexical diversity: Measure of Textual Lexical Diversity (MTLD)}
+\usage{
+  MTLD(txt, factor.size = 0.72, char = FALSE, ...)
+}
+\arguments{
+  \item{txt}{An object of either class
+  \code{\link[koRpus]{kRp.tagged-class}} or
+  \code{\link[koRpus]{kRp.analysis-class}}, containing the
+  tagged text to be analyzed.}
+
+  \item{factor.size}{A real number between 0 and 1,
+  defining the MTLD factor size.}
+
+  \item{char}{Logical, defining whether data for plotting
+  characteristic curves should be calculated.}
+
+  \item{...}{Further valid options for the main function,
+  see \code{\link[koRpus:lex.div]{lex.div}} for details.}
+}
+\value{
+  An object of class \code{\link[koRpus]{kRp.TTR-class}}.
+}
+\description{
+  This is just a convenient wrapper function for
+  \code{\link[koRpus:lex.div]{lex.div}}.
+}
+\details{
+  This function calculates the measure of textual lexical
+  diversity (MTLD; see McCarthy & Jarvis, 2010). In
+  contrast to \code{\link[koRpus:lex.div]{lex.div}}, which
+  by default calculates all possible measures and their
+  progressing characteristics, this function will only
+  calculate the MTLD value, and characteristics are off by
+  default.
+}
+\examples{
+\dontrun{
+MTLD(tagged.text)
+}
+}
+\author{
+  m.eik michalke \email{meik.michalke@hhu.de}
+}
+\references{
+  McCarthy, P. M. & Jarvis, S. (2010). MTLD, vocd-D, and
+  HD-D: A validation study of sophisticated approaces to
+  lexical diversity assessment.  \emph{Behaviour Research
+  Methods}, 42(2), 381--392.
+}
+\seealso{
+  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
+  \code{\link[koRpus]{kRp.tagged-class}},
+  \code{\link[koRpus]{kRp.TTR-class}}
+}
+\keyword{LD}
+

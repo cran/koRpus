@@ -1,0 +1,42 @@
+<!DOCTYPE rkpluginmap>
+
+<document base_prefix="" namespace="rkward" id="koRpus_rkward">
+  <about
+    name="koRpus"
+    shortinfo="Tools for text analysis."
+    version="0.01-1"
+    releasedate="2011-03-21"
+    url="http://reaktanz.de/?c=hacking&amp;s=koRpus"
+    license="GPL"
+    category="NLP">
+    <author
+      name="m.eik michalke"
+      email="m@reaktanz.de"
+      url="http://reaktanz.de"
+    />
+    <dependencies
+      rkward_min_version="0.5.4"
+      rkward_max_version=""
+      R_min_verion="2.10"
+      R_max_verion="">
+      <package
+	name="koRpus"
+	min_version="0.01-1"
+	max_version=""
+	repository="http://R.reaktanz.de"
+      />
+    </dependencies>
+  </about>
+
+  <components>
+    <component type="standard" id="koRpus" file="plugins/koRpus.xml" label="koRpus" />
+  </components>
+
+  <hierarchy>
+    <menu id="analysis" label="Analysis" index="4">
+      <menu id="menu_koRpus" label="Text Analysis">
+	<entry component="koRpus" />
+      </menu>
+    </menu>
+  </hierarchy>
+</document>

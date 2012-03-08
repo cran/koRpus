@@ -1,0 +1,49 @@
+\name{set.kRp.env}
+\alias{set.kRp.env}
+\title{A function to set information on your koRpus environmenton}
+\usage{
+  set.kRp.env(TT.cmd = NULL, lang = NULL,
+    TT.options = NULL)
+}
+\arguments{
+  \item{TT.cmd}{A character string pointing to the tagger
+  command you want to use for basic text analysis, or
+  \code{"manual"} if you want to set \code{TT.options} as
+  well. Set to \code{"tokenize"} to use
+  \code{\link[koRpus:tokenize]{tokenize}}.}
+
+  \item{lang}{A character string specifying a valid
+  language.}
+
+  \item{TT.options}{A list with arguments to be used as
+  \code{TT.options} by \code{treetag}.}
+}
+\value{
+  Returns an invisible \code{NULL}.
+}
+\description{
+  The function \code{set.kRp.env} can be called once before
+  any of the analysing functions. It writes information on
+  your session environment regarding the koRpus package,
+  e.g. path to a local TreeTagger installation, to a hidden
+  environment.
+}
+\details{
+  To get the contents of the hitten environment, the
+  function \code{\link[koRpus:get.kRp.env]{get.kRp.env}}
+  can be used.
+}
+\examples{
+\dontrun{
+set.kRp.env(TT.cmd="~/bin/treetagger/cmd/tree-tagger-german", lang="de")
+get.kRp.env(TT.cmd=TRUE)
+}
+}
+\author{
+  m.eik michalke \email{meik.michalke@hhu.de}
+}
+\seealso{
+  \code{\link[koRpus:get.kRp.env]{get.kRp.env}}
+}
+\keyword{misc}
+

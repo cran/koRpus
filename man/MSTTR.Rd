@@ -1,0 +1,48 @@
+\name{MSTTR}
+\alias{MSTTR}
+\title{Lexical diversity: Mean Segmental Type-Token Ratio (MSTTR)}
+\usage{
+  MSTTR(txt, segment = 100, ...)
+}
+\arguments{
+  \item{txt}{An object of either class
+  \code{\link[koRpus]{kRp.tagged-class}} or
+  \code{\link[koRpus]{kRp.analysis-class}}, containing the
+  tagged text to be analyzed.}
+
+  \item{segment}{An integer value, defining how many tokens
+  should form one segment.}
+
+  \item{...}{Further valid options for the main function,
+  see \code{\link[koRpus:lex.div]{lex.div}} for details.}
+}
+\value{
+  An object of class \code{\link[koRpus]{kRp.TTR-class}}.
+}
+\description{
+  This is just a convenient wrapper function for
+  \code{\link[koRpus:lex.div]{lex.div}}.
+}
+\details{
+  This function calculates the mean segmental type-token
+  ratio (MSTTR). In contrast to
+  \code{\link[koRpus:lex.div]{lex.div}}, which by default
+  calculates all possible measures and their progressing
+  characteristics, this function will only calculate the
+  MSTTR value.
+}
+\examples{
+\dontrun{
+MSTTR(tagged.text)
+}
+}
+\author{
+  m.eik michalke \email{meik.michalke@hhu.de}
+}
+\seealso{
+  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
+  \code{\link[koRpus]{kRp.tagged-class}},
+  \code{\link[koRpus]{kRp.TTR-class}}
+}
+\keyword{LD}
+

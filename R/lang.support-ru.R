@@ -32,7 +32,7 @@ set.lang.support("treetag",
 				# preset for windows systems
 				return(
 					list(
-						TT.tokenizer		= file.path(TT.cmd, "tokenize.pl"),
+						TT.tokenizer		= file.path(TT.cmd, "utf8-tokenize.perl"),
 						TT.tagger			= file.path(TT.bin, "tree-tagger.exe"),
 						TT.abbrev			= c(),
 						TT.params			= file.path(TT.lib, "russian.par"),

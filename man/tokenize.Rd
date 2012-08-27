@@ -11,9 +11,9 @@
     detect = c(parag = FALSE, hline = FALSE))
 }
 \arguments{
-  \item{txt}{Either the path to directory with txt files to
-  read and tokenize, or a vector object already holding the
-  text corpus.}
+  \item{txt}{Either an open connection, the path to
+  directory with txt files to read and tokenize, or a
+  vector object already holding the text corpus.}
 
   \item{format}{Either "file" or "obj", depending on
   whether you want to scan files or analyze the given
@@ -99,9 +99,6 @@
 \dontrun{
 tokenized.obj <- tokenize("~/mydata/corpora/russian_corpus/")
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \keyword{misc}
 

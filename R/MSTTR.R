@@ -10,7 +10,7 @@
 #' @param segment An integer value, defining how many tokens should form one segment.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:lex.div]{lex.div}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.TTR-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords LD
 #' @seealso \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
 #'	\code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}

@@ -21,7 +21,7 @@
 #' @param hj5 A numeric vector with named magic numbers for the fifth of the formulas.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
 #'		Harris, A.J. & Jacobson, M.D. (1974). Revised Harris-Jacobson readability formulas. In \emph{18th Annual Meeting of the College Reading Association}, Bethesda.
 #' @keywords readability

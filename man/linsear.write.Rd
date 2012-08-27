@@ -44,8 +44,5 @@
 linsear.write(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \keyword{readability}
 

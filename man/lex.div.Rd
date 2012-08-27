@@ -196,9 +196,6 @@
 lex.div(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Covington, M.A. & McFall, J.D. (2010). Cutting the
   Gordian Knot: The Moving-Average Type-Token Ratio

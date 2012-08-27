@@ -63,11 +63,8 @@ my.LCC.data <- read.corp.LCC("~/mydata/corpora/rus_web_2002_300K-text.tar")
 my.LCC.data <- read.corp.LCC("~/mydata/corpora/rus_web_2002_300K-text", prefix="rus_web_2002_300K-")
 
 tagged.results <- treetag("/some/text.txt")
-kRp.freq.analysis(tagged.results, corp.freq=my.LCC.data)
+freq.analysis(tagged.results, corp.freq=my.LCC.data)
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \references{
   Quasthoff, U., Richter, M. & Biemann, C. (2006). Corpus

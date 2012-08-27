@@ -22,7 +22,7 @@ set.lang.support("treetag",
 				TT.lookup		<- file.path(TT.cmd, "mwl-lookup.perl")
 				return(
 					list(
-						TT.tokenizer 			= file.path(TT.cmd, "tokenize.pl"),
+						TT.tokenizer 			= file.path(TT.cmd, "utf8-tokenize.perl"),
 						TT.tagger 				= file.path(TT.bin, "tree-tagger"),
 						TT.abbrev 				= TT.abbrev,
 						TT.params 				= file.path(TT.lib, "spanish-utf8.par"),
@@ -41,7 +41,7 @@ set.lang.support("treetag",
 				TT.abbrev		<- file.path(TT.lib, "spanish-abbreviations")
 				return(
 					list(
-						TT.tokenizer 			= file.path(TT.cmd, "tokenize.pl"),
+						TT.tokenizer 			= file.path(TT.cmd, "utf8-tokenize.perl"),
 						TT.tagger 				= file.path(TT.bin, "tree-tagger.exe"),
 						TT.abbrev				= TT.abbrev,
 						TT.params				= file.path(TT.lib, "spanish-utf8.par"),

@@ -7,7 +7,7 @@
 #' @param fileEncoding A character string naming the encoding of the Celex files.
 #' @param n An integer value defining how many lines of data should be read if \code{format="flatfile"}. Reads all at -1.
 #' @return An object of class \code{\link[koRpus]{kRp.corp.freq-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords corpora
 #' @seealso \code{\link[koRpus]{kRp.corp.freq-class}}
 #' @references [1] \url{http://celex.mpi.nl}
@@ -15,7 +15,7 @@
 #' @examples
 #' \dontrun{
 #' my.Celex.data <- read.corp.celex("~/mydata/Celex/GERMAN/GFW/GFW.CD", running.words=5952000)
-#' kRp.freq.analysis("/some/text.txt", corp.freq=my.Celex.data)
+#' freq.analysis("/some/text.txt", corp.freq=my.Celex.data)
 #' }
 
 read.corp.celex <- function(celex.path, running.words, fileEncoding="ISO_8859-1", n=-1){

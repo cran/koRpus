@@ -38,9 +38,6 @@
 	fucks(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Fucks, W. (1955). Der Unterschied des Prosastils von
   Dichtern und anderen Schriftstellern. \emph{Sprachforum},

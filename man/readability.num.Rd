@@ -19,7 +19,9 @@
 }
 \arguments{
   \item{txt.features}{A named list with statistical
-  information on the text. Used values are: \describe{
+  information on the text, or an object of class
+  \code{kRp.readability} (only its \code{desc} slot will
+  then be used). Valid values are: \describe{
   \item{\code{sentences}:}{The number of sentences.}
   \item{\code{words}:}{The number of words.}
   \item{\code{letters}:}{A named vector providing the

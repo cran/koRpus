@@ -9,12 +9,12 @@
 #'		\code{\link[koRpus]{kRp.txt.freq-class}} or \code{\link[koRpus]{kRp.analysis-class}}.
 #' @param replace A named character vector to define replacements for \code{koRpus}' internal headline and paragraph tags.
 #' @return An atomic character vector.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @export
 #' @examples
 #' \dontrun{
-#' tagged.text.obj <- kRp.freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
+#' tagged.text.obj <- freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
 #' kRp.text.paste(tagged.text.obj)
 #' }
 
@@ -45,9 +45,9 @@ kRp.text.paste <- function(txt, replace=c(hon.kRp="", hoff.kRp="\n\n", p.kRp="\n
 	# put all text together
 	all.text <- paste(txt, collapse=" ")
 	# remove superfluous spaces
-	all.text <- gsub("([[:space:]]{1})([\\(\\[\\{])([[:space:]]{1})", " \\2", all.text, perl=TRUE)
-	all.text <- gsub("([[:space:]]{1})([\\)\\]\\}])([[:space:]]{1})", "\\2 ", all.text, perl=TRUE)
-	all.text <- gsub("([[:space:]]{1})([,;.:])([[:space:]]{1})", "\\2 ", all.text, perl=TRUE)
+	all.text <- gsub("([[:space:]]{1})([\\(\\[\\{])([[:space:]]{1}|$)", " \\2", all.text, perl=TRUE)
+	all.text <- gsub("([[:space:]]{1})([\\)\\]\\}])([[:space:]]{1}|$)", "\\2 ", all.text, perl=TRUE)
+	all.text <- gsub("([[:space:]]{1})([,;.:])([[:space:]]{1}|$)", "\\2 ", all.text, perl=TRUE)
 
 	results <- all.text
 

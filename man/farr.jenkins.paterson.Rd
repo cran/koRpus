@@ -48,9 +48,6 @@
 farr.jenkins.paterson(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Farr, J.N., Jenkins, J.J. & Paterson, D.G. (1951).
   Simplification of Flesch Reading Ease formula.

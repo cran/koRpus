@@ -261,7 +261,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 				txt.freq@desc$all.words <- tagged.words.only@TT.res[["token"]]
 			} else {}
 		} else {
-			txt.freq <- kRp.freq.analysis(txt.file=txt.file, desc.stat=TRUE, force.lang=lang,
+			txt.freq <- freq.analysis(txt.file=txt.file, desc.stat=TRUE, force.lang=lang,
 								tagger=tagger, corp.rm.class=nonword.class, corp.rm.tag=nonword.tag, ...)
 			tagged.words.only <- kRp.filter.wclass(txt.freq, corp.rm.class=nonword.class, corp.rm.tag=nonword.tag)
 		}

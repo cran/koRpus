@@ -19,7 +19,7 @@
 #'		a valid character string naming a preset for implemented languages (\code{"de"}, \code{"es"}, \code{"nl"}, \code{"fr"}).
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords readability
 #' @seealso \code{\link[koRpus:flesch.kincaid]{flesch.kincaid}} for grade levels,
 #' \code{\link[koRpus:farr.jenkins.paterson]{farr.jenkins.paterson}} for a simplified Flesch formula.

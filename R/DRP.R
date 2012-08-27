@@ -15,7 +15,7 @@
 #'		the long Dale-Chall list with 3000 words should be used.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords readability
 #' @export
 #' @examples

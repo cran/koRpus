@@ -54,9 +54,6 @@
 flesch(german.tagged.text, parameters="de")
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \seealso{
   \code{\link[koRpus:flesch.kincaid]{flesch.kincaid}} for
   grade levels,

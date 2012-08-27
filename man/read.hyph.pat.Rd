@@ -40,9 +40,6 @@
 read.hyph.pat("~/patterns/hyph-en-us.pat.txt", lang="en_us")
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   [1]
   \url{http://tug.ctan.org/tex-archive/language/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/}

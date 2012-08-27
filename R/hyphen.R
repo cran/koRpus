@@ -42,7 +42,7 @@
 #'		i.e., they are cleaned at the end of a session.
 #' @return An object of class \code{\link[koRpus]{kRp.hyphen-class}}
 #' @keywords hyphenation
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @seealso
 #'		\code{\link[koRpus:read.hyph.pat]{read.hyph.pat}},
 #'		\code{\link[koRpus:manage.hyph.pat]{manage.hyph.pat}}
@@ -58,6 +58,9 @@
 hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		corp.rm.class="nonpunct",
 		corp.rm.tag=c(), quiet=FALSE, cache=TRUE){
+
+	# to avoid needless NOTEs from R CMD check
+	token <- NULL
 
 	## global stuff
 	# deal with the words object

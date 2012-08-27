@@ -120,6 +120,8 @@ kRp.POS.drp.TTroot <- rk.XML.dropdown(label="Text language:", options=list(
 		"English"=c(val="en", chk=TRUE),
 		"German (UTF-8)"=c(val="de-utf8"),
 		"German"=c(val="de"),
+		"Italian (UTF-8)"=c(val="it-utf8"),
+		"Italian"=c(val="it"),
 		"Spanish (UTF-8)"=c(val="es-utf8"),
 		"Spanish"=c(val="es"),
 		"Russian (UTF-8)"=c(val="ru")

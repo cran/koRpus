@@ -10,7 +10,7 @@
 #' which gives you more control for automatic analyses. And adding to that, \code{\link[koRpus:kRp.text.paste]{kRp.text.paste}}
 #' can replace these tags, which probably preserves more of the original layout.
 #'
-#' @param txt Either the path to directory with txt files to read and tokenize, or a vector object
+#' @param txt Either an open connection, the path to directory with txt files to read and tokenize, or a vector object
 #'		already holding the text corpus.
 #' @param format Either "file" or "obj", depending on whether you want to scan files or analyze the given object.
 #' @param fileEncoding A character string naming the encoding of all files.
@@ -36,7 +36,7 @@
 #' @param detect A named logical vector, indicating by the setting of \code{parag} and \code{hline} whether \code{tokenize} should try
 #'		to detect paragraphs and headlines.
 #' @return If \code{tag=FALSE}, a character vector with the tokenized text. If \code{tag=TRUE}, returns an object of class \code{\link[koRpus]{kRp.tagged-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @export
 #' @examples
@@ -49,8 +49,15 @@ tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 					abbrev=NULL, tag=TRUE, lang="kRp.env", sentc.end=c(".","!","?",";",":"),
 					detect=c(parag=FALSE, hline=FALSE)){
 
+	if(is.null(fileEncoding)){
+		fileEncoding <- ""
+	} else {}
+
 	# basic checks before we even proceed...
-	if(identical(format, "file")){
+	if(inherits(txt, "connection")){
+		takeAsTxt <- readLines(txt, encoding=fileEncoding)
+		read.txt.files <- FALSE
+	} else if(identical(format, "file")){
 		# valid path? file or directory?
 		if(check.file(txt, mode="exist", stopOnFail=FALSE)){
 			txt.file <- txt
@@ -62,13 +69,11 @@ tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 			stop(simpleError(paste("Unable to locate\n ",txt, sep="")))
 		}
 	} else if(identical(format, "obj")){
+		takeAsTxt <- txt
 		read.txt.files <- FALSE
 	} else {
 		stop(simpleError(paste("Invalid value for format: ",format, sep="")))
 	}
-	if(is.null(fileEncoding)){
-		fileEncoding <- ""
-	} else {}
 
 	## read file or text vector?
 	if(isTRUE(read.txt.files)){
@@ -81,7 +86,7 @@ tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 		txt.vector <- enc2utf8(txt.vector)
 	} else {
 		# process object
-		txt.vector <- enc2utf8(as.vector(txt))
+		txt.vector <- enc2utf8(as.vector(takeAsTxt))
 	}
 
 	## run the tokenizer

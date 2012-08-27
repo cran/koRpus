@@ -62,7 +62,7 @@
 }
 \details{
   The function is basically a wrapper for
-  \code{treetag()},\code{kRp.freq.analysis()} and
+  \code{treetag()},\code{freq.analysis()} and
   \code{lex.div()}.
 
   By default, if the text has to be tagged yet, the
@@ -80,9 +80,6 @@
 \dontrun{
 kRp.text.analysis("/some/text.txt")
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \references{
   [1]

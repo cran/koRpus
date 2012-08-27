@@ -30,12 +30,9 @@
 }
 \examples{
 \dontrun{
-tagged.text.obj <- kRp.freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
+tagged.text.obj <- freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
 kRp.text.paste(tagged.text.obj)
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \keyword{misc}
 

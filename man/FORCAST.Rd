@@ -47,9 +47,6 @@
 FORCAST(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Klare, G.R. (1975). Assessing readability. \emph{Reading
   Research Quarterly}, 10(1), 62--102.

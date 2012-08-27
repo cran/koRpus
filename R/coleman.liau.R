@@ -15,7 +15,7 @@
 #' @param short A numeric vector with named magic numbers, defining the relevant parameters for the short form of the formula.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords readability
 #' @export
 #' @examples

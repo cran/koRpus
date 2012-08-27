@@ -40,9 +40,6 @@
 MTLD(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   McCarthy, P. M. & Jarvis, S. (2010). MTLD, vocd-D, and
   HD-D: A validation study of sophisticated approaces to

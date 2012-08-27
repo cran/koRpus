@@ -28,7 +28,7 @@
 #' @seealso
 #'		\code{\link[koRpus:kRp.hyph.pat-class]{kRp.hyph.pat-class}},
 #'		\code{\link[koRpus:hyphen]{hyphen}}
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
 #' [1] \url{http://tug.ctan.org/tex-archive/language/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/}
 #' @export

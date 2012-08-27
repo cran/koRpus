@@ -11,7 +11,7 @@
 #' @param lang A character string specifying a valid language.
 #' @param TT.options A list with arguments to be used as \code{TT.options} by \code{treetag}.
 #' @return Returns an invisible \code{NULL}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @seealso \code{\link[koRpus:get.kRp.env]{get.kRp.env}}
 #' @export

@@ -4,12 +4,14 @@
 #'
 #' Note that the value of \code{lang} must match a valid language supported by \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}.
 #' It will also get stored in the resulting object and might be used by other functions at a later point.
-#' E.g., \code{treetag} is being called by \code{\link[koRpus:kRp.freq.analysis]{kRp.freq.analysis}}, which
+#' E.g., \code{treetag} is being called by \code{\link[koRpus:freq.analysis]{freq.analysis}}, which
 #' will by default query this language definition, unless explicitly told otherwise. The rationale behind this
 #' is to comfortably make it possible to have tokenized and POS tagged objects of various languages around
 #' in your workspace, and not worry about that too much.
 #'
-#' @param file A character vector, valid path to a file, containing the text to be analyzed.
+#' @param file Either a connection or a character vector, valid path to a file, containing the text to be analyzed.
+#'		If \code{file} is a connection, its contents will be written to a temporary file, since TreeTagger can't read from
+#'		R connection objects.
 #' @param treetagger A character vector giving the TreeTagger script to be called. If set to \code{"kRp.env"} this is got from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}.
 #'		Only if set to \code{"manual"}, it is assumend not to be a wrapper script that can work the given text file, but that you would like
 #'		to manually tweak options for tokenizing and POS tagging yourself. In that case, you need to provide a full set of options with the \code{TT.options}
@@ -56,11 +58,13 @@
 #' @param TT.tknz Logical, if \code{FALSE} TreeTagger's tokenzier script will be replaced by \code{koRpus}' function \code{\link[koRpus:tokenize]{tokenize}}.
 #'		To accomplish this, its results will be written to a temporal file which is automatically deleted afterwards (if \code{debug=FALSE}). Note that
 #'		this option only has an effect if \code{treetagger="manual"}.
+#' @param format Either "file" or "obj", depending on whether you want to scan files or analyze the text in a given object, like
+#'		a character vector. If the latter, it will be written to a temporary file (see \code{file}).
 #' @return An object of class \code{\link[koRpus]{kRp.tagged-class}}. If \code{debug=TRUE}, prints internal variable settings and attempts to return the
 #'		original output if the TreeTagger system call in a matrix.
 #' @author m.eik michalke \email{meik.michalke@@hhu.de}, support for Spanish contributed by Earl Brown \email{eabrown@@csumb.edu}
 #' @keywords misc
-#' @seealso \code{\link[koRpus:kRp.freq.analysis]{kRp.freq.analysis}}, \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
+#' @seealso \code{\link[koRpus:freq.analysis]{freq.analysis}}, \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
 #' \code{\link[koRpus]{kRp.tagged-class}}
 #' @references
 #' Schmid, H. (1994). Probabilistic part-of-speec tagging using decision trees. In
@@ -86,7 +90,8 @@
 #' }
 
 treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
-					sentc.end=c(".","!","?",";",":"), encoding=NULL, TT.options=NULL, debug=FALSE, TT.tknz=TRUE){
+					sentc.end=c(".","!","?",";",":"), encoding=NULL, TT.options=NULL, debug=FALSE, TT.tknz=TRUE,
+					format="file"){
 
 	# TreeTagger uses slightly different presets on windows and unix machines,
 	# so we'll need to check the OS first
@@ -120,9 +125,24 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 		stop(simpleError("Sorry, you can't use treetag() and tokenize() at the same time!"))
 	} else {}
 
-	# does the text file exist?
-	file <- normalizePath(file)
-	check.file(file, mode="exist")
+	# TreeTagger won't be able to use a connection object, so to make these usable,
+	# we have to write its content to a temporary file first
+	if(inherits(file, "connection") | identical(format, "obj")){
+		conn.tempfile <- tempfile(pattern="tempTextFromObject", fileext=".txt")
+		if(!isTRUE(debug)){
+			on.exit(unlink(conn.tempfile), add=TRUE)
+		} else {}
+		if(inherits(file, "connection")){
+			writeLines(readLines(file, encoding=ifelse(is.null(encoding), "", encoding)), con=conn.tempfile)
+		} else {
+			writeLines(file, con=conn.tempfile)
+		}
+		takeAsFile <- conn.tempfile
+	} else {
+		# does the text file exist?
+		takeAsFile <- normalizePath(file)
+	}
+	check.file(takeAsFile, mode="exist")
 
 	# TODO: move TT.options checks to internal function to call it here
 	manual.config <- identical(treetagger, "manual")
@@ -253,7 +273,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			# call tokenize() and write results to tempfile
 			tknz.tempfile <- tempfile(pattern="tokenize", fileext=".txt")
 			tknz.results <- tokenize(
-				file,
+				takeAsFile,
 				fileEncoding=input.enc,
 				split=TT.tknz.opts[["split"]],
 				ign.comp=TT.tknz.opts[["ign.comp"]],
@@ -270,7 +290,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			message(paste("Assuming '", input.enc, "' as encoding for the input file. If the results turn out to be erroneous, check the file for invalid characters, e.g. em.dashes or fancy quotes, and/or consider setting 'encoding' manually.", sep=""), call.=FALSE)
 			cat(paste(tknz.results, collapse="\n"), file=tknz.tempfile)
 			if(!isTRUE(debug)){
-				on.exit(unlink(tknz.tempfile))
+				on.exit(unlink(tknz.tempfile), add=TRUE)
 			} else {}
 		} else {}
 
@@ -310,7 +330,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 		# create system call for unix and windows
 		if(isTRUE(unix.OS)){
 			if(isTRUE(TT.tknz)){
-				sys.tt.call <- paste(TT.tokenizer, TT.tknz.opts, file, "|",
+				sys.tt.call <- paste(TT.tokenizer, TT.tknz.opts, paste("\"", takeAsFile, "\"", sep=""), "|",
 					TT.lookup.command, TT.tagger, TT.opts, TT.params, TT.filter.command)
 			} else {
 				sys.tt.call <- paste("cat ", tknz.tempfile, "|",
@@ -318,7 +338,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			}
 		} else {
 			if(isTRUE(TT.tknz)){
-				sys.tt.call <- paste("perl ", TT.tokenizer, TT.tknz.opts, file, "|",
+				sys.tt.call <- paste("perl ", TT.tokenizer, TT.tknz.opts, paste("\"", takeAsFile, "\"", sep=""), "|",
 					TT.lookup.command, TT.tagger, TT.params, TT.opts, TT.filter.command)
 			} else {
 				sys.tt.call <- paste("type ", tknz.tempfile, "|",
@@ -334,7 +354,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 
 		check.file(treetagger, mode="exec")
 
-		sys.tt.call <- paste(treetagger, file)
+		sys.tt.call <- paste(treetagger, takeAsFile)
 	}
 
 	## uncomment for debugging
@@ -345,7 +365,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 				ifelse(isTRUE(TT.tknz),
 					paste("\n\t\t\t\tTT.tknz.opts: ",TT.tknz.opts, sep=""),
 					paste("\n\t\t\t\ttempfile: ",tknz.tempfile, sep="")),"
-				file: ",file,"
+				file: ",takeAsFile,"
 				TT.lookup.command: ",TT.lookup.command,"
 				TT.tagger: ",TT.tagger,"
 				TT.opts: ",TT.opts,"
@@ -354,7 +374,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 				sys.tt.call: ",sys.tt.call,"\n"))
 		} else {
 			cat(paste("
-				file: ",file,"
+				file: ",takeAsFile,"
 				sys.tt.call: ",sys.tt.call,"\n"))
 		}
 	} else {}
@@ -395,7 +415,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 	if(is.null(encoding)){
 		encoding <- ""
 	} else {}
-	txt.vector <- readLines(file, encoding=encoding)
+	txt.vector <- readLines(takeAsFile, encoding=encoding)
 	# force text into UTF-8 format
 	txt.vector <- enc2utf8(txt.vector)
 	results@desc <- basic.tagged.descriptives(results, lang=lang, txt.vector=txt.vector)

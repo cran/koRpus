@@ -12,6 +12,10 @@
 #	 \describe{
 #		\item{\code{num}:}{Some word ID from the DB, integer}
 #		\item{\code{word}:}{The word itself}
+#		\item{\code{lemma}:}{The lemma of the word}
+#		\item{\code{tag}:}{A part-of-speech tag}
+#		\item{\code{wclass}:}{The word class}
+#		\item{\code{lttr}:}{The number of characters}
 #		\item{\code{freq}:}{The frequency of that word in the corpus DB}
 #		\item{\code{pct}:}{Percentage of appearance in DB}
 #		\item{\code{pmio}:}{Appearance per million words in DB}
@@ -43,13 +47,36 @@
 
 setClass("kRp.corp.freq",
 		representation=representation(
-		meta="data.frame",
-		words="data.frame",
-		desc="data.frame"),
+			meta="data.frame",
+			words="data.frame",
+			desc="data.frame"),
 		prototype(
-		meta=as.data.frame(matrix(ncol=2, dimnames=list(c(),c("meta", "value")))),
-		words=as.data.frame(matrix(ncol=10, dimnames=list(c(),c("num", "word", "freq", "pct", "pmio", "log10", "rank.avg", "rank.min", "rank.rel.avg", "rank.rel.min")))),
-		desc=as.data.frame(matrix(ncol=6, dimnames=list(c(),c("tokens", "types", "words.p.sntc", "chars.p.sntc", "chars.p.wform", "chars.p.word")))))
+			meta=data.frame(
+				meta=NA,
+				value=NA),
+			words=data.frame(
+				num=NA,
+				word=NA,
+				lemma=NA,
+				tag=NA,
+				wclass=NA,
+				lttr=NA,
+				freq=NA,
+				pct=NA,
+				pmio=NA,
+				log10=NA,
+				rank.avg=NA,
+				rank.min=NA,
+				rank.rel.avg=NA,
+				rank.rel.min=NA),
+			desc=data.frame(
+				tokens=NA,
+				types=NA,
+				words.p.sntc=NA,
+				chars.p.sntc=NA,
+				chars.p.wform=NA,
+				chars.p.word=NA)
+		)
 )
 
 setValidity("kRp.corp.freq", function(object){
@@ -62,7 +89,7 @@ setValidity("kRp.corp.freq", function(object){
 		desc.names <- dimnames(desc)[[2]]
 
 		if(identical(meta.names, c("meta", "value")) &
-				identical(words.names, c("num", "word", "freq", "pct", "pmio", "log10", "rank.avg", "rank.min", "rank.rel.avg", "rank.rel.min")) &
+				identical(words.names, c("num", "word", "lemma", "tag", "wclass", "lttr", "freq", "pct", "pmio", "log10", "rank.avg", "rank.min", "rank.rel.avg", "rank.rel.min")) &
 				identical(desc.names, c("tokens", "types", "words.p.sntc", "chars.p.sntc", "chars.p.wform", "chars.p.word"))){
 			return(TRUE)
 		} else {

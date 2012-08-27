@@ -21,7 +21,7 @@
 #' @param prefix Character string, giving the prefix for the file names in the archive. Needed for newer LCC tar archives
 #'		if they are already decompressed (autodetected if \code{LCC.path} points to the tar archive directly).
 #' @return An object of class \code{\link[koRpus]{kRp.corp.freq-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords corpora
 #' @seealso \code{\link[koRpus]{kRp.corp.freq-class}}
 #' @references Quasthoff, U., Richter, M. & Biemann, C. (2006). Corpus Portal for Search in Monolingual Corpora, In
@@ -39,7 +39,7 @@
 #' my.LCC.data <- read.corp.LCC("~/mydata/corpora/rus_web_2002_300K-text", prefix="rus_web_2002_300K-")
 #' 
 #' tagged.results <- treetag("/some/text.txt")
-#' kRp.freq.analysis(tagged.results, corp.freq=my.LCC.data)
+#' freq.analysis(tagged.results, corp.freq=my.LCC.data)
 #' }
 
 read.corp.LCC <- function(LCC.path, format="flatfile", fileEncoding="UTF-8", n=-1, keep.temp=FALSE, prefix=NULL){

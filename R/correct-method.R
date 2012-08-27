@@ -22,11 +22,6 @@
 #'			some other way, e.g. in a spreadsheet GUI, but don't want to have to correct the syllable count yourself as well.}
 #' }
 #'
-#' @usage # for S4 objects of class kRp.tagged
-#' correct.tag(obj, row, tag=NULL, lemma=NULL, check.token=NULL)
-#'
-#' # for S4 objects of class kRp.hyphen
-#' correct.hyph(obj, word=NULL, hyphen=NULL, cache=TRUE)
 #' @param obj An object of class \code{\link[koRpus]{kRp.tagged-class}} or \code{\link[koRpus]{kRp.hyphen-class}}.
 #' @param row Integer, the row number of the entry to be changed. Can be an integer vector
 #'		to change several rows in one go.
@@ -42,8 +37,7 @@
 #' @param cache Logical, if \code{TRUE}, the given hyphenation will be added to the sessions' hyphenation cache.
 #'		Existing entries for the same word will be replaced.
 #' @return An object of the same class as \code{obj}.
-#' @aliases correct.tag,-methods correct.tag,kRp.tagged-method correct.hyph,-methods correct.hyph,kRp.hyphen-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords methods
 #' @seealso \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus:treetag]{treetag}},
 #'		\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}.
@@ -56,11 +50,14 @@
 #'
 #' hyphenated.txt <- correct.hyph(hyphenated.txt, "Hilfe", "Hil-fe")
 #' }
+#' @exportMethod correct.tag
+#' @docType methods
 #' @rdname correct-methods
 setGeneric("correct.tag", function(obj, row, tag=NULL, lemma=NULL, check.token=NULL){standardGeneric("correct.tag")})
 
-#' @exportMethod correct.tag
 #' @rdname correct-methods
+#' @aliases correct.tag,kRp.tagged-method
+#' @usage correct.tag(obj, row, tag=NULL, lemma=NULL, check.token=NULL)
 setMethod("correct.tag",
     signature(obj="kRp.tagged"),
     function (obj, row, tag=NULL, lemma=NULL, check.token=NULL){
@@ -97,6 +94,9 @@ setMethod("correct.tag",
 				}
 			} else {}
 
+			# update descriptive statistics
+			local.obj.copy@desc <- basic.tagged.descriptives(local.obj.copy, lang=lang, desc=local.obj.copy@desc, update.desc=TRUE)
+
 			cat("Changed\n\n")
 			print(obj@TT.res[row, ])
 			cat("\n  into\n\n")
@@ -107,10 +107,12 @@ setMethod("correct.tag",
 )
 
 #' @rdname correct-methods
+#' @exportMethod correct.hyph
 setGeneric("correct.hyph", function(obj, word=NULL, hyphen=NULL, cache=TRUE){standardGeneric("correct.hyph")})
 
-#' @exportMethod correct.hyph
 #' @rdname correct-methods
+#' @aliases correct.hyph,kRp.hyphen-method
+#' @usage correct.hyph(obj, word=NULL, hyphen=NULL, cache=TRUE)
 setMethod("correct.hyph",
     signature(obj="kRp.hyphen"),
     function (obj, word=NULL, hyphen=NULL, cache=TRUE){
@@ -174,6 +176,21 @@ setMethod("correct.hyph",
 			} else {
 				stop(simpleError(paste("Either \"word\" or \"hyphen\" is missing!")))
 			}
+
+			# update descriptive statistics
+			new.num.syll <- sum(local.obj.copy@hyphen$syll, na.rm=TRUE)
+			new.syll.distrib <- value.distribs(local.obj.copy@hyphen$syll)
+			new.syll.uniq.distrib <- value.distribs(unique(local.obj.copy@hyphen)$syll)
+			new.avg.syll.word <- mean(local.obj.copy@hyphen$syll, na.rm=TRUE)
+			new.syll.per100 <- new.avg.syll.word * 100
+
+			local.obj.copy@desc <- list(
+				num.syll=new.num.syll,
+				syll.distrib=new.syll.distrib,
+				syll.uniq.distrib=new.syll.uniq.distrib,
+				avg.syll.word=new.avg.syll.word,
+				syll.per100=new.syll.per100
+			)
 
 			cat("Changed\n\n")
 			print(obj@hyphen[matching.rows, ])

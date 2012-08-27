@@ -1,6 +1,3 @@
-#' @rdname plot-methods
-setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
-
 #' Plot method for objects of class kRp.tagged
 #'
 #' Plot method for S4 objects of class \code{\link[koRpus]{kRp.tagged-class}},
@@ -13,7 +10,6 @@ setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 #'			\item{\code{"wclass"}:}{Barplot of distribution of word classes}
 #'			\item{\code{"letters"}:}{Line plot of distribution of word length in letters}
 #'		}
-#' @aliases plot,-methods plot,kRp.tagged-method plot,kRp.tagged,missing-method
 #' @seealso \code{\link[koRpus]{kRp.tagged-class}}
 #' @keywords methods
 #' @examples
@@ -22,8 +18,14 @@ setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 #'    TT.options=list(path="~/bin/treetagger", preset="en"))
 #' plot(tagged.results)
 #' }
-#' @exportMethod plot
+#' @keywords methods plot
+#' @export
+#' @docType methods
 #' @rdname plot-methods
+setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
+
+#' @rdname plot-methods
+#' @aliases plot,kRp.tagged,missing-method
 setMethod("plot", signature(x="kRp.tagged", y="missing"), function(x, what="wclass", ...){
 	if(identical(what, "wclass")){
 		wclass.distrib <- summary(x)

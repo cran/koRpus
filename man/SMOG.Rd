@@ -51,9 +51,6 @@
 SMOG(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Bamberger, R. & Vanecek, E. (1984).
   \emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend

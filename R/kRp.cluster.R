@@ -22,7 +22,7 @@ kRp.cluster <- function(txts, lang, TT.path, TT.preset){
 		txt <- txts[txt.idx]
 		message(paste("Analyzing text: ", txt, " [", txt.idx, "/", num.texts, "]...\n", sep=""))
 		POS.analysis.res <- treetag(txt, treetagger="manual", lang=lang, TT.options=list(path=TT.path, preset=TT.preset))
-		frq.analysis.res <- kRp.freq.analysis(POS.analysis.res)
+		frq.analysis.res <- freq.analysis(POS.analysis.res)
 		# get relative token class distribution
 		frq.vector <- c(frq.analysis.res@desc$freq.token) / sum(frq.analysis.res@desc$freq.token)
 		# trigger hyphenation

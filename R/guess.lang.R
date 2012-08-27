@@ -19,7 +19,7 @@
 #' @param in.mem Logical. If \code{TRUE}, the gzip compression will remain in memory (using \code{memCompress}), which
 #'		is probably the faster method. Otherwise temporary files are created and automatically removed on exit.
 #' @return An object of class \code{\link[koRpus]{kRp.lang-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
 #' Benedetto, D., Caglioti, E. & Loreto, V. (2002). Language trees and zipping. \emph{Physical Review Letters}, 88(4), 048702.
 #'

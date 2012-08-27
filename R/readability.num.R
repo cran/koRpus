@@ -3,7 +3,8 @@
 #' This function is a stripped down version of \code{\link[koRpus:readability]{readability}}. It does not analyze text,
 #' but directly takes the values used by the formulae to calculate the readability measures.
 #' 
-#' @param txt.features A named list with statistical information on the text. Used values are:
+#' @param txt.features A named list with statistical information on the text, or an object of class \code{kRp.readability}
+#'		(only its \code{desc} slot will then be used). Valid values are:
 #'		\describe{
 #'			\item{\code{sentences}:}{The number of sentences.}
 #'			\item{\code{words}:}{The number of words.}
@@ -107,6 +108,12 @@ readability.num <- function(
 				"FOG", "FORCAST", "Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS",
 				"RIX", "SMOG", "Spache", "Strain", "Traenkle.Bailer", "TRI", "Wheeler.Smith"),
 			parameters=list(), ...){
+
+	# check if txt.features is a readability result, and
+	# probably fetch the desct slot from it:
+	if(inherits(txt.features, "kRp.readability")){
+		txt.features <- slot(txt.features, "desc")
+	} else {}
 
 	# this function checks if all needed data is present for a given readability measure
 	# and removes measures from the index list otherwise

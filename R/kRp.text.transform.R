@@ -25,12 +25,12 @@
 #' @param paste Logical, see value section.
 #' @return By default an object of class \code{\link[koRpus]{kRp.txt.trans-class}} is returned. If \code{paste=TRUE}, returns
 #'		an atomic character vector (via \code{\link[koRpus:kRp.text.paste]{kRp.text.paste}}).
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @export
 #' @examples
 #' \dontrun{
-#' tagged.text.obj <- kRp.freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
+#' tagged.text.obj <- freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
 #' kRp.text.transform(tagged.text.obj, scheme="random", paste=TRUE)
 #' }
 

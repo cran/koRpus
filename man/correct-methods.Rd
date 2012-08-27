@@ -1,10 +1,9 @@
+\docType{methods}
 \name{correct.tag}
 \alias{correct.hyph}
 \alias{correct.hyph,kRp.hyphen-method}
-\alias{correct.hyph,-methods}
 \alias{correct.tag}
 \alias{correct.tag,kRp.tagged-method}
-\alias{correct.tag,-methods}
 \title{Methods to correct koRpus objects}
 \arguments{
   \item{obj}{An object of class
@@ -88,9 +87,6 @@ tagged.txt <- correct.tag(tagged.txt, row=21, tag="NN")
 
 hyphenated.txt <- correct.hyph(hyphenated.txt, "Hilfe", "Hil-fe")
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \seealso{
   \code{\link[koRpus]{kRp.tagged-class}},

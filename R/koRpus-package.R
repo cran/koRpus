@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab koRpus\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.04-27\cr
-#' Date: \tab 2012-03-07\cr
+#' Version: \tab 0.04-36\cr
+#' Date: \tab 2012-08-27\cr
 #' Depends: \tab R (>= 2.10.0),methods\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
@@ -25,7 +25,6 @@
 #' @name koRpus-package
 #' @docType package
 #' @title An R Package for Text Analysis.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}, with contributions from Earl Brown \email{eabrown@@csumb.edu},
-#' Alberto Mirisola, and Laura Hauser
+#' @author Meik Michalke \email{meik.michalke@@hhu.de}
 #' @keywords package
 NULL

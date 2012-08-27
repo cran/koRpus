@@ -40,9 +40,6 @@ set.kRp.env(TT.cmd="~/bin/treetagger/cmd/tree-tagger-german", lang="de")
 get.kRp.env(TT.cmd=TRUE)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \seealso{
   \code{\link[koRpus:set.kRp.env]{set.kRp.env}}
 }

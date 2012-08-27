@@ -432,9 +432,6 @@
   mentioned in the index descriptions above (e.g., "PSK",
   if appropriate).
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Anderson, J. (1981). Analysing the readability of english
   and non-english texts in the classroom with Lix. In

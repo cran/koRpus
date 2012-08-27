@@ -52,9 +52,6 @@
 \examples{
 segment.optimizer(2014, favour.min=FALSE)
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \seealso{
   \code{\link[koRpus:lex.div]{lex.div}},
   \code{\link[koRpus:MSTTR]{MSTTR}}

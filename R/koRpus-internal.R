@@ -17,6 +17,9 @@
 # empty environment for TreeTagger information
 .koRpus.env <- new.env()
 
+# define class union to make life easier
+setClassUnion("kRp.taggedText", members=c("kRp.tagged", "kRp.analysis", "kRp.txt.freq", "kRp.txt.trans"))
+
 ## function check.file()
 # helper function for file checks
 check.file <- function(filename, mode="exist", stopOnFail=TRUE){
@@ -137,7 +140,7 @@ basic.text.descriptives <- function(txt){
 
 ## function basic.tagged.descriptives()
 # txt must be an object of class kRp.tagged
-basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL){
+basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL, update.desc=FALSE){
 	if(is.null(lang)){
 		lang <- txt@lang
 	} else {}
@@ -159,23 +162,36 @@ basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL
 
 	# txt.desc$letters had all digits removed
 	# we'll use these numbers as they are usually more exact than relying on correct tokenization
-	num.letters <- desc$letters + desc$digits
+ 	if("letters.only" %in% names(desc)){
+ 		num.letters <- desc$letters.only + desc$digits
+ 	} else {
+		num.letters <- desc$letters + desc$digits
+		# for readability calculations
+		desc$letters.only <- desc$letters
+		desc$letters <- distrib.to.fixed(lttr.distrib, all.values=num.letters, idx="l")
+ 	}
 	avg.word.length <- num.letters / num.words
 
-	# for readability calculations
-	desc$letters.only <- desc$letters
-	desc$letters <- distrib.to.fixed(lttr.distrib, all.values=num.letters, idx="l")
-
-	results <- append(
-		desc,
-		list(
-			char.distrib=char.distrib,
-			lttr.distrib=lttr.distrib,
-			words=num.words,
-			sentences=txt.stend,
-			avg.sentc.length=avg.sentc.length,
-			avg.word.length=avg.word.length
-		))
+	if(isTRUE(update.desc)){
+		desc[["char.distrib"]] <- char.distrib
+		desc[["lttr.distrib"]] <- lttr.distrib
+		desc[["words"]] <- num.words
+		desc[["sentences"]] <- txt.stend
+		desc[["avg.sentc.length"]] <- avg.sentc.length
+		desc[["avg.word.length"]] <- avg.word.length
+		results <- desc
+	} else {
+		results <- append(
+			desc,
+			list(
+				char.distrib=char.distrib,
+				lttr.distrib=lttr.distrib,
+				words=num.words,
+				sentences=txt.stend,
+				avg.sentc.length=avg.sentc.length,
+				avg.word.length=avg.word.length
+			))
+ 	}
 	return(results)
 } ## end function basic.tagged.descriptives()
 
@@ -226,6 +242,8 @@ treetag.com <- function(tagged.text, lang){
 # takes a tagged text object and returns it without punctuation or other defined
 # classes or tags. can also return tokens in lemmatized form.
 tagged.txt.rm.classes <- function(txt, lemma=FALSE, lang, corp.rm.class, corp.rm.tag, as.vector=TRUE){
+	# to avoid needless NOTEs from R CMD check
+	wclass <- tag <- rel.col <- NULL
 
 	valid.tagset <- as.data.frame(kRp.POS.tags(lang))
 	txt.rm.tags <- c()
@@ -630,6 +648,8 @@ frqcy.summarize <- function(pct.data, na.rm=TRUE){
 
 ## function frqcy.by.rel()
 frqcy.by.rel <- function(txt.commented, corp.freq, corp.rm.class, corp.rm.tag, rel){
+	# to avoid needless NOTEs from R CMD check
+	wclass <- tag <- rel.col <- NULL
 
 	# look up percentages for each part of the text
 	# call internal function word.freq()
@@ -640,30 +660,24 @@ frqcy.by.rel <- function(txt.commented, corp.freq, corp.rm.class, corp.rm.tag, r
 
 	# now let's do some calculations...
 	frqcy.summary <- frqcy.summarize(txt.rel.all)
-#	frqcy.num.NAs <- frqcy.summary[["summary"]][["NA's"]]
 
 	# there are probably some NAs in our text. they're the result of words not found
 	# in the language corpus, hence we'll compute another summary and assume NA equals to probabilty of 0
 	txt.rel.noNAs <- txt.rel.all
-#	txt.rel.noNAs[is.na(txt.rel.noNAs)] <- 0
 	frqcy.summary.noNAs <- frqcy.summarize(txt.rel.noNAs)
 	# if defined, remove entries of certain classes from the word list
 	txt.dropped.classes <- droplevels(subset(new.commented, !wclass %in% corp.rm.class)) 
 	txt.dropped.classes <- droplevels(subset(txt.dropped.classes, !tag %in% corp.rm.tag)) 
 	txt.rel.sub <- subset(txt.dropped.classes, select = rel.col)$rel.col
 	# exclude NAs as well, with probablility = 0
-#	txt.rel.sub[is.na(txt.rel.sub)] <- 0
 	frqcy.summary.excluded <- frqcy.summarize(txt.rel.sub)
 	# and finally, analyze only unique words
 	txt.types <- unique(txt.dropped.classes)
 	txt.rel.types <- subset(txt.types, select = rel.col)$rel.col
-#	txt.rel.types[is.na(txt.rel.types)] <- 0
 	frqcy.summary.types <- frqcy.summarize(txt.rel.types)
 
-#	results <- list(rel.col=txt.rel.all, NAs=frqcy.num.NAs, summary.known=frqcy.summary, summary.all=frqcy.summary.noNAs, summary.excluded=frqcy.summary.excluded, summary.types=frqcy.summary.types)
 	results <- list(
 		rel.col=txt.rel.all,
-#		NAs=frqcy.num.NAs,
 		summary.known=frqcy.summary,
 		summary.all=frqcy.summary.noNAs,
 		summary.excluded=frqcy.summary.excluded,
@@ -675,40 +689,41 @@ frqcy.by.rel <- function(txt.commented, corp.freq, corp.rm.class, corp.rm.tag, r
 ## function text.freq.analysis()
 # expects tagged text, commented text and valid corp.freq objects
 text.freq.analysis <- function(txt.commented, corp.freq, corp.rm.class, corp.rm.tag, lang){
+	# to avoid needless NOTEs from R CMD check
+	wclass <- NULL
 
-		stopifnot(inherits(corp.freq, "kRp.corp.freq"))
+	stopifnot(inherits(corp.freq, "kRp.corp.freq"))
 
-		frq.pmio      <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="pmio")
-		frq.log10     <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="log10")
-		frq.rank.avg  <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="rank.rel.avg")
-		frq.rank.min  <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="rank.rel.min")
-		# recreate the commented text with percent info, to substitute the old object
- 		new.commented <- cbind(txt.commented,
- 														pmio=frq.pmio[["rel.col"]],
-														log10=frq.log10[["rel.col"]],
- 														rank.avg=frq.rank.avg[["rel.col"]],
- 														rank.min=frq.rank.min[["rel.col"]])
+	frq.pmio      <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="pmio")
+	frq.log10     <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="log10")
+	frq.rank.avg  <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="rank.rel.avg")
+	frq.rank.min  <- frqcy.by.rel(txt.commented, corp.freq=corp.freq, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, rel="rank.rel.min")
+	# recreate the commented text with percent info, to substitute the old object
+	new.commented <- cbind(txt.commented,
+													pmio=frq.pmio[["rel.col"]],
+													log10=frq.log10[["rel.col"]],
+													rank.avg=frq.rank.avg[["rel.col"]],
+													rank.min=frq.rank.min[["rel.col"]])
 
-		# information on words-per-sentence and commas-per-sentence
-		num.sentences <- dim(subset(new.commented, wclass %in% kRp.POS.tags(lang, tags="sentc", list.classes=TRUE)))[1]
-		num.commas    <- dim(subset(new.commented, wclass %in% "comma"))[1]
-		freq.commas   <- num.commas/num.sentences
-		num.words     <- dim(subset(new.commented, !wclass %in% kRp.POS.tags(lang, tags=c("punct","sentc"), list.classes=TRUE)))[1]
-		freq.words    <- num.words/num.sentences
-		freq.w.p.c    <- num.words/num.commas
-		res.sentences <- data.frame(words.p.sntc=freq.words, comma.p.sntc=freq.commas, words.p.comma=freq.w.p.c)
+	# information on words-per-sentence and commas-per-sentence
+	num.sentences <- dim(subset(new.commented, wclass %in% kRp.POS.tags(lang, tags="sentc", list.classes=TRUE)))[1]
+	num.commas    <- dim(subset(new.commented, wclass %in% "comma"))[1]
+	freq.commas   <- num.commas/num.sentences
+	num.words     <- dim(subset(new.commented, !wclass %in% kRp.POS.tags(lang, tags=c("punct","sentc"), list.classes=TRUE)))[1]
+	freq.words    <- num.words/num.sentences
+	freq.w.p.c    <- num.words/num.commas
+	res.sentences <- data.frame(words.p.sntc=freq.words, comma.p.sntc=freq.commas, words.p.comma=freq.w.p.c)
 
-		freq.analysis <- list(
-#			NAs=frq.pmio[["NAs"]],
-			frq.pmio=frq.pmio[-c(1,2)],
-			frq.log10=frq.log10[-c(1,2)],
-			frq.rank.avg=frq.rank.avg[-c(1,2)],
-			frq.rank.min=frq.rank.min[-c(1,2)],
-			sentence.factors=res.sentences)
+	freq.analysis <- list(
+		frq.pmio=frq.pmio[-c(1,2)],
+		frq.log10=frq.log10[-c(1,2)],
+		frq.rank.avg=frq.rank.avg[-c(1,2)],
+		frq.rank.min=frq.rank.min[-c(1,2)],
+		sentence.factors=res.sentences)
 
-		results <- list(commented=new.commented, freq.analysis=freq.analysis)
+	results <- list(commented=new.commented, freq.analysis=freq.analysis)
 
-		return(results)
+	return(results)
 } ## end function text.freq.analysis()
 
 
@@ -738,6 +753,10 @@ create.corp.freq.object <- function(matrix.freq, num.running.words, df.meta, df.
 	df.words <- data.frame(
 							num=as.numeric(matrix.freq[,"num"]),
 							word=matrix.freq[,"word"],
+							lemma=NA,
+							tag=NA,
+							wclass=NA,
+							lttr=nchar(matrix.freq[,"word"], allowNA=TRUE),
 							freq=as.numeric(matrix.freq[,"freq"]),
 							pct=as.numeric(matrix.freq[,"freq"])/num.running.words,
 							pmio=words.per.mio,
@@ -793,6 +812,9 @@ is.supported.lang <- function(lang.ident, support="hyphen"){
 
 ## function load.hyph.pattern()
 load.hyph.pattern <- function(lang){
+	# to avoid needless NOTEs from R CMD check
+	hyph.pat <- NULL
+
 	lang <- is.supported.lang(lang, support="hyphen")
 	pat.to.load <- parse(text=paste("if(!exists(\"hyph.", lang, "\", envir=.koRpus.env, inherits=FALSE)){
 		data(hyph.", lang, ", package=\"koRpus\", envir=.koRpus.env)} else {}
@@ -1213,3 +1235,40 @@ set.lang.support <- function(target, value){
 	}
 	list2env(all.kRp.env, envir=as.environment(.koRpus.env))
 } ## end function set.lang.support()
+
+## function queryList()
+queryList <- function(obj, var, query, rel, as.df, ignore.case, perl){
+	this.query <- query[[1]]
+	this.query.vars <- names(this.query)
+	this.q.var <- this.query.vars[[1]]
+	this.q.query <- this.query[[1]]
+	this.q.rel <- ifelse("rel" %in% this.query.vars, this.query[["rel"]], rel)
+	this.q.ignore.case <- ifelse("ignore.case" %in% this.query.vars, this.query[["ignore.case"]], ignore.case)
+	this.q.perl <- ifelse("perl" %in% this.query.vars, this.query[["perl"]], perl)
+	if(length(query) == 1){
+		obj <- query(obj=obj, var=this.q.var, query=this.q.query, rel=this.q.rel, as.df=as.df, ignore.case=this.q.ignore.case, perl=this.q.perl)
+	} else {
+		remaining.queries <- query[-1]
+		remaining.obj <- query(obj=obj, var=this.q.var, query=this.q.query, rel=this.q.rel, as.df=FALSE, ignore.case=this.q.ignore.case, perl=this.q.perl)
+		obj <- query(obj=remaining.obj, var=var, query=remaining.queries, rel=rel, as.df=as.df, ignore.case=ignore.case, perl=perl)
+	}
+	return(obj)
+} ## end function queryList()
+
+
+## function headLine()
+# takes text and builds a border around it
+headLine <- function(txt, level=1){
+	if(identical(level, 1)){
+		headlineTxt <- paste("## ", txt, " ##", sep="")
+		headlineLine <- paste(rep("#", nchar(headlineTxt)), collapse="")
+		headlineFull <- paste(headlineLine, "\n", headlineTxt, "\n", headlineLine, sep="")
+	} else if(identical(level, 2)){
+		headlineLine <- paste(rep("=", nchar(txt)), collapse="")
+		headlineFull <- paste(txt, "\n", headlineLine, sep="")
+	} else {
+		headlineLine <- paste(rep("-", nchar(txt)), collapse="")
+		headlineFull <- paste(txt, "\n", headlineLine, sep="")
+	}
+	return(headlineFull)
+} ## end function headLine()

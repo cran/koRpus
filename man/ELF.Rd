@@ -43,9 +43,6 @@
 	ELF(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   DuBay, W.H. (2004). \emph{The Principles of Readability}.
   Costa Mesa: Impact Information.  WWW:

@@ -1,21 +1,10 @@
-#' Show methods for objects of class kRp.TTR
-#'
-#' Show methods for S4 objects of class \code{\link[koRpus]{kRp.TTR-class}}
-#'
-#' @param object An object of class \code{kRp.TTR}
-#' @aliases show,-methods show,kRp.TTR-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso \code{\link[koRpus]{kRp.TTR-class}}
-#' @keywords methods
+#' @aliases show,kRp.TTR-method
+#' @rdname show-methods
+#' @include show.kRp.lang.R
 #' @examples
 #' \dontrun{
 #' MTLD(tagged.txt)
 #' }
-#' @rdname show-methods
-setGeneric("show")
-
-#' @exportMethod show
-#' @rdname show-methods
 setMethod("show", signature(object="kRp.TTR"), function(object){
 
 	if(length(object@tt$num.tokens) > 0){

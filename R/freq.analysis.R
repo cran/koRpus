@@ -1,6 +1,6 @@
 #' Analyze word frequencies
 #'
-#' The function \code{kRp.freq.analysis} analyzes texts regarding frequencies of tokens, word classes etc.
+#' The function \code{freq.analysis} analyzes texts regarding frequencies of tokens, word classes etc.
 #'
 #' The easiest way to see what kinds of analyses are done is probably to look at the slot description of \code{\link[koRpus]{kRp.txt.freq-class}}.
 #'
@@ -8,6 +8,10 @@
 #' Or, if \code{txt.file} has already been tagged, by default the language definition of that tagged object is read
 #' and used. Set \code{force.lang=get.kRp.env(lang=TRUE)} or to any other valid value, if you want to forcibly overwrite this
 #' default behaviour, and only then. See \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all supported languages.
+#'
+#' @note Prior to \code{koRpus} 0.04-29, this function was named \code{kRp.freq.analysis()}.
+#'		For backwards compatibility there is a wrapper function, but it should be considered
+#'		deprecated.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.txt.freq-class}},
 #'		\code{\link[koRpus]{kRp.analysis-class}} or \code{\link[koRpus]{kRp.txt.trans-class}}, or a character vector which must
@@ -24,17 +28,17 @@
 #' @param corp.rm.tag A character vector with POS tags which should be ignored for frequency analysis.
 #' @param ... Additional options to be passed through to the function defined with \code{tagger}.
 #' @return An object of class \code{\link[koRpus]{kRp.txt.freq-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @seealso \code{\link[koRpus:get.kRp.env]{get.kRp.env}}, \code{\link[koRpus]{kRp.tagged-class}},
 #'		\code{\link[koRpus]{kRp.corp.freq-class}}
 #' @export
+#' @rdname freq.analysis
 #' @examples
 #' \dontrun{
-#' kRp.freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
+#' freq.analysis("~/some/text.txt", corp.freq=my.LCC.data)
 #' }
 
-kRp.freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
+freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
 											 tagger="kRp.env", corp.rm.class="nonpunct",
 											 corp.rm.tag=c(), ...){
 
@@ -77,4 +81,21 @@ kRp.freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.la
 
 	results <- new("kRp.txt.freq", lang=lang, TT.res=commented, desc=desc.stat.res, freq.analysis=frequency.res)
 	return(results)
+}
+
+# function for backward compatibility
+#' @export
+#' @rdname freq.analysis
+kRp.freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
+											 tagger="kRp.env", corp.rm.class="nonpunct",
+											 corp.rm.tag=c(), ...){
+	return(freq.analysis(
+		txt.file=txt.file,
+		corp.freq=corp.freq,
+		desc.stat=desc.stat,
+		force.lang=force.lang,
+		tagger=tagger,
+		corp.rm.class=corp.rm.class,
+		corp.rm.tag=corp.rm.tag,
+		...))
 }

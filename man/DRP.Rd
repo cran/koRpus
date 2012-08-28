@@ -42,8 +42,5 @@
 	DRP(tagged.text, word.list=new.dale.chall.wl)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \keyword{readability}
 

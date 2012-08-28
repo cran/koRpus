@@ -8,12 +8,15 @@
 #' other functions of this package.
 #'
 #' @param corpus Either the path to directory with txt files to read and analyze, or a vector object already holding the text corpus.
+#'		Can also be an already tokenized and tagged text object which inherits class \code{kRp.tagged} (then the column \code{"token"} of
+#'		the \code{"TT.res"} slot is used).
 #' @param format Either "file" or "obj", depending on whether you want to scan files or analyze the given object.
 #' @param fileEncoding A character string naming the encoding of the corpus files.
 #' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
+#' @param caseSens Logical. If \code{FALSE}, all tokens will be matched in their lower case form.
 #' @param ... Additional options to be passed through to the \code{tokenize} function.
 #' @return An object of class \code{\link[koRpus]{kRp.corp.freq-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords corpora
 #' @seealso \code{\link[koRpus]{kRp.corp.freq-class}}
 #' @export
@@ -22,43 +25,49 @@
 #' ru.corp <- read.corp.custom("~/mydata/corpora/russian_corpus/")
 #' }
 
-read.corp.custom <- function(corpus, format="file", fileEncoding="UTF-8", quiet=FALSE, ...){
+read.corp.custom <- function(corpus, format="file", fileEncoding="UTF-8", quiet=TRUE, caseSens=TRUE, ...){
 
-	# leftover of an earlier attempt; the matrix idea could be resurrected sometime
-	# 	} else if(is.matrix(corpus) & identical(dimnames(corpus)[[2]], c("token", "freq"))){
-	# 		run.tokenizer <- FALSE
-	# 	} else {
-	# 		stop(simpleError("\"corpus\" must be an existing file or directory, or a matrix object with columns \"token\" and \"freq\"!"))
-	# 	}
+	if(inherits(corpus, "kRp.tagged")){
+		tokens <- slot(corpus, "TT.res")[["token"]]
+	} else {
+		tokens <- tokenize(txt=corpus, format=format, fileEncoding=fileEncoding, tag=FALSE, ...)
+	}
+	if(!isTRUE(caseSens)){
+		tokens <- tolower(tokens)
+	} else {}
 
-	tokens <- tokenize(txt=corpus, format=format, fileEncoding=fileEncoding, tag=FALSE, ...)
+	# this can be handled quick if quiet=TRUE, by using table()
+	if(isTRUE(quiet)){
+		freq.table <- table(tokens)
+		num.tokens <- sum(freq.table)
+		num.types <- length(freq.table)
+		corp.freq <- matrix(
+			data=c(names(freq.table), as.vector(freq.table)),
+			ncol=2, dimnames=list(c(), c("word", "freq")))
+	} else {
+		# get types
+		types <- unique(tokens)
+		num.tokens <- length(tokens)
+		num.types <- length(types)
 
-	# get types
-	types <- unique(tokens)
-	num.tokens <- length(tokens)
-	num.types <- length(types)
-
-	## now do the counting!
-	corp.freq <- matrix(ncol=2, dimnames=list(c(), c("word", "freq")))[-1,]
-	type.counter <- 1
-	for (tp in types){
-		if(!isTRUE(quiet)){
+		## now do the counting!
+		corp.freq <- matrix(ncol=2, dimnames=list(c(), c("word", "freq")))[-1,]
+		type.counter <- 1
+		for (tp in types){
 			cat(paste("\t", floor(100*type.counter/num.types), "% complete, processing token ", type.counter, " of ", num.types, ": \"", tp, "\"", sep=""))
-		} else {}
-		type.freq <- sum(match(tokens, tp), na.rm=TRUE)
-		if(!isTRUE(quiet)){
-			cat(paste(" (found ", type.freq, " times in ", num.tokens, " tokens)\n", sep=""))
-		} else {}
-		corp.freq <- rbind(corp.freq, c(word=tp, freq=type.freq))
-		type.counter <- type.counter + 1
+			type.freq <- sum(match(tokens, tp), na.rm=TRUE)
+			if(!isTRUE(quiet)){
+				cat(paste(" (found ", type.freq, " times in ", num.tokens, " tokens)\n", sep=""))
+			} else {}
+			corp.freq <- rbind(corp.freq, c(word=tp, freq=type.freq))
+			type.counter <- type.counter + 1
+		}
 	}
 
 	# sort the matrix
 	corp.freq <- corp.freq[order(as.numeric(corp.freq[,"freq"]), decreasing=TRUE), ]
 	# add num variable
 	corp.freq <- cbind(num=1:num.types, corp.freq)
-
-#	return(corp.freq)
 
 	# descriptive statistics
 	dscrpt.meta <- data.frame(

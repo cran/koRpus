@@ -1,20 +1,27 @@
-#' Show methods for objects of class kRp.lang
+#' Show methods for koRpus objects
 #'
-#' Show methods for S4 objects of class \code{\link[koRpus]{kRp.lang-class}}
+#' Show methods for S4 objects of classes \code{\link[koRpus]{kRp.lang-class}},
+#' \code{\link[koRpus]{kRp.readability-class}}, \code{\link[koRpus]{kRp.corp.freq-class}} or
+#' \code{\link[koRpus]{kRp.TTR-class}}.
 #'
-#' @param object An object of class \code{kRp.lang}
+#' @param object An object of class \code{kRp.lang}, \code{kRp.readability}, \code{kRp.corp.freq}
+#'		or \code{kRp.TTR}.
 #' @aliases show,-methods show,kRp.lang-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso \code{\link[koRpus]{kRp.lang-class}}
+#' @seealso
+#'		\code{\link[koRpus]{kRp.lang-class}},
+#'		\code{\link[koRpus]{kRp.readability-class}},
+#'		\code{\link[koRpus]{kRp.corp.freq-class}},
+#'		\code{\link[koRpus]{kRp.TTR-class}}
 #' @keywords methods
 #' @examples
 #' \dontrun{
 #'   guess.lang("/home/user/data/some.txt", udhr.path="/home/user/data/udhr_txt/")
 #' }
+#' @export
+#' @docType methods
 #' @rdname show-methods
 setGeneric("show")
 
-#' @exportMethod show
 #' @rdname show-methods
 setMethod("show", signature(object="kRp.lang"), function(object){
 	estim.lang <- object@lang.name

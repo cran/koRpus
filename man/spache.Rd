@@ -51,8 +51,5 @@
 spache(tagged.text, word.list=spache.revised.wl)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \keyword{readability}
 

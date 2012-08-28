@@ -16,6 +16,7 @@ pckg.dscrptn <- data.frame(
 		Maintainer="m.eik michalke <meik.michalke@hhu.de>",
 		Depends="R (>= 2.10.0),methods",
 		Enhances="rkward",
+		Suggests="testthat",
 		Description="A set of tools to analyze texts. Includes, amongst others, functions for automatic language detection,
 						hyphenation, several indices of lexical diversity (e.g., type token ratio, HD-D/vocd-D, MTLD)
 						and readability (e.g., Flesch, SMOG, LIX, Dale-Chall). Basic import functions for language corpora

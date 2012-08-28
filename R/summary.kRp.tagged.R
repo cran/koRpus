@@ -1,44 +1,55 @@
-#' Summary method for objects of class kRp.tagged
-#'
-#' Summary method for S4 objects of class \code{\link[koRpus]{kRp.tagged-class}}
-#'
-#' @param object An object of class \code{kRp.tagged}
-#' @aliases summary,-methods summary,kRp.tagged-method
-#' @seealso \code{\link[koRpus]{kRp.tagged-class}}
-#' @keywords methods
-#' @examples
-#' \dontrun{
-#' tagged.results <- treetag("~/my.data/sample_text.txt", treetagger="manual", lang="en",
-#'    TT.options=list(path="~/bin/treetagger", preset="en"))
-#' summary(tagged.results)
-#' }
-#' @rdname summary-methods
-setGeneric("summary")
-
-#' @exportMethod summary
-#' @rdname summary-methods
-setMethod("summary", signature(object="kRp.tagged"), function(object){
-	desc <- object@desc
-	word.tags <- kRp.POS.tags(object@lang, list.classes=TRUE, tags="words")
-	wclass.num <- summary(as.factor(object@TT.res[["wclass"]]))
+# internal function to produce the word class distribution table
+# wclass: object@TT.res[["wclass"]]
+# lang:   object@lang
+# abs: if not NULL, percentages will also be calculated relative to this number
+wClassNoPunct <- function(wclass, lang, abs=NULL){
+	word.tags <- kRp.POS.tags(lang, list.classes=TRUE, tags="words")
+	wclass.num <- summary(as.factor(wclass))
 	wclass.nopunct <- names(wclass.num)[names(wclass.num) %in% word.tags]
 	wclass.punct <- names(wclass.num)[!names(wclass.num) %in% word.tags]
 	wclass.nopunct.num <- wclass.num[wclass.nopunct]
 	wclass.punct.num <- wclass.num[wclass.punct]
 
 	wclass.nopunct.num <- wclass.nopunct.num[order(wclass.nopunct.num, decreasing=TRUE)]
-	wclass.nopunct.num <- rbind(wclass.nopunct.num, 100 * wclass.nopunct.num / sum(wclass.nopunct.num))
-	rownames(wclass.nopunct.num) <- c("num", "pct")
-	wclass.nopunct.num <- t(cbind(wclass.nopunct.num, rbind(wclass.punct.num, NA)))
+	if(is.null(abs)){
+		wclass.nopunct.num <- rbind(wclass.nopunct.num, 100 * wclass.nopunct.num / sum(wclass.nopunct.num))
+		rownames(wclass.nopunct.num) <- c("num", "pct")
+	} else {
+		wclass.nopunct.num <- rbind(wclass.nopunct.num, 100 * wclass.nopunct.num / sum(wclass.nopunct.num), 100 * wclass.nopunct.num / abs)
+		rownames(wclass.nopunct.num) <- c("num", "pct", "pct.abs")
+	}
+	if(length(wclass.punct) != 0){
+		wclass.nopunct.num <- t(cbind(wclass.nopunct.num, rbind(wclass.punct.num, NA)))
+	} else {
+		wclass.nopunct.num <- t(wclass.nopunct.num)
+	}
+	return(wclass.nopunct.num)
+}
 
-# 	desc.summary <- data.frame(
-# 			letters=desc[["letters"]][["all"]],
-# 			words=desc[["words"]],
-# 			sentences=desc[["sentences"]],
-# 			avg.word.length=desc[["avg.word.length"]],
-# 			avg.sentc.length=desc[["avg.sentc.length"]])
-# 
-# 	print(desc.summary)
+#' @rdname summary-methods
+#' @include summary.kRp.lang.R
+#' @examples
+#' \dontrun{
+#' tagged.results <- treetag("~/my.data/sample_text.txt", treetagger="manual", lang="en",
+#'    TT.options=list(path="~/bin/treetagger", preset="en"))
+#' summary(tagged.results)
+#' }
+setMethod("summary", signature(object="kRp.tagged"), function(object){
+	desc <- object@desc
+	wclass.nopunct.num <- wClassNoPunct(wclass=object@TT.res[["wclass"]], lang=object@lang)
+	if(!is.null(object@desc[["cloze"]][["origText"]][["wclass"]])){
+		wclass.orig.order <- order(order(rownames(wclass.nopunct.num)))
+		wclass.nopunct.num.cloze <- wClassNoPunct(wclass=object@desc[["cloze"]][["origText"]][["wclass"]], lang=object@lang, abs=desc[["words"]])
+		colnames(wclass.nopunct.num.cloze) <- c("num.cloze", "pct.cloze", "pct.cloze.abs")
+		wclass.nopunct.num <- merge(wclass.nopunct.num, wclass.nopunct.num.cloze, all=TRUE, by='row.names', sort=FALSE, suffixes=c("", ".cloze"))
+		# merge adds a column for row numbers, reverse that
+		rownames(wclass.nopunct.num) <- wclass.nopunct.num[["Row.names"]]
+		wclass.nopunct.num <- subset(wclass.nopunct.num, select=-Row.names)
+		# regain original order
+		wclass.nopunct.num <- wclass.nopunct.num[order(rownames(wclass.nopunct.num))[wclass.orig.order],]
+		# add another column for the percentage of words of each class which were removed
+		wclass.nopunct.num[["pct.cloze.wclass"]] <- wclass.nopunct.num[["num.cloze"]] * 100 / wclass.nopunct.num[["num"]]
+	} else {}
 
 	cat(
 	"\n  Sentences: ", desc[["sentences"]], "\n",
@@ -48,3 +59,4 @@ setMethod("summary", signature(object="kRp.tagged"), function(object){
 
 	return(wclass.nopunct.num)
 })
+

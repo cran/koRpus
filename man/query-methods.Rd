@@ -1,20 +1,24 @@
+\docType{methods}
 \name{query}
 \alias{query}
 \alias{query,kRp.corp.freq-method}
 \alias{query,kRp.tagged-method}
-\alias{query,-methods}
 \title{A method to get information out of koRpus objects}
 \arguments{
   \item{obj}{An object of class
   \code{\link[koRpus]{kRp.corp.freq-class}}.}
 
   \item{var}{A character string naming a variable in the
-  object.}
+  object (i.e., colname). If set to \code{"regexp"},
+  \code{grepl} is called on the \code{word} column of
+  corpus frequency objects.}
 
-  \item{query}{A character vector (for words) or single
-  number naming values to be matched in the variable.  Can
-  be a vector of two numbers to query a range of frequency
-  data.}
+  \item{query}{A character vector (for words), regular
+  expression, or single number naming values to be matched
+  in the variable.  Can also be a vector of two numbers to
+  query a range of frequency data, or a list of named lists
+  for multiple queries (see "Query lists" section in
+  details).}
 
   \item{rel}{A character string defining the relation of
   the queried value and desired results.  Must either be
@@ -22,6 +26,15 @@
   than), \code{"ge"} (greater of equal), \code{"lt"} (less
   than) or \code{"le"} (less or equal). If
   \code{var="word"}, is always interpreted as \code{"eq"}}
+
+  \item{as.df}{Logical, if \code{TRUE}, returns a
+  data.frame, otherwise an object of the input class.}
+
+  \item{ignore.case}{Logical, passed through to
+  \code{grepl} if \code{var="regexp"}.}
+
+  \item{perl}{Logical, passed through to \code{grepl} if
+  \code{var="regexp"}.}
 }
 \value{
   Depending on the arguments, might include whole objects,
@@ -51,6 +64,20 @@
   and "num" are implemented. The latter isn't a relation,
   but will return a vector with the row numbers in which
   the query was found.
+}
+\section{Query lists}{
+  You can combine an arbitrary number of queries in a
+  simple way by providing a list of named lists to the
+  \code{query} parameter, where each list contains one
+  query request. In each list, the first element name
+  represents the \code{var} value of the request, and its
+  value is taken as the \code{query} argument. You can also
+  assign \code{rel}, \code{ignore.case} and \code{perl} for
+  each request individually, and if you don't, the settings
+  of the main query call are taken as default (\code{as.df}
+  only applies to the final query). The filters will be
+  applied in the order given, i.e., the second query will
+  be made to the results of the first.
 
   This method calls \code{\link[base]{subset}}, which might
   actually be even more flexible if you need more control.
@@ -59,21 +86,29 @@
 \dontrun{
 # look up frequencies for the word "aber"
 query(LCC.data, var="word", query="aber")
+
 # show all entries with a frequency of exactly 3000 in the corpus
 query(LCC.data, "freq", 3000)
+
 # now, which words appear more than 40000 times in a million?
 query(LCC.data, "pmio", 40000, "gt")
+
 # example for a range request: words with a log10 between 2 and 2.1
 # (including these two values)
 query(LCC.data, "log10", c(2, 2.1))
 # (and without them)
 query(LCC.data, "log10", c(2, 2.1), "gt")
+
+# example for a list of queries: get words with a frequency between
+# 700 and 750 per million and at least five letters
+query(LCC.data, query=list(
+  list(pmio=c(700,750)),
+  list(lttr=5, rel="ge"))
+)
+
 # get all "he" lemmata in a previously tagged text object
 query(tagged.txt, "lemma", "he")
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \seealso{
   \code{\link[koRpus]{kRp.corp.freq-class}},

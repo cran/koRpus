@@ -10,7 +10,7 @@
 #' @param as.vector Logical. If \code{TRUE}, results will be returned as a character vector containing only the text parts
 #'		which survived the filtering.
 #' @return An object of class \code{\link[koRpus]{kRp.tagged-class}}. If \code{as.vector=TRUE}, returns only a character vector.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @seealso \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}
 #' @keywords misc
 #' @export

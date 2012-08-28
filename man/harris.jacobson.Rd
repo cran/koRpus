@@ -71,9 +71,6 @@
 harris.jacobson(tagged.text, word.list=harris.jacobson.wl)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Harris, A.J. & Jacobson, M.D. (1974). Revised
   Harris-Jacobson readability formulas. In \emph{18th

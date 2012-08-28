@@ -271,7 +271,7 @@
 #' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
 #' @param ... Additional options for the specified \code{tagger} function
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords readability
 #' @references
 #'		Anderson, J. (1981). Analysing the readability of english and non-english texts in the classroom with Lix. In

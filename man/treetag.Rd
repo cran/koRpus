@@ -6,11 +6,14 @@
     lang = "kRp.env",
     sentc.end = c(".", "!", "?", ";", ":"),
     encoding = NULL, TT.options = NULL, debug = FALSE,
-    TT.tknz = TRUE)
+    TT.tknz = TRUE, format = "file")
 }
 \arguments{
-  \item{file}{A character vector, valid path to a file,
-  containing the text to be analyzed.}
+  \item{file}{Either a connection or a character vector,
+  valid path to a file, containing the text to be analyzed.
+  If \code{file} is a connection, its contents will be
+  written to a temporary file, since TreeTagger can't read
+  from R connection objects.}
 
   \item{treetagger}{A character vector giving the
   TreeTagger script to be called. If set to
@@ -104,6 +107,11 @@
   temporal file which is automatically deleted afterwards
   (if \code{debug=FALSE}). Note that this option only has
   an effect if \code{treetagger="manual"}.}
+
+  \item{format}{Either "file" or "obj", depending on
+  whether you want to scan files or analyze the text in a
+  given object, like a character vector. If the latter, it
+  will be written to a temporary file (see \code{file}).}
 }
 \value{
   An object of class
@@ -123,12 +131,12 @@
   also get stored in the resulting object and might be used
   by other functions at a later point. E.g., \code{treetag}
   is being called by
-  \code{\link[koRpus:kRp.freq.analysis]{kRp.freq.analysis}},
-  which will by default query this language definition,
-  unless explicitly told otherwise. The rationale behind
-  this is to comfortably make it possible to have tokenized
-  and POS tagged objects of various languages around in
-  your workspace, and not worry about that too much.
+  \code{\link[koRpus:freq.analysis]{freq.analysis}}, which
+  will by default query this language definition, unless
+  explicitly told otherwise. The rationale behind this is
+  to comfortably make it possible to have tokenized and POS
+  tagged objects of various languages around in your
+  workspace, and not worry about that too much.
 }
 \examples{
 \dontrun{
@@ -162,7 +170,7 @@ lex.div(tagged.results)
   \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
 }
 \seealso{
-  \code{\link[koRpus:kRp.freq.analysis]{kRp.freq.analysis}},
+  \code{\link[koRpus:freq.analysis]{freq.analysis}},
   \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
   \code{\link[koRpus]{kRp.tagged-class}}
 }

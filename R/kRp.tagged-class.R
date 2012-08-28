@@ -33,7 +33,13 @@ setClass("kRp.tagged",
 		prototype(
 			lang=character(),
 			desc=list(),
-			TT.res=data.frame(token=NA,tag=NA,lemma=NA,lttr=NA,wclass=NA,desc=NA)
+			TT.res=data.frame(
+				token=NA,
+				tag=NA,
+				lemma=NA,
+				lttr=NA,
+				wclass=NA,
+				desc=NA)
 		)
 )
 

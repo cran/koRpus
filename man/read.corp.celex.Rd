@@ -29,11 +29,8 @@
 \examples{
 \dontrun{
 my.Celex.data <- read.corp.celex("~/mydata/Celex/GERMAN/GFW/GFW.CD", running.words=5952000)
-kRp.freq.analysis("/some/text.txt", corp.freq=my.Celex.data)
+freq.analysis("/some/text.txt", corp.freq=my.Celex.data)
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \references{
   [1] \url{http://celex.mpi.nl}

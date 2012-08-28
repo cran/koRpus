@@ -1,22 +1,10 @@
-#' Summary method for objects of class kRp.readability
-#'
-#' Summary method for S4 objects of class \code{\link[koRpus]{kRp.readability-class}}
-#'
-#' @param object An object of class \code{kRp.readability}
 #' @param flat Logical, if TRUE only a named vector of main results is returned
-#' @aliases summary,-methods summary,kRp.readability-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso \code{\link[koRpus]{kRp.readability-class}}
-#' @keywords methods
+#' @rdname summary-methods
+#' @include summary.kRp.lang.R
 #' @examples
 #' \dontrun{
 #' summary(flesch(tagged.txt))
 #' }
-#' @rdname summary-methods
-setGeneric("summary")
-
-#' @exportMethod summary
-#' @rdname summary-methods
 setMethod("summary", signature(object="kRp.readability"), function(object, flat=FALSE){
 
 	# function to add stuff to the matrix,

@@ -14,7 +14,7 @@
 #'	\item{lang}{The specified language}
 #'	\item{TT.options}{A list with options for \code{treetag}}
 #' If the desired property is not set at all, the function will fail with an error message.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @seealso \code{\link[koRpus:set.kRp.env]{set.kRp.env}}
 #' @export

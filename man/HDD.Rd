@@ -39,9 +39,6 @@
 HDD(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   McCarthy, P.M. & Jarvis, S. (2007). vocd: A theoretical
   and empirical evaluation. \emph{Language Testing}, 24(4),

@@ -1,21 +1,9 @@
-#' Summary method for objects of class kRp.TTR
-#'
-#' Summary method for S4 objects of class \code{\link[koRpus]{kRp.TTR-class}}
-#'
-#' @param object An object of class \code{kRp.TTR}
-#' @aliases summary,-methods summary,kRp.TTR-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso \code{\link[koRpus]{kRp.TTR-class}}
-#' @keywords methods
+#' @rdname summary-methods
+#' @include summary.kRp.lang.R
 #' @examples
 #' \dontrun{
 #' summary(lex.div(tagged.txt))
 #' }
-#' @rdname summary-methods
-setGeneric("summary")
-
-#' @exportMethod summary
-#' @rdname summary-methods
 setMethod("summary", signature(object="kRp.TTR"), function(object){
 
 	# function to add stuff to the matrix,

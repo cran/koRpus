@@ -1,3 +1,4 @@
+\docType{methods}
 \name{summary}
 \alias{summary}
 \alias{summary,kRp.lang-method}
@@ -6,36 +7,22 @@
 \alias{summary,kRp.TTR-method}
 \alias{summary,kRp.txt.freq-method}
 \alias{summary,-methods}
-\title{Summary method for objects of class kRp.lang}
+\title{Summary methods for koRpus objects}
 \arguments{
-  \item{object}{An object of class \code{kRp.lang}}
-
-  \item{object}{An object of class \code{kRp.readability}}
+  \item{object}{An object of class \code{kRp.lang},
+  \code{kRp.readability}, \code{kRp.tagged}, \code{kRp.TTR}
+  or \code{kRp.txt.freq}.}
 
   \item{flat}{Logical, if TRUE only a named vector of main
   results is returned}
-
-  \item{object}{An object of class \code{kRp.tagged}}
-
-  \item{object}{An object of class \code{kRp.TTR}}
-
-  \item{object}{An object of class \code{kRp.txt.freq}}
 }
 \description{
-  Summary method for S4 objects of class
-  \code{\link[koRpus]{kRp.lang-class}}
-
-  Summary method for S4 objects of class
-  \code{\link[koRpus]{kRp.readability-class}}
-
-  Summary method for S4 objects of class
-  \code{\link[koRpus]{kRp.tagged-class}}
-
-  Summary method for S4 objects of class
-  \code{\link[koRpus]{kRp.TTR-class}}
-
-  Summary method for S4 objects of class
-  \code{\link[koRpus]{kRp.txt.freq-class}}
+  Summary method for S4 objects of classes
+  \code{\link[koRpus]{kRp.lang-class}},
+  \code{\link[koRpus]{kRp.readability-class}},
+  \code{\link[koRpus]{kRp.tagged-class}},
+  \code{\link[koRpus]{kRp.TTR-class}} or
+  \code{\link[koRpus]{kRp.txt.freq-class}}.
 }
 \examples{
 \dontrun{
@@ -53,27 +40,14 @@ summary(tagged.results)
 summary(lex.div(tagged.txt))
 }
 \dontrun{
-summary(kRp.freq.analysis(tagged.txt))
+summary(freq.analysis(tagged.txt))
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-
-  m.eik michalke \email{meik.michalke@hhu.de}
-
-  m.eik michalke \email{meik.michalke@hhu.de}
-
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \seealso{
-  \code{\link[koRpus]{kRp.lang-class}}
-
-  \code{\link[koRpus]{kRp.readability-class}}
-
-  \code{\link[koRpus]{kRp.tagged-class}}
-
-  \code{\link[koRpus]{kRp.TTR-class}}
-
+  \code{\link[koRpus]{kRp.lang-class}},
+  \code{\link[koRpus]{kRp.readability-class}},
+  \code{\link[koRpus]{kRp.tagged-class}},
+  \code{\link[koRpus]{kRp.TTR-class}},
   \code{\link[koRpus]{kRp.txt.freq-class}}
 }
 \keyword{methods}

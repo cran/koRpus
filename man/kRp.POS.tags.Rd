@@ -72,7 +72,8 @@ tags.de <- kRp.POS.tags("de")
 \author{
   m.eik michalke \email{meik.michalke@hhu.de}, support for
   Spanish contributed by Earl Brown
-  \email{eabrown@csumb.edu}
+  \email{eabrown@csumb.edu}, support for Italian
+  contributed by Alberto Mirisola.
 }
 \references{
   Santorini, B. (1991). \emph{Part-of-Speech Tagging

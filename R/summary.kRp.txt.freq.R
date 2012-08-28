@@ -1,21 +1,9 @@
-#' Summary method for objects of class kRp.txt.freq
-#'
-#' Summary method for S4 objects of class \code{\link[koRpus]{kRp.txt.freq-class}}
-#'
-#' @param object An object of class \code{kRp.txt.freq}
-#' @aliases summary,-methods summary,kRp.txt.freq-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso \code{\link[koRpus]{kRp.txt.freq-class}}
-#' @keywords methods
+#' @rdname summary-methods
+#' @include summary.kRp.lang.R
 #' @examples
 #' \dontrun{
-#' summary(kRp.freq.analysis(tagged.txt))
+#' summary(freq.analysis(tagged.txt))
 #' }
-#' @exportMethod summary
-#' @rdname summary-methods
-setGeneric("summary")
-
-#' @rdname summary-methods
 setMethod("summary", signature(object="kRp.txt.freq"), function(object){
 
 	summary.table <- t(data.frame(
@@ -24,7 +12,7 @@ setMethod("summary", signature(object="kRp.txt.freq"), function(object){
 		words=object@desc[["words"]],
 		avg.word.length=object@desc[["avg.word.length"]],
 		all.characters=object@desc[["all.chars"]],
-		letters=object@desc[["letters"]],
+		letters=object@desc[["letters"]][["all"]],
 		lemmata=object@desc[["lemmata"]],
 		questions=object@desc[["questions"]],
 		exclamations=object@desc[["exclam"]],

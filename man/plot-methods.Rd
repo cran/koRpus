@@ -1,8 +1,7 @@
+\docType{methods}
 \name{plot}
 \alias{plot}
-\alias{plot,kRp.tagged-method}
 \alias{plot,kRp.tagged,missing-method}
-\alias{plot,-methods}
 \title{Plot method for objects of class kRp.tagged}
 \arguments{
   \item{x}{An object of class \code{kRp.tagged}}
@@ -29,4 +28,5 @@ plot(tagged.results)
   \code{\link[koRpus]{kRp.tagged-class}}
 }
 \keyword{methods}
+\keyword{plot}
 

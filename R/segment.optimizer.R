@@ -23,7 +23,7 @@
 #' @return A numeric vector with two elements:
 #'   \item{seg}{The optimized segment size}
 #'   \item{drop}{The number of tokens that would be dropped using this segment size}
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords LD
 #' @seealso \code{\link[koRpus:lex.div]{lex.div}}, \code{\link[koRpus:MSTTR]{MSTTR}}
 #' @export

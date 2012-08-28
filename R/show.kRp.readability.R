@@ -1,21 +1,10 @@
-#' Show methods for objects of class kRp.readability
-#'
-#' Show methods for S4 objects of class \code{\link[koRpus]{kRp.readability-class}}
-#'
-#' @param object An object of class \code{kRp.readability}
-#' @aliases show,-methods show,kRp.readability-method
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso \code{\link[koRpus]{kRp.readability-class}}
-#' @keywords methods
+#' @aliases show,kRp.readability-method
+#' @rdname show-methods
+#' @include show.kRp.lang.R
 #' @examples
 #' \dontrun{
 #' flesch(tagged.txt)
 #' }
-#' @rdname show-methods
-setGeneric("show")
-
-#' @exportMethod show
-#' @rdname show-methods
 setMethod("show", signature(object="kRp.readability"), function(object){
 
 	if(sum(!is.na(object@ARI)) == 0){

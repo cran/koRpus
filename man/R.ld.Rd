@@ -35,9 +35,6 @@
 R.ld(tagged.text)
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \seealso{
   \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
   \code{\link[koRpus]{kRp.tagged-class}},

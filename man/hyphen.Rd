@@ -77,9 +77,6 @@
   \code{\link[koRpus:hyph.XX]{hyph.XX}} for detailed
   information.
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Liang, F.M. (1983). \emph{Word Hy-phen-a-tion by
   Com-put-er}.  Dissertation, Stanford University, Dept. of

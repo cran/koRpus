@@ -1,7 +1,13 @@
-\name{kRp.freq.analysis}
+\name{freq.analysis}
+\alias{freq.analysis}
 \alias{kRp.freq.analysis}
 \title{Analyze word frequencies}
 \usage{
+  freq.analysis(txt.file, corp.freq = NULL,
+    desc.stat = TRUE, force.lang = NULL,
+    tagger = "kRp.env", corp.rm.class = "nonpunct",
+    corp.rm.tag = c(), ...)
+
   kRp.freq.analysis(txt.file, corp.freq = NULL,
     desc.stat = TRUE, force.lang = NULL,
     tagger = "kRp.env", corp.rm.class = "nonpunct",
@@ -51,7 +57,7 @@
   \code{\link[koRpus]{kRp.txt.freq-class}}.
 }
 \description{
-  The function \code{kRp.freq.analysis} analyzes texts
+  The function \code{freq.analysis} analyzes texts
   regarding frequencies of tokens, word classes etc.
 }
 \details{
@@ -70,13 +76,16 @@
   \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all
   supported languages.
 }
+\note{
+  Prior to \code{koRpus} 0.04-29, this function was named
+  \code{kRp.freq.analysis()}.  For backwards compatibility
+  there is a wrapper function, but it should be considered
+  deprecated.
+}
 \examples{
 \dontrun{
-kRp.freq.analysis("/some/text.txt", corp.freq=my.LCC.data)
+freq.analysis("~/some/text.txt", corp.freq=my.LCC.data)
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \seealso{
   \code{\link[koRpus:get.kRp.env]{get.kRp.env}},

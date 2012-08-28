@@ -61,9 +61,6 @@
   guess.lang("/home/user/data/some.txt", udhr.path="/home/user/data/udhr_txt/")
 }
 }
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
-}
 \references{
   Benedetto, D., Caglioti, E. & Loreto, V. (2002). Language
   trees and zipping. \emph{Physical Review Letters}, 88(4),

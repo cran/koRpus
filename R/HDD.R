@@ -12,7 +12,7 @@
 #' @param char Logical, defining whether data for plotting characteristic curves should be calculated.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:lex.div]{lex.div}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.TTR-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
 #' 	McCarthy, P.M. & Jarvis, S. (2007). vocd: A theoretical and empirical evaluation. \emph{Language Testing}, 24(4), 459--488.
 #' @keywords LD

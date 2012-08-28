@@ -26,7 +26,7 @@ a tokenizer/POS tagger.
 \section{Recommendations}
 \subsection{TreeTagger}
 At the very beginning of almost every analysis with this package, the text you want to examine has to be sliced into its components, and the components
-must be identified an named. That is, it has to be split into its semantic parts (tokens), words, numbers, punctuation marks. After that, each token will
+must be identified and named. That is, it has to be split into its semantic parts (tokens), words, numbers, punctuation marks. After that, each token will
 be tagged regarding its part-of-speech (POS). For both of these steps, \texttt{koRpus} can use the third party software TreeTagger \cite{schmid_TT_1994}.\footnote{
 \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
 }
@@ -117,7 +117,7 @@ If you don't need detailed word class analysis, you should be fine using \texttt
 
 \subsubsection{The \texttt{desc} Slot}
 
-All results of both \texttt{treetag()} and \texttt{tokenize()} have also a slot called \texttt{desc}, which provies various descriptive statistics calculated from the analyzed text. If you deal with this slot for the first time, it's a good idea to first look at its structure:
+All results of both \texttt{treetag()} and \texttt{tokenize()} have also a slot called \texttt{desc}, which provides various descriptive statistics calculated from the analyzed text. If you deal with this slot for the first time, it's a good idea to first look at its structure:
 
 \begin{Schunk}
 	\begin{Sinput}
@@ -127,7 +127,7 @@ All results of both \texttt{treetag()} and \texttt{tokenize()} have also a slot 
 % 	\end{Soutput}
 \end{Schunk}
 
-Amonst others, you will find several indices describing the number of characters:
+Amongst others, you will find several indices describing the number of characters:
 \begin{description}
 	\item[\texttt{all.chars}:] Counts each character, including all space characters
 	\item[\texttt{normalized.space}:] Like \texttt{all.chars}, but clusters of space characters (incl. line breaks) are counted only as one character
@@ -208,7 +208,8 @@ MTLD characteristics:
 	\end{Soutput}
 \end{Schunk}
 
-The above output is only a small sample and really much longer. Let's look at some particular parts: At first we are informed of the language, which is read from the tagged object. Following that is a growing feedback stream, letting you know how far calculations of a measures' characteristics\footnote{Characteristics can be looked at to examine each measure's dependency on text length. They are calculated by computing each measure repeatedly, beginning with only the first token, then adding the next, progressing until the full text was analyzed.} have progressed. This was added because if all possible measures are being calculated and the text is rather long, this can take quite some time, and it might be uplifting to see that R didn't just freeze. After that the actual results are being printed, using the package's \texttt{show()} method for this particular kind of object. As you can see, it prints the actual value of each measure before a summary of the characteristics\footnote{For informtaion on the measures shown see \citeA{tweedie_how_1998, mccarthy_vocd_2007, mccarthy_mtld_2010}.}.
+The above output is only a small sample and really much longer. Let's look at some particular parts: At first we are informed of the language, which is read from the tagged object. Following that is a growing feedback stream, letting you know how far calculations of a measures' characteristics\footnote{Characteristics can be looked at to examine each measure's dependency on text length. They are calculated by computing each measure repeatedly, beginning with only the first token, then adding the next, progressing until the full text was analyzed.} have progressed. This was added because if all possible measures are being calculated and the text is rather long, this can take quite some time, and it might be uplifting to see that R didn't just freeze. After that the actual results are being printed, using the package's \texttt{show()} method for this particular kind of object. As you can see, it prints the actual value of each measure before a summary of the characteristics\footnote{For informtaion on the 
+measures shown see \citeA{tweedie_how_1998, mccarthy_vocd_2007, mccarthy_mtld_2010}.}.
 
 Some measures return more information than only their actual index value. For instance, when the Mean Segmental Type-Token Ratio is calculated, you'll be informed how much of your text was dropped and hence not examined. A small feature tool of \texttt{koRpus}, \texttt{segment.optimizer()}, automatically recommends you with a different segment size if this could decrease the number of lost tokens.
 
@@ -274,7 +275,8 @@ Please see to the documentation for more detailed information on the available m
 
 \subsection{Frequency analysis}
 \subsubsection{Importing language corpora data}
-This package has rudimentary support to import corpus databases.\footnote{The package also has a function called \texttt{read.corp.custom()} which can be used to process language corpora yourself, and store the results in an object of class \texttt{kRp.corp.freq}, which is the class returned by \texttt{read.corp.LCC()} and \texttt{read.corp.celex()} as well. That is, if you can't get any already analyzed corpus database but have a huge language corpus at hand, you can create your own frequency database. But be warned that depending on corpus size and your hardware, this might take ages.} That is, it can read frequency data for words into an R object and use this object for further analysis. Next to the Celex\footnote{\url{http://celex.mpi.nl}} database format (\texttt{read.corp.celex()}), it can read the LCC flatfile format\footnote{Actually, it unterstands two different LCC formats, both the older .zip and the newer .tar archive format.} (\texttt{read.corp.LCC()}). The latter might be of special interest, because the needed database archives can be freely downloaded.\footnote{\url{http://corpora.informatik.uni-leipzig.de/download.html}} Once you've downloaded one of these archives, it can be comfortably imported:
+This package has rudimentary support to import corpus databases.\footnote{The package also has a function called \texttt{read.corp.custom()} which can be used to process language corpora yourself, and store the results in an object of class \texttt{kRp.corp.freq}, which is the class returned by \texttt{read.corp.LCC()} and \texttt{read.corp.celex()} as well. That is, if you can't get any already analyzed corpus database but have a huge language corpus at hand, you can create your own frequency database. But be warned that depending on corpus size and your hardware, this might take ages.} That is, it can read frequency data for words into an R object and use this object for further analysis. Next to the Celex\footnote{\url{http://celex.mpi.nl}} database format (\texttt{read.corp.celex()}), it can read the LCC flatfile format\footnote{Actually, it unterstands two different LCC formats, both the older .zip and the newer .tar archive format.} (\texttt{read.corp.LCC()}). The latter might be of special interest, 
+because the needed database archives can be freely downloaded.\footnote{\url{http://corpora.informatik.uni-leipzig.de/download.html}} Once you've downloaded one of these archives, it can be comfortably imported:
 
 \begin{Schunk}
 	\begin{Sinput}
@@ -348,7 +350,7 @@ The resulting object holds a lot of information, even if no corpus data was used
 
 Perhaps most informatively, \texttt{pmio} shows how often the respective token appears in a million tokens, according to the corpus data. Adding to this, the previously introduced slot \texttt{desc} now contains some more descriptive statistics on our text, and if we provided a corpus database, the slot \texttt{freq.analysis} lists summaries of various frequency information that was calculated.
 
-\subsubsection{New to the \texttt{desc} Slot}
+\subsubsection{New to the \texttt{desc} slot}
 
 Amongst others, \texttt{desc} now also gives easy access to character vectors with all words (\texttt{@desc\$all.words}) and all lemmata (\texttt{@desc\$all.lemmata}), all tokens sorted into word classes (e.\,g., all verbs in \texttt{@desc\$classes\$verb})\footnote{This sorting depends on proper POS-tagging, so this will only contain useful data if you used \texttt{treetag()} instead of \texttt{tokenize()}.}, or the number of words in each sentece:
 
@@ -536,6 +538,10 @@ Läsbarhetsindex (LIX)
 Text language: en 
  	\end{Soutput}
 \end{Schunk}
+
+\subsubsection{Readability from numeric data}
+
+It is possible to calculate the readability measures from the relevant key values directly, rather than analyze an actual text, by using \texttt{readability.num()} instead of \texttt{readability()}. If you need to reanalyze a particular text, this can be considerably faster. Therefore, all objects returned by \texttt{readability()} can directly be fed to \texttt{readability.num()}, since all relevant data is present in the \texttt{desc} slot. 
 
 \subsection{Language detection}
 

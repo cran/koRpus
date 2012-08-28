@@ -7,7 +7,7 @@
 #
 # @slot lang A character string, naming the language that is assumed for the analized text in this object
 # @slot TT.res A commented verion of the fully tagged text. Depending on input data, this is
-#		identical to the slot \code{TT.res} of function \code{treetag} or \code{kRp.freq.analysis}.
+#		identical to the slot \code{TT.res} of function \code{treetag} or \code{freq.analysis}.
 # @slot desc Descriptive statistics
 # @slot lex.div Information on lexical diversity
 # @slot freq.analysis Information on the word frequencies of the analyzed text.

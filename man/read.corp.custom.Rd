@@ -3,12 +3,16 @@
 \title{Import custom corpus data}
 \usage{
   read.corp.custom(corpus, format = "file",
-    fileEncoding = "UTF-8", quiet = FALSE, ...)
+    fileEncoding = "UTF-8", quiet = TRUE, caseSens = TRUE,
+    ...)
 }
 \arguments{
   \item{corpus}{Either the path to directory with txt files
   to read and analyze, or a vector object already holding
-  the text corpus.}
+  the text corpus.  Can also be an already tokenized and
+  tagged text object which inherits class \code{kRp.tagged}
+  (then the column \code{"token"} of the \code{"TT.res"}
+  slot is used).}
 
   \item{format}{Either "file" or "obj", depending on
   whether you want to scan files or analyze the given
@@ -19,6 +23,9 @@
 
   \item{quiet}{Logical. If \code{FALSE}, short status
   messages will be shown.}
+
+  \item{caseSens}{Logical. If \code{FALSE}, all tokens will
+  be matched in their lower case form.}
 
   \item{...}{Additional options to be passed through to the
   \code{tokenize} function.}
@@ -44,9 +51,6 @@
 \dontrun{
 ru.corp <- read.corp.custom("~/mydata/corpora/russian_corpus/")
 }
-}
-\author{
-  m.eik michalke \email{meik.michalke@hhu.de}
 }
 \seealso{
   \code{\link[koRpus]{kRp.corp.freq-class}}

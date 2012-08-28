@@ -15,7 +15,7 @@
 #' @param db2 A numeric vector with named magic numbers, defining the relevant parameters for the second formula (cloze equivalent).
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords readability
 #' @export
 #' @examples

@@ -2,7 +2,7 @@
 #'
 #' The function \code{kRp.text.analysis} analyzes texts in various ways.
 #'
-#' The function is basically a wrapper for \code{treetag()},\code{kRp.freq.analysis()} and \code{lex.div()}.
+#' The function is basically a wrapper for \code{treetag()},\code{freq.analysis()} and \code{lex.div()}.
 #'
 #' By default, if the text has to be tagged yet, the language definition is queried by calling \code{get.kRp.env(lang=TRUE)} internally.
 #' Or, if \code{txt.file} has already been tagged, by default the language definition of that tagged object is read
@@ -25,7 +25,7 @@
 #' @param corp.rm.tag A character vector with POS tags which should be ignored for frequency analysis.
 #' @param ... Additional options to be passed through to the function defined with \code{tagger}.
 #' @return An object of class \code{\link[koRpus]{kRp.analysis-class}}.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+# @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
 #' @seealso \code{\link[koRpus:set.kRp.env]{set.kRp.env}}, \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
 #'		\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}, \code{\link[koRpus:lex.div]{lex.div}}
@@ -56,7 +56,7 @@ kRp.text.analysis <- function(txt.file, tagger="kRp.env", force.lang=NULL,
 	} else {}
 
 	if(isTRUE(desc.stat) | !is.null(corp.freq)){
-		frequency.pre <- kRp.freq.analysis(txt.file=tagged.text, corp.freq=corp.freq, desc.stat=desc.stat, force.lang=lang,
+		frequency.pre <- freq.analysis(txt.file=tagged.text, corp.freq=corp.freq, desc.stat=desc.stat, force.lang=lang,
 											 tagger=tagger, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag)
 		# commented will be overwritten with a new version containing percentages for each word
 		tagged.text@TT.res <- frequency.pre@TT.res

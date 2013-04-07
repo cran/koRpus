@@ -5,6 +5,7 @@
 \alias{hyph.en}
 \alias{hyph.en.us}
 \alias{hyph.es}
+\alias{hyph.fr}
 \alias{hyph.it}
 \alias{hyph.ru}
 \alias{hyph.XX}
@@ -49,11 +50,11 @@
 \description{
   Hyphenation patterns for \code{hyphen()} in several
   languages. Replace \code{"XX"} with \code{"de"},
-  \code{"de.old"}, \code{"en"}, \code{"es"}, \code{"it"},
-  \code{"en.us"}, or \code{"ru"}, respectively. These data
-  objects are not really intended to be used directly, but
-  rather to be consulted by the hyphen() function without
-  further user interaction.
+  \code{"de.old"}, \code{"en"}, \code{"es"}, \code{"fr"},
+  \code{"it"}, \code{"en.us"}, or \code{"ru"},
+  respectively. These data objects are not really intended
+  to be used directly, but rather to be consulted by the
+  hyphen() function without further user interaction.
 }
 \references{
   Liang, F.M. (1983). \emph{Word Hy-phen-a-tion by

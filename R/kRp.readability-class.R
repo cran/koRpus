@@ -80,7 +80,7 @@
 # @slot Spache The "flavour" of the parameter settings and the calculated value of the Spache formula. NA if not calculated.
 # @slot Spache.old See "Spache".
 # @slot Strain The "flavour" of the parameter settings and the calculated value of the Strain index. NA if not calculated.
-# @slot Traenkle.Bailer The "flavour" of the parameter settings, percentages of prepositions and conjunctions, and the calculated values of both Tränkle-Bailer formulae. NA if not calculated.
+# @slot Traenkle.Bailer The "flavour" of the parameter settings, percentages of prepositions and conjunctions, and the calculated values of both Tr\"ankle-Bailer formulae. NA if not calculated.
 # @slot TRI The calculated value of Kuntzsch' Text-Redundanz-Index. NA if not calculated.
 # @slot Wheeler.Smith The "flavour" of the parameter settings and the calculated value of the Wheeler-Smith index. NA if not calculated.
 # @slot Wheeler.Smith.de See "Wheeler.Smith"
@@ -206,7 +206,7 @@ setValidity("kRp.readability", function(object){
 			stop(simpleError("Invalid object: Slot \"lang\" must be of class character!"))
 		} else {}
 
-		if(!identical(TT.res.names, c("token","tag","lemma","lttr","wclass","desc"))){
+		if(!identical(TT.res.names, valid.TT.res.kRp.tagged)){
 			stop(simpleError("Invalid object: Wrong column names in slot \"TT.res\"!"))
 		} else {}
 

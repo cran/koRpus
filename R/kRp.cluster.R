@@ -20,7 +20,7 @@ kRp.cluster <- function(txts, lang, TT.path, TT.preset){
 	num.texts <- length(txts)
 	analysis.res <- sapply(1:num.texts, function(txt.idx){
 		txt <- txts[txt.idx]
-		message(paste("Analyzing text: ", txt, " [", txt.idx, "/", num.texts, "]...\n", sep=""))
+		message(paste0("Analyzing text: ", txt, " [", txt.idx, "/", num.texts, "]...\n"))
 		POS.analysis.res <- treetag(txt, treetagger="manual", lang=lang, TT.options=list(path=TT.path, preset=TT.preset))
 		frq.analysis.res <- freq.analysis(POS.analysis.res)
 		# get relative token class distribution

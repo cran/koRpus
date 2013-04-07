@@ -772,7 +772,7 @@ setMethod("show", signature(object="kRp.readability"), function(object){
 		cat("       Grade:", prt.Spache.grade, "\n\n")
 	} else {}
 	if(show.Spache.old){
-		cat("\nSpache.old Formula\n")
+		cat("\nSpache Formula\n")
 		cat("  Parameters:", prt.Spache.old.flavour, "\n")
 		cat(" Not on list: ", prt.Spache.old.pct, "%\n", sep="")
 		cat("       Grade:", prt.Spache.old.grade, "\n\n")

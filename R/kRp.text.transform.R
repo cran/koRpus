@@ -147,7 +147,7 @@ kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
 								lang=txt@lang,
 								TT.res=old.new.comp,
 								diff=list(all.tokens=diff.pct.words.all, words=diff.pct.words, all.chars=diff.pct.lett.all, letters=diff.pct.lett))
-			message(paste("Difference between objects\n    Words: ", round(diff.pct.words, digits=2), "%\n  Letters: ", round(diff.pct.lett, digits=2),"%", sep=""))
+			message(paste0("Difference between objects\n    Words: ", round(diff.pct.words, digits=2), "%\n  Letters: ", round(diff.pct.lett, digits=2),"%"))
 	}
 
 	return(results)

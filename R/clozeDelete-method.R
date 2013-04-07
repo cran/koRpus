@@ -55,11 +55,11 @@ setMethod("clozeDelete",
 				changedTxt <- slot(clozeTxt, "desc")[["cloze"]][["origText"]]
 				rmLetters <- sum(changedTxt[["lttr"]])
 				allLetters <- slot(obj, "desc")[["letters.only"]]
-				cat(headLine(paste("Cloze variant ", idx+1, " (offset ", idx, ")", sep="")), "\n\n",
-					kRp.text.paste(clozeTxt), "\n\n\n", headLine(paste("Changed text (offset ", idx, "):", sep=""), level=2), "\n\n",
+				cat(headLine(paste0("Cloze variant ", idx+1, " (offset ", idx, ")")), "\n\n",
+					kRp.text.paste(clozeTxt), "\n\n\n", headLine(paste0("Changed text (offset ", idx, "):"), level=2), "\n\n",
 					sep="")
 				print(changedTxt)
-				cat("\n\n", headLine(paste("Statistics (offset ", idx, "):", sep=""), level=2), "\n", sep="")
+				cat("\n\n", headLine(paste0("Statistics (offset ", idx, "):"), level=2), "\n", sep="")
 				print(summary(as(clozeTxt, "kRp.tagged")))
 				cat("\nCloze deletion took ", rmLetters, " letters (", round(rmLetters * 100 / allLetters, digits=2),"%)\n\n\n", sep="")
 			}

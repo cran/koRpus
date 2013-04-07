@@ -34,9 +34,9 @@
 lex.div.num(104, 43)
 }
 \references{
-  Maas, H.-D., (1972). Über den Zusammenhang zwischen
-  Wortschatzumfang und Länge eines Textes.
-  \emph{Zeitschrift für Literaturwissenschaft und
+  Maas, H.-D., (1972). \"Uber den Zusammenhang zwischen
+  Wortschatzumfang und L\"ange eines Textes.
+  \emph{Zeitschrift f\"ur Literaturwissenschaft und
   Linguistik}, 2(8), 73--96.
 
   Tweedie. F.J. & Baayen, R.H. (1998). How Variable May a

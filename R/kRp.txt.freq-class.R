@@ -34,7 +34,7 @@ setClass("kRp.txt.freq",
 
 #' @include kRp.tagged-class.R
 setAs(from="kRp.txt.freq", to="kRp.tagged", function(from){
-		tagged.df <- as.data.frame(from@TT.res[, c("token","tag","lemma","lttr","wclass","desc")])
+		tagged.df <- as.data.frame(from@TT.res[, valid.TT.res.kRp.tagged])
 		retagged.object <- new("kRp.tagged", lang=from@lang, desc=from@desc, TT.res=tagged.df)
 		return(retagged.object)
 		}

@@ -37,7 +37,7 @@ import.RS <- function(res.txt){
 		c("Average \\(Mean\\)","Average (Mean)",""), stringsAsFactors=FALSE))
 
 	measure.res <- t(sapply(all.measures[,1], function(cur.meas){
-			cur.res <- unlist(strsplit(RS.res[grep(paste("^",cur.meas,"\t(.*)\t(.*)\t", sep=""), RS.res)], "\t"))
+			cur.res <- unlist(strsplit(RS.res[grep(paste0("^",cur.meas,"\t(.*)\t(.*)\t"), RS.res)], "\t"))
 			# add name and flavour:
 			cur.res <- c(all.measures[all.measures[,1] == cur.meas,2],
 					all.measures[all.measures[,1] == cur.meas,3], cur.res)
@@ -119,7 +119,7 @@ import.TQ <- function(res.txt, encoding="Latin1"){
 			name.I <- gsub("(-)([[:space:]]+)(R)([[:space:]]+)([[:digit:]]+)", "\\3\\5", split.I[1], perl=TRUE)
 			value.I <- gsub("([-]{0,1}[[:digit:]]+[.]{0,1}[[:digit:]]*)([[:space:]]+)([-]{0,1}[[:digit:]]+[.]{0,1}[[:digit:]]*)([[:space:]]+)(.*)", "\\1", split.I[2], perl=TRUE)
 			value.II <- gsub("([-]{0,1}[[:digit:]]+[.]{0,1}[[:digit:]]*)([[:space:]]+)([-]{0,1}[[:digit:]]+[.]{0,1}[[:digit:]]*)([[:space:]]+)(.*)", "\\3", split.I[2], perl=TRUE)
-			if(name.I %in% paste("R", sprintf("%02d", c(5:11,14,15,17,18,20,40,60)), sep="")) {
+			if(name.I %in% paste0("R", sprintf("%02d", c(5:11,14,15,17,18,20,40,60)))) {
 				value.III <- ""
 				value.IV <- gsub("^[[:space:]]", "", split.I[3], perl=TRUE)
 			} else if(identical(name.I, "R03")){
@@ -230,7 +230,7 @@ import.TQ.desc <- function(res.txt, encoding="Latin1"){
 			split.I <- unlist(strsplit(this.I, ":[[:space:]]+"))
 			name.I <- gsub("(-)([[:space:]]+)(I)([[:space:]]+)([[:digit:]]+)", "\\3\\5", split.I[1], perl=TRUE)
 			value.I <- gsub("([[:digit:]]+)([[:space:]]+)(.*)", "\\1", split.I[2], perl=TRUE)
-			if(name.I %in% paste("I", sprintf("%02d", 1:11), sep="")) {
+			if(name.I %in% paste0("I", sprintf("%02d", 1:11))) {
 				value.II <- ""
 				desc.I <- gsub("([[:digit:]]+)([[:space:]]+)(.*)", "\\3", split.I[2], perl=TRUE)
 			} else {
@@ -244,7 +244,7 @@ import.TQ.desc <- function(res.txt, encoding="Latin1"){
 			split.I <- unlist(strsplit(this.S, ":[[:space:]]+"))
 			name.I   <- gsub("(-)([[:space:]]+)(S)([[:space:]]+)([[:digit:]]+)", "\\3\\5", split.I[1], perl=TRUE)
 			value.I  <- gsub("([[:digit:]]+[.[:digit:]]*)([[:space:]]+)(.*)", "\\1", split.I[2], perl=TRUE)
-			if(name.I %in% paste("S", sprintf("%02d", 1:6), sep="")) {
+			if(name.I %in% paste0("S", sprintf("%02d", 1:6))) {
 				value.II <- ""
 			} else {
 				value.II <- gsub("([[:digit:]]+[.[:digit:]]*)([[:space:]]+)([[:digit:]]+[.[:digit:]]*)([[:space:]]+)(.*)", "\\3", split.I[2], perl=TRUE)

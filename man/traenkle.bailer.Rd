@@ -35,7 +35,7 @@
 }
 \details{
   This function calculates the two formulae by
-  Tränkle-Bailer, which are based on the Dickes-Steiwer
+  Tr\"ankle-Bailer, which are based on the Dickes-Steiwer
   formulae. In contrast to
   \code{\link[koRpus:readability]{readability}}, which by
   default calculates all possible indices, this function

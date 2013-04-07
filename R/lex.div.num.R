@@ -20,7 +20,7 @@
 #' @seealso \code{\link[koRpus:lex.div]{lex.div}}
 #' @keywords LD
 #' @references
-#'		Maas, H.-D., (1972). Über den Zusammenhang zwischen Wortschatzumfang und Länge eines Textes. \emph{Zeitschrift für
+#'		Maas, H.-D., (1972). \"Uber den Zusammenhang zwischen Wortschatzumfang und L\"ange eines Textes. \emph{Zeitschrift f\"ur
 #'			Literaturwissenschaft und Linguistik}, 2(8), 73--96.
 #'
 #'		Tweedie. F.J. & Baayen, R.H. (1998). How Variable May a Constant Be? Measures of Lexical Richness in Perspective.
@@ -78,9 +78,9 @@ lex.div.num <- function(num.tokens, num.types, measure=c("TTR","C","R","CTTR","U
 	## for the time being, give a warning until all implementations have been validated
 	needs.warning <- measure %in% c("S")
 	if(any(needs.warning)){
-		warning(paste("Note: The implementations of these formulas are still subject to validation:\n  ",
+		warning(paste0("Note: The implementations of these formulas are still subject to validation:\n  ",
 		paste(measure[needs.warning], collapse=", "),
-		"\n  Use the results with caution, even if they seem plausible!", sep=""), call.=FALSE)
+		"\n  Use the results with caution, even if they seem plausible!"), call.=FALSE)
 	} else {}
 	return(lex.div.results)
 }

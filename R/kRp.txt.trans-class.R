@@ -39,7 +39,7 @@ setClass("kRp.txt.trans",
 
 setAs(from="kRp.txt.trans", to="kRp.tagged", function(from){
 		lang <- from@lang
-		tagged.df <- as.data.frame(from@TT.res[, c("token","tag","lemma","lttr","wclass","desc")])
+		tagged.df <- as.data.frame(from@TT.res[, valid.TT.res.kRp.tagged])
 		retagged.object <- new("kRp.tagged", lang=lang, TT.res=tagged.df)
 		return(retagged.object)
 		}

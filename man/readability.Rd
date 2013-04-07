@@ -235,7 +235,7 @@
   parameters are also implemented. They can be used by
   setting the \code{Flesch} parameter to \code{"es"}
   (Fernandez-Huerta), \code{"nl"} (Douma), \code{"de"}
-  (Amstad's Verständlichkeitsindex), or \code{"fr"}
+  (Amstad's Verst\"andlichkeitsindex), or \code{"fr"}
   (Kandel-Moles).  If \code{parameters} is set to
   \code{Flesch="PSK"}, the revised parameters by
   Powers-Sumner-Kearl (1958) are used to calculate a grade
@@ -304,21 +304,21 @@
 
   Wrapper function:
   \code{\link[koRpus:harris.jacobson]{harris.jacobson}} }
-  \item{\code{"Linsear.Write"}:}{ \deqn{LW_{raw} =
-  \frac{100 - \frac{100 \times W_{<3Sy}}{W} + \left( 3
-  \times \frac{100 \times W_{3Sy}}{W} \right)}{\frac{100
-  \times St}{W}}} \deqn{LW(LW_{raw} \leq 20) =
-  \frac{LW_{raw} - 2}{2}} \deqn{LW(LW_{raw} > 20) =
-  \frac{LW_{raw}}{2}}
+  \item{\code{"Linsear.Write"} (O'Hayre, undated, see
+  Klare, 1975, p. 85):}{ \deqn{LW_{raw} = \frac{100 -
+  \frac{100 \times W_{<3Sy}}{W} + \left( 3 \times \frac{100
+  \times W_{3Sy}}{W} \right)}{\frac{100 \times St}{W}}}
+  \deqn{LW(LW_{raw} \leq 20) = \frac{LW_{raw} - 2}{2}}
+  \deqn{LW(LW_{raw} > 20) = \frac{LW_{raw}}{2}}
 
   Wrapper function:
   \code{\link[koRpus:linsear.write]{linsear.write}} }
-  \item{\code{"LIX"}}{Björnsson's \emph{Läsbarhetsindex}.
-  Originally proposed for Swedish texts, calculated by:
-  \deqn{\frac{W}{St} + \frac{100 \times{} W_{7C}}{W}}{LIX =
-  W7C / St + (L*100) / W} Texts with a LIX < 25 are
-  considered very easy, around 40 normal, and > 55 very
-  difficult to read.
+  \item{\code{"LIX"}}{Bj\"ornsson's
+  \emph{L\"asbarhetsindex}. Originally proposed for Swedish
+  texts, calculated by: \deqn{\frac{W}{St} + \frac{100
+  \times{} W_{7C}}{W}}{LIX = W7C / St + (L*100) / W} Texts
+  with a LIX < 25 are considered very easy, around 40
+  normal, and > 55 very difficult to read.
 
   Wrapper function: \code{\link[koRpus:LIX]{LIX}} }
   \item{\code{"nWS"}:}{\emph{Neue Wiener Sachtextformeln}
@@ -356,13 +356,15 @@
   \frac{30}{St}} - 2}
 
   Wrapper function: \code{\link[koRpus:SMOG]{SMOG}} }
-  \item{\code{"Spache"}:}{\emph{Spache Revised Formula}:
-  \deqn{Spache = 0.121 \times \frac{W}{St} + 0.082 \times{}
-  \frac{100 \times{} W_{-WL}}{W} + 0.659} If
+  \item{\code{"Spache"}:}{\emph{Spache Revised Formula
+  (1974)}: \deqn{Spache = 0.121 \times \frac{W}{St} + 0.082
+  \times{} \frac{100 \times{} W_{-WL}}{W} + 0.659} If
   \code{parameters} is set to \code{Spache="old"}, the
-  original parameters are used: \deqn{Spache_{old} = 0.141
-  \times \frac{W}{St} + 0.086 \times{} \frac{100 \times{}
-  W_{-WL}}{W} + 0.839} \strong{Note:} This index needs the
+  original parameters (Spache, 1953) are used:
+  \deqn{Spache_{old} = 0.141 \times \frac{W}{St} + 0.086
+  \times{} \frac{100 \times{} W_{-WL}}{W} + 0.839}
+  \strong{Note:} The revised index needs the revised Spache
+  word list (see Klare, 1975, p. 73), and the old index the
   short Dale-Chall list of 769 familiar (english) words to
   compute \eqn{W_{-WL}}. That is, you must have a copy of
   this word list and provide it via the
@@ -374,11 +376,11 @@
   \times{} \frac{1}{10}}
 
   Wrapper function: \code{\link[koRpus:strain]{strain}} }
-  \item{\code{"Traenkle.Bailer"}:}{\emph{Tränke-Bailer
+  \item{\code{"Traenkle.Bailer"}:}{\emph{Tr\"anke-Bailer
   Formeln}. These two formulas were the result of a
   re-examination of the ones proposed by Dickes-Steiwer.
   They try to avoid the usage of the type-token ratio,
-  which is dependent on text length (Tränkle, & Bailer,
+  which is dependent on text length (Tr\"ankle, & Bailer,
   1984): \deqn{TB1 = 224.6814 - \left(79.8304 \times
   \frac{C}{W} \right) - \left(12.24032 \times \frac{W}{St}
   \right) - \left(1.292857 \times \frac{100 \times{}
@@ -451,9 +453,9 @@
   Applied Psychology}, 60(2), 283--284.
 
   Dickes, P. & Steiwer, L. (1977). Ausarbeitung von
-  Lesbarkeitsformeln für die deutsche Sprache.
-  \emph{Zeitschrift für Entwicklungspsychologie und
-  Pädagogische Psychologie}, 9(1), 20--28.
+  Lesbarkeitsformeln f\"ur die deutsche Sprache.
+  \emph{Zeitschrift f\"ur Entwicklungspsychologie und
+  P\"adagogische Psychologie}, 9(1), 20--28.
 
   DuBay, W.H. (2004). \emph{The Principles of Readability}.
   Costa Mesa: Impact Information.  WWW:
@@ -491,10 +493,14 @@
   readability index}. AMRL-TR-66-22. Wright-Paterson AFB,
   Ohio: Aerospace Medical Division.
 
-  Tränkle, U. & Bailer, H. (1984). Kreuzvalidierung und
-  Neuberechnung von Lesbarkeitsformeln für die deutsche
-  Sprache.  \emph{Zeitschrift für Entwicklungspsychologie
-  und Pädagogische Psychologie}, 16(3), 231--244.
+  Spache, G. (1953). A new readability formula for
+  primary-grade reading materials. \emph{The Elementary
+  School Journal}, 53, 410--413.
+
+  Tr\"ankle, U. & Bailer, H. (1984). Kreuzvalidierung und
+  Neuberechnung von Lesbarkeitsformeln f\"ur die deutsche
+  Sprache.  \emph{Zeitschrift f\"ur Entwicklungspsychologie
+  und P\"adagogische Psychologie}, 16(3), 231--244.
 
   Wheeler, L.R. & Smith, E.H. (1954). A practical
   readability formula for the classroom teacher in the

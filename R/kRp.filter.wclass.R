@@ -6,6 +6,7 @@
 #' @param corp.rm.class A character vector with word classes which should be removed. The default value
 #'		\code{"nonpunct"} has special meaning and will cause the result of
 #'		\code{kRp.POS.tags(lang, c("punct","sentc"), list.classes=TRUE)} to be used.
+#'		Another valid value is "stopword" to remove all detected stopwords.
 #' @param corp.rm.tag A character vector with valid POS tags which should be removed.
 #' @param as.vector Logical. If \code{TRUE}, results will be returned as a character vector containing only the text parts
 #'		which survived the filtering.
@@ -33,7 +34,7 @@ kRp.filter.wclass <- function(txt, corp.rm.class="nonpunct", corp.rm.tag=c(), as
 	if(isTRUE(as.vector)){
 		results <- pre.results
 	} else {
-		dimnames(pre.results)[[1]] <- c(1:dim(pre.results)[1])
+		dimnames(pre.results)[[1]] <- c(1:nrow(pre.results))
 		results <- new("kRp.tagged", lang=lang, TT.res=pre.results)
 	}
 

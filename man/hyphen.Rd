@@ -66,10 +66,11 @@
   {\code{"de.old"}} {--- German (old spelling, 1901--1996)}
   \item {\code{"en"}} {--- English (UK)} \item
   {\code{"en.us"}} {--- English (US)} \item {\code{"es"}}
-  {--- Spanish} \item {\code{"it"}} {--- Italian} \item
-  {\code{"ru"}} {--- Russian} } In case you'd rather use
-  your own pattern set, \code{hyph.pattern} can be an
-  object of class \code{kRp.hyph.pat}, alternatively.
+  {--- Spanish} \item {\code{"fr"}} {--- French} \item
+  {\code{"it"}} {--- Italian} \item {\code{"ru"}} {---
+  Russian} } In case you'd rather use your own pattern set,
+  \code{hyph.pattern} can be an object of class
+  \code{kRp.hyph.pat}, alternatively.
 
   The built-in hyphenation patterns were derived from the
   patterns available on CTAN[1] under the terms of the

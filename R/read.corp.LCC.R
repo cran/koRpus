@@ -94,10 +94,10 @@ read.corp.LCC <- function(LCC.path, format="flatfile", fileEncoding="UTF-8", n=-
 		}
 
 		# does meta.txt exist?
-		LCC.meta <- file.path(LCC.path, paste(prefix, "meta.txt", sep=""))
+		LCC.meta <- file.path(LCC.path, paste0(prefix, "meta.txt"))
 		check.file(LCC.meta, mode="exist")
 		# does words.txt exist?
-		LCC.words <- file.path(LCC.path, paste(prefix, "words.txt", sep=""))
+		LCC.words <- file.path(LCC.path, paste0(prefix, "words.txt"))
 		check.file(LCC.words, mode="exist")
 	} else if(identical(format, "MySQL")){
 		stop(simpleMessage("Sorry, not implemented yet..."))

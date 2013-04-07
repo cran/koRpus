@@ -3,11 +3,11 @@
 
 # S4 Class kRp.tagged
 #
-# This class is used for objects that are returned by \code{\link[koRpus:treetag]{treetag}}.
+# This class is used for objects that are returned by \code{\link[koRpus:treetag]{treetag}} or \code{\link[koRpus:tokenize]{tokenize}}.
 #
 # @slot lang A character string, naming the language that is assumed for the tokenized text in this object.
 # @slot desc Descriptive statistics of the tagged text.
-# @slot TT.res Results of the called tokenizer and POS tagger. The data.frame has six columns:
+# @slot TT.res Results of the called tokenizer and POS tagger. The data.frame has eight columns:
 #		\describe{
 #			\item{\code{token}:}{The tokenized text.}
 #			\item{\code{tag}:}{POS tags for each token.}
@@ -15,6 +15,8 @@
 #			\item{\code{lttr}:}{Number of letters.}
 #			\item{\code{wclass}:}{Word class.}
 #			\item{\code{desc}:}{A short description of the POS tag.}
+#			\item{\code{stop}:}{Logical, \code{TRUE} if token is a stopword.}
+#			\item{\code{stem}:}{Stemmed token.}
 #		}
 # @note There is also \code{as()} methods to transform objects from other koRpus classes into kRp.tagged.
 # @name kRp.tagged,-class
@@ -39,9 +41,13 @@ setClass("kRp.tagged",
 				lemma=NA,
 				lttr=NA,
 				wclass=NA,
-				desc=NA)
+				desc=NA,
+				stop=NA,
+				stem=NA)
 		)
 )
+
+valid.TT.res.kRp.tagged <- c("token","tag","lemma","lttr","wclass","desc","stop","stem")
 
 setValidity("kRp.tagged", function(object){
 		TT.res <- object@TT.res
@@ -51,7 +57,7 @@ setValidity("kRp.tagged", function(object){
 			stop(simpleError("Invalid object: Slot \"lang\" must be of class character!"))
 		} else {}
 
-		if(!identical(TT.res.names, c("token","tag","lemma","lttr","wclass","desc"))){
+		if(!identical(TT.res.names, valid.TT.res.kRp.tagged)){
 			stop(simpleError("Invalid object: Wrong column names in slot \"TT.res\"!"))
 		} else {}
 

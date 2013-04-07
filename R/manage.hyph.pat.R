@@ -87,7 +87,7 @@ manage.hyph.pat <- function(hyph.pattern, get=NULL, set=NULL, rm=NULL,
 		## convert to lowercase
 		word <- tolower(word)
 		## transform "word" to ".word."
-		word.dotted <- paste(".", word, ".", sep="")
+		word.dotted <- paste0(".", word, ".")
 		word.length <- nchar(word.dotted)
 
 		## create word fragments ".w", ".wo", ".wor"... "rd."

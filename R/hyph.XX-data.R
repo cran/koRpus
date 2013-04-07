@@ -1,7 +1,7 @@
 #' Hyphenation patterns
 #' 
 #' Hyphenation patterns for \code{hyphen()} in several languages. Replace \code{"XX"} with \code{"de"},
-#' \code{"de.old"}, \code{"en"}, \code{"es"}, \code{"it"}, \code{"en.us"}, or \code{"ru"}, respectively.
+#' \code{"de.old"}, \code{"en"}, \code{"es"}, \code{"fr"}, \code{"it"}, \code{"en.us"}, or \code{"ru"}, respectively.
 #' These data objects are not really intended to be used directly, but rather to be consulted by the hyphen() function without further user interaction.
 #'
 #' @format The \code{pattern} slot of each hyphenation pattern object has three colums:
@@ -25,7 +25,7 @@
 #' documented in the file "ChangeLog_hyph_patterns.txt" in the sources for this package. The
 #' unchanged original patterns can be found under [1].
 
-#' @aliases hyph.de hyph.de.old hyph.en hyph.en.us hyph.es hyph.it hyph.ru
+#' @aliases hyph.de hyph.de.old hyph.en hyph.en.us hyph.es hyph.fr hyph.it hyph.ru
 #' @docType data
 #' @keywords datasets
 #' @name hyph.XX

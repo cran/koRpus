@@ -20,6 +20,17 @@
 # define class union to make life easier
 setClassUnion("kRp.taggedText", members=c("kRp.tagged", "kRp.analysis", "kRp.txt.freq", "kRp.txt.trans"))
 
+
+## wrapper for paste0() needed?
+if(isTRUE(R_system_version(getRversion()) < 2.15)){
+	# if this is an older R version, we need a wrapper function for paste0()
+	# which was introduced with R 2.15 as a more efficient shortcut to paste(..., sep="")
+	paste0 <- function(..., collapse=NULL){
+		return(paste(..., sep="", collapse=collapse))
+	}
+} else {}
+
+
 ## function check.file()
 # helper function for file checks
 check.file <- function(filename, mode="exist", stopOnFail=TRUE){
@@ -196,6 +207,26 @@ basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL
 } ## end function basic.tagged.descriptives()
 
 
+## function clean.text()
+# takes a character vector and a named list. it replaces each occurance
+# of the list names by ist value and returns the changed vector
+# e.g., use list("\"  "="\"") to remove two spaces behind double quotes
+clean.text <- function(txt.vct, from.to=NULL, perl=FALSE){
+	if(is.null(from.to)){
+		return(txt.vct)
+	} else {}
+	stopifnot(is.character(txt.vct))
+	stopifnot(is.list(from.to))
+	for (idx in 1:length(from.to)){
+			from <- names(from.to)[[idx]]
+			to <- from.to[[idx]]
+			txt.vct <- gsub(from, to, txt.vct, perl=perl)
+			rm("from", "to")
+		}
+	return(txt.vct)
+} ## end function clean.text()
+
+
 ## function language.setting()
 language.setting <- function(tagged.object, force.lang){
 	stopifnot(inherits(tagged.object, "kRp.tagged"))
@@ -212,7 +243,7 @@ language.setting <- function(tagged.object, force.lang){
 ## function treetag.com()
 treetag.com <- function(tagged.text, lang){
 
-	tagged.text <- as.data.frame(tagged.text, row.names=1:dim(tagged.text)[1], stringsAsFactors=FALSE)
+	tagged.text <- as.data.frame(tagged.text, row.names=1:nrow(tagged.text), stringsAsFactors=FALSE)
 
 	# get are all valid tags
 	tag.class.def <- kRp.POS.tags(lang)
@@ -238,6 +269,38 @@ treetag.com <- function(tagged.text, lang){
 } ## end function treetag.com()
 
 
+## function stopAndStem()
+# tagged.text is a data.frame from treetag() or tokenize(), to become TT.res
+stopAndStem <- function(tagged.text.df, stopwords=NULL, stemmer=NULL, lowercase=TRUE){
+
+	if(!is.null(stopwords)){
+		if(!is.character(stopwords)){
+			stop(simpleError("Stopwords must be specified as a character vector!"))
+		} else {}
+		# treat all tokens and stopwords in lower case?
+		if(isTRUE(lowercase)){
+			this.token <- tolower(tagged.text.df[,"token"])
+			stopwords <- tolower(stopwords)
+		} else {
+			this.token <- tagged.text.df[,"token"]
+		}
+		# check if token is a stopword, add column "lttr"
+		tagged.text.df <- cbind(tagged.text.df, stop=this.token %in% stopwords, stringsAsFactors=FALSE)
+	} else {
+		tagged.text.df <- cbind(tagged.text.df, stop=NA, stringsAsFactors=FALSE)
+	}
+
+	# check for stemming
+	if(inherits(stemmer, "R_Weka_stemmer_interface") || is.function(stemmer)){
+		tagged.text.df <- cbind(tagged.text.df, stem=stemmer(tagged.text.df[,"token"]), stringsAsFactors=FALSE)
+	} else {
+		tagged.text.df <- cbind(tagged.text.df, stem=NA, stringsAsFactors=FALSE)
+	}
+
+	return(tagged.text.df)
+} ## end function stopAndStem()
+
+
 ## function tagged.txt.rm.classes()
 # takes a tagged text object and returns it without punctuation or other defined
 # classes or tags. can also return tokens in lemmatized form.
@@ -245,15 +308,28 @@ tagged.txt.rm.classes <- function(txt, lemma=FALSE, lang, corp.rm.class, corp.rm
 	# to avoid needless NOTEs from R CMD check
 	wclass <- tag <- rel.col <- NULL
 
+	txt.cleaned <- as.data.frame(txt)
+
 	valid.tagset <- as.data.frame(kRp.POS.tags(lang))
 	txt.rm.tags <- c()
 	if(identical(corp.rm.class, "nonpunct")){
 		corp.rm.class <- kRp.POS.tags(lang, tags=c("punct","sentc"), list.classes=TRUE)
 	} else {}
 
-	if(is.vector(corp.rm.class) & length(corp.rm.class) > 0){
+	# "stopword" needs to be treated differently, it's another column
+	if("stopword" %in% corp.rm.class){
+		if(all(is.na(txt[,"stop"]))){
+			warning("Stopword removal not possible: All values are NA! Did you provide a stopword list when tokenizing?", call.=FALSE)
+		} else {
+			txt.cleaned <- txt.cleaned[!txt.cleaned[["stop"]],]
+		}
+		# that's all we need -- remove the entry from the vector
+		corp.rm.class <- corp.rm.class[!corp.rm.class %in% "stopword"]
+	} else {}
+	
+	if(is.vector(corp.rm.class) && length(corp.rm.class) > 0){
 		# only proceed if all class values are valid
-		if(sum(is.na(match(corp.rm.class, valid.tagset[,"wclass"]))) == 0){
+		if(all(corp.rm.class %in% valid.tagset[,"wclass"])){
 			txt.rm.tag.classes <- as.vector(subset(valid.tagset, wclass %in% corp.rm.class)[,"tag"])
 			txt.rm.tags <- unique(c(txt.rm.tags, txt.rm.tag.classes))
 		} else {
@@ -261,9 +337,9 @@ tagged.txt.rm.classes <- function(txt, lemma=FALSE, lang, corp.rm.class, corp.rm
 		}
 	} else {}
 
-	if(is.vector(corp.rm.tag) & length(corp.rm.tag) > 0){
+	if(is.vector(corp.rm.tag) && length(corp.rm.tag) > 0){
 	  # only proceed if all class values are valid
-	  if(sum(is.na(match(corp.rm.tag, valid.tagset[,"tag"]))) == 0){
+	  if(all(corp.rm.tag %in% valid.tagset[,"tag"])){
 		txt.rm.tags <- unique(c(txt.rm.tags, corp.rm.tag))
 	  } else {
 		stop(simpleError("Invalid value in corp.rm.tag!"))
@@ -273,12 +349,12 @@ tagged.txt.rm.classes <- function(txt, lemma=FALSE, lang, corp.rm.class, corp.rm
 	# return only a vetor with the tokens itself, or the whole object?
 	if(isTRUE(as.vector)){
 		if(isTRUE(lemma)){
-			txt.cleaned <- as.vector(subset(as.data.frame(txt), !tag %in% txt.rm.tags)[,"lemma"])
+			txt.cleaned <- as.vector(subset(txt.cleaned, !tag %in% txt.rm.tags)[,"lemma"])
 		} else{
-			txt.cleaned <- as.vector(subset(as.data.frame(txt), !tag %in% txt.rm.tags)[,"token"])
+			txt.cleaned <- as.vector(subset(txt.cleaned, !tag %in% txt.rm.tags)[,"token"])
 		}
 	} else {
-		txt.cleaned <- subset(as.data.frame(txt), !tag %in% txt.rm.tags)
+		txt.cleaned <- subset(txt.cleaned, !tag %in% txt.rm.tags)
 	}
 	return(txt.cleaned)
 } ## end function tagged.txt.rm.classes()
@@ -289,15 +365,15 @@ kRp.check.params <- function(given, valid, where=NULL, missing=FALSE){
 	compared <- given %in% valid
 	invalid.params <- given[!compared]
 	if(!is.null(where)){
-		check.location <- paste(" in \"",where,"\"", sep="")
+		check.location <- paste0(" in \"",where,"\"")
 	} else {
 		check.location <- ""
 	}
 	if(!length(invalid.params) == 0){
 		if(isTRUE(missing)){
-			stop(simpleError(paste("Missing elements", check.location,": \"", paste(invalid.params, collapse="\", \""), "\"", sep="")))
+			stop(simpleError(paste0("Missing elements", check.location,": \"", paste(invalid.params, collapse="\", \""), "\"")))
 		} else {
-			stop(simpleError(paste("Invalid elements given", check.location,": \"", paste(invalid.params, collapse="\", \""), "\"", sep="")))
+			stop(simpleError(paste0("Invalid elements given", check.location,": \"", paste(invalid.params, collapse="\", \""), "\"")))
 		}
 	} else {
 		return(TRUE)
@@ -349,7 +425,7 @@ value.distribs <- function(value.vect, omit.missings=TRUE){
 ## function distrib.from.fixed()
 # make distribution matrices from fixed text features
 distrib.from.fixed <- function(fixed.vect, all.words, idx="s", unaccounted="x"){
-	num.accounted <- fixed.vect[grep(paste(idx, "[[:digit:]]+", sep=""), names(fixed.vect))]
+	num.accounted <- fixed.vect[grep(paste0(idx, "[[:digit:]]+"), names(fixed.vect))]
 	num.unaccounted <- all.words - sum(num.accounted)
 	num.names <- names(num.accounted)
 
@@ -367,7 +443,7 @@ distrib.from.fixed <- function(fixed.vect, all.words, idx="s", unaccounted="x"){
 # the other way round, to be able to use the desc slot with readability.num()
 distrib.to.fixed <- function(distrib, all.values, idx="s"){
 	values <- distrib["num",]
-	names(values) <- paste(idx, colnames(distrib), sep="")
+	names(values) <- paste0(idx, colnames(distrib))
 	values <- c(all=all.values, values)
 	return(values)
 } ## end function distrib.to.fixed()
@@ -506,7 +582,7 @@ list.add.type <- function(this.token, type.list){
 list.drop.type <- function(this.token, type.list){
 	# is this type in the list in the first place?
 	if(is.null(type.list[[this.token]])){
-		stop(simpleError(paste("list.drop.type: '", this.token, "' cannot be found in the list of types, this is odd!", sep="")))
+		stop(simpleError(paste0("list.drop.type: '", this.token, "' cannot be found in the list of types, this is odd!")))
 	} else {}
 	# is this the last type?
 	if(type.list[[this.token]] > 1){
@@ -613,9 +689,9 @@ type.freq <- function(txt, case.sens=TRUE, verbose=FALSE){
 	type.counter <- 1
 	for (tp in all.types){
 		if(isTRUE(verbose)){
-			cat(paste("\t", floor(100*type.counter/num.types), "% complete, processing token ", type.counter, " of ", num.types, ": \"", tp, "\"", sep=""))
+			cat(paste0("\t", floor(100*type.counter/num.types), "% complete, processing token ", type.counter, " of ", num.types, ": \"", tp, "\""))
 			tp.freq <- sum(match(all.tokens[["token"]], tp), na.rm=TRUE)
-			cat(paste(" (found ", tp.freq, " times in ", num.tokens, " tokens)\n", sep=""))
+			cat(paste0(" (found ", tp.freq, " times in ", num.tokens, " tokens)\n"))
 		} else {
 			tp.freq <- sum(match(all.tokens[["token"]], tp), na.rm=TRUE)
 		}
@@ -793,7 +869,7 @@ is.supported.lang <- function(lang.ident, support="hyphen"){
 		if(lang.ident %in% names(hyphen.supported)){
 			res.ident <- hyphen.supported[[lang.ident]]
 		} else {
-			stop(simpleError(paste("Unknown language: \"", lang.ident, "\".\nPlease provide a valid hyphenation pattern!", sep="")))
+			stop(simpleError(paste0("Unknown language: \"", lang.ident, "\".\nPlease provide a valid hyphenation pattern!")))
 		}
 	} else {}
 
@@ -816,9 +892,9 @@ load.hyph.pattern <- function(lang){
 	hyph.pat <- NULL
 
 	lang <- is.supported.lang(lang, support="hyphen")
-	pat.to.load <- parse(text=paste("if(!exists(\"hyph.", lang, "\", envir=.koRpus.env, inherits=FALSE)){
+	pat.to.load <- parse(text=paste0("if(!exists(\"hyph.", lang, "\", envir=.koRpus.env, inherits=FALSE)){
 		data(hyph.", lang, ", package=\"koRpus\", envir=.koRpus.env)} else {}
-		hyph.pat <- get(\"hyph.", lang, "\", envir=.koRpus.env)", sep=""))
+		hyph.pat <- get(\"hyph.", lang, "\", envir=.koRpus.env)"))
 	eval(pat.to.load)
 	return(hyph.pat)
 } ## end function load.hyph.pattern()
@@ -915,7 +991,7 @@ read.udhr <- function(txt.path, quiet=TRUE){
 	# split vector into a list with ell elements; then we have basically what xmlParse() and xmlSApply() returned
 	udhr.XML <- gsub("([[:alnum:]]+)=('[^']+'|'')[[:space:]]+", "\\1=\\2#", udhr.XML, perl=TRUE)
 	udhr.XML.list <- strsplit(udhr.XML, split="#")
-	udhr.list <- lapply(1:length(udhr.XML.list), function(cur.entry){eval(parse(text=paste("c(", paste(udhr.XML.list[[cur.entry]], collapse=", "), ")", sep="")))})
+	udhr.list <- lapply(1:length(udhr.XML.list), function(cur.entry){eval(parse(text=paste0("c(", paste(udhr.XML.list[[cur.entry]], collapse=", "), ")")))})
 
 	names(udhr.list) <- 1:length(udhr.list)
 	# correct for missing values and variables
@@ -923,19 +999,19 @@ read.udhr <- function(txt.path, quiet=TRUE){
 			if(sum(!c("v","nv") %in% names(udhr.entry))){
 				if(!"v" %in% names(udhr.entry)){
 					udhr.entry[["v"]] <- NA
-					udhr.entry[["file"]] <- file.path(udhr.path, paste("udhr_", udhr.entry[["l"]], ".txt", sep=""))
+					udhr.entry[["file"]] <- file.path(udhr.path, paste0("udhr_", udhr.entry[["l"]], ".txt"))
 				} else {
-					udhr.entry[["file"]] <- file.path(udhr.path, paste("udhr_", udhr.entry[["l"]], "_", udhr.entry[["v"]], ".txt", sep=""))
+					udhr.entry[["file"]] <- file.path(udhr.path, paste0("udhr_", udhr.entry[["l"]], "_", udhr.entry[["v"]], ".txt"))
 				}
 				if(!"nv" %in% names(udhr.entry)){
 					udhr.entry[["nv"]] <- NA
 					udhr.entry[["name"]] <- udhr.entry[["n"]]
 				} else {
-					udhr.entry[["name"]] <- paste(udhr.entry[["n"]], " (",udhr.entry[["nv"]],")", sep="")
+					udhr.entry[["name"]] <- paste0(udhr.entry[["n"]], " (",udhr.entry[["nv"]],")")
 				}
 			} else {
-				udhr.entry[["file"]] <- file.path(udhr.path, paste("udhr_", udhr.entry[["l"]], "_", udhr.entry[["v"]], ".txt", sep=""))
-				udhr.entry[["name"]] <- paste(udhr.entry[["n"]], " (",udhr.entry[["nv"]],")", sep="")
+				udhr.entry[["file"]] <- file.path(udhr.path, paste0("udhr_", udhr.entry[["l"]], "_", udhr.entry[["v"]], ".txt"))
+				udhr.entry[["name"]] <- paste0(udhr.entry[["n"]], " (",udhr.entry[["nv"]],")")
 			}
 			# now try to load the translated text from file and add it to the entry
 			udhr.file <- udhr.entry[["file"]]
@@ -1104,9 +1180,9 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
 	}
 
 	# call our own simple tokenizer
-	# it sould split strings at every non-letter character, with the
+	# it should split strings at every non-letter character, with the
 	# exception of a defined word-binding (like "-")
-	tokenized.text <- unlist(sapply(tk.pre.lst, function(tkn){
+	tokenized.text <- as.vector(unlist(sapply(tk.pre.lst, function(tkn){
 			# in case of empty elements, skip to the next one
 			if(identical(tkn,"")){
 				return()
@@ -1127,21 +1203,35 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
 				# create a vector for later exclusion if a pre/suffix heuristic was chosen and already applied
 				tkn.nonheur <- tkn
 				all.fixes <- c()
-				# probably split off possessive 's and the like
-				if("en" %in% heuristics){
-					stopifnot(length(heur.fix$suf) > 0)
-					heur.suffix <- paste(heur.fix$suf, collapse="")
-					tkn <- gsub(paste("([\\p{L}\\p{M}\\p{N}])([",heur.suffix,"][\\p{L}\\p{M}\\p{N}]+)", sep=""), "\\1 \\2", tkn, perl=TRUE)
-					all.fixes <- unique(c(all.fixes, heur.suffix))
-					tkn.nonheur <- gsub(paste("[",all.fixes,"]", sep=""), "", tkn)
-				} else {}
-				# the same for french suffixes like l'animal
+				# for pre- and suffixes, set number of occurring letters
+				pre.max.num <- "" # the empty default reads a "exactly one letter"
+				suf.max.num <- "{1,2}"
+				# see what we need to check for
+				check.suffix <- ifelse(any(c("en", "fr", "suf") %in% heuristics), TRUE, FALSE)
+				check.prefix <- ifelse(any(c("fr", "pre") %in% heuristics), TRUE, FALSE)
 				if("fr" %in% heuristics){
+					# in french longer suffixes like "'elle" are common
+					suf.max.num <- "+"
+				} else {}
+				# probably split off french prefixes like l'animal
+				if(isTRUE(check.prefix)){
 					stopifnot(length(heur.fix$pre) > 0)
-					heur.prefix <- paste(heur.fix$pre, collapse="")
-					tkn <- gsub(paste("([\\p{L}\\p{M}\\p{N}][",heur.prefix,"])([\\p{L}\\p{M}\\p{N}]+)", sep=""), "\\1 \\2", tkn, perl=TRUE)
+					heur.prefix <- paste0(heur.fix$pre, collapse="")
+					# also take care of cases where there's non-letter stuff before the prefix or after the prefixed word
+					tkn <- gsub(paste0("(^[\\p{Z}\\p{S}\\p{P}]*)([\\p{L}\\p{M}\\p{N}]", pre.max.num, "[", heur.prefix, "])([\\p{L}\\p{M}\\p{N}]+)([\\p{Z}\\p{S}\\p{P}]*$)"),
+						"\\1 \\2 \\3 \\4", tkn, perl=TRUE)
 					all.fixes <- unique(c(all.fixes, heur.prefix))
-					tkn.nonheur <- gsub(paste("[",all.fixes,"]", sep=""), "", tkn)
+					tkn.nonheur <- gsub(paste0("[",all.fixes,"]", collapse=""), "", tkn)
+				} else {}
+				# the same for possessive 's and the like
+				if(isTRUE(check.suffix)){
+					stopifnot(length(heur.fix$suf) > 0)
+					heur.suffix <- paste0(heur.fix$suf, collapse="")
+					# also take care of cases where there's non-letter stuff before the suffix or after the suffixed word
+					tkn <- gsub(paste0("(^[\\p{Z}\\p{S}\\p{P}]*)([\\p{L}\\p{M}\\p{N}]+)([", heur.suffix, "][\\p{L}\\p{M}\\p{N}]", suf.max.num, ")([\\p{Z}\\p{S}\\p{P}]*$)"),
+						"\\1 \\2 \\3 \\4", tkn, perl=TRUE)
+					all.fixes <- unique(c(all.fixes, heur.suffix))
+					tkn.nonheur <- gsub(paste0("[",all.fixes,"]", collapse=""), "", tkn)
 				} else {}
 				# check for possible abbreviations
 				if(is.null(abbrev.vect) | !tkn %in% abbrev.vect){
@@ -1156,14 +1246,14 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
 					# take care of probably already applied prefix/suffix heuristics here:
 					} else if(grepl("([\\p{L}\\p{M}\\p{N}]+)([^\\p{L}\\p{M}\\p{N}\\s]+)|([^\\p{L}\\p{M}\\p{N}\\s]+)([\\p{L}\\p{M}\\p{N}]+)", tkn.nonheur, perl=TRUE)){
 						# this should be some other punctuation or strange stuff...
-						tkn <- gsub(paste("([^\\p{L}\\p{M}\\p{N}",paste(ign.comp, collapse=""),"])([\\p{L}\\p{M}\\p{N}])", sep=""), "\\1 \\2", tkn, perl=TRUE)
-						tkn <- gsub(paste("([\\p{L}\\p{M}\\p{N}])([^\\p{L}\\p{M}\\p{N}",paste(ign.comp, collapse=""),"])", sep=""), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([^\\p{L}\\p{M}\\p{N}",paste(ign.comp, collapse=""),"])([\\p{L}\\p{M}\\p{N}])"), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([\\p{L}\\p{M}\\p{N}])([^\\p{L}\\p{M}\\p{N}",paste(ign.comp, collapse=""),"])"), "\\1 \\2", tkn, perl=TRUE)
 					} else {}
 					# is there clusters of undefined nonword stuff left?
 					if(grepl("([^\\p{L}\\p{M}\\p{N}\\s]{2,})", tkn, perl=TRUE)){
 						# as long as it's not dots:
-						tkn <- gsub(paste("([^\\s])([^\\p{L}\\p{M}\\p{N}.",paste(ign.comp, collapse=""),"\\s])", sep=""), "\\1 \\2", tkn, perl=TRUE)
-						tkn <- gsub(paste("([^\\p{L}\\p{M}\\p{N}.",paste(ign.comp, collapse=""),"\\s])([^\\s])", sep=""), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([^\\s])([^\\p{L}\\p{M}\\p{N}.",paste(ign.comp, collapse=""),"\\s])"), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([^\\p{L}\\p{M}\\p{N}.",paste(ign.comp, collapse=""),"\\s])([^\\s])"), "\\1 \\2", tkn, perl=TRUE)
 						# keep "..." intact
 						tkn <- gsub("([^\\p{L}\\p{M}\\p{N}.\\s])([.])", "\\1 \\2", tkn, perl=TRUE)
 					} else {}
@@ -1173,10 +1263,7 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
 				new.tkn <- new.tkn[!new.tkn %in% ""]
 				return(new.tkn)
 			}
-		}))
-
-	# remove the dumb names
-	names(tokenized.text) <- NULL
+		}, USE.NAMES=FALSE)))
 
 	if(isTRUE(tag)){
 		tokenized.text <- taggz(tokenized.text, abbrev=abbrev.vect, heur.fix=heur.fix, sntc=sntc, ign.comp=ign.comp)
@@ -1231,7 +1318,7 @@ set.lang.support <- function(target, value){
 		}
 		all.kRp.env[["langSup"]][["treetag"]][["presets"]] <- recent.presets
 	} else {
-		stop(simpleError(paste("Invalid target for language support: ", target, sep="")))
+		stop(simpleError(paste0("Invalid target for language support: ", target)))
 	}
 	list2env(all.kRp.env, envir=as.environment(.koRpus.env))
 } ## end function set.lang.support()
@@ -1260,15 +1347,15 @@ queryList <- function(obj, var, query, rel, as.df, ignore.case, perl){
 # takes text and builds a border around it
 headLine <- function(txt, level=1){
 	if(identical(level, 1)){
-		headlineTxt <- paste("## ", txt, " ##", sep="")
+		headlineTxt <- paste0("## ", txt, " ##")
 		headlineLine <- paste(rep("#", nchar(headlineTxt)), collapse="")
-		headlineFull <- paste(headlineLine, "\n", headlineTxt, "\n", headlineLine, sep="")
+		headlineFull <- paste0(headlineLine, "\n", headlineTxt, "\n", headlineLine)
 	} else if(identical(level, 2)){
 		headlineLine <- paste(rep("=", nchar(txt)), collapse="")
-		headlineFull <- paste(txt, "\n", headlineLine, sep="")
+		headlineFull <- paste0(txt, "\n", headlineLine)
 	} else {
 		headlineLine <- paste(rep("-", nchar(txt)), collapse="")
-		headlineFull <- paste(txt, "\n", headlineLine, sep="")
+		headlineFull <- paste0(txt, "\n", headlineLine)
 	}
 	return(headlineFull)
 } ## end function headLine()

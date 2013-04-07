@@ -33,6 +33,10 @@
 #'				\item {\code{"en"}} {English}
 #'				\item {\code{"es-utf8"}} {Spanish, UTF-8}
 #'				\item {\code{"es"}} {Spanish}
+#'				\item {\code{"fr-utf8"}} {French, UTF-8}
+#'				\item {\code{"fr"}} {French}
+#'				\item {\code{"it-utf8"}} {Italian, UTF-8}
+#'				\item {\code{"it"}} {Italian}
 #'				\item {\code{"ru"}} {Russian, UTF-8}
 #'			}
 #'				you can omit all the following elements, because they will be filled with defaults. Of course this only makes sense if you have a
@@ -60,9 +64,14 @@
 #'		this option only has an effect if \code{treetagger="manual"}.
 #' @param format Either "file" or "obj", depending on whether you want to scan files or analyze the text in a given object, like
 #'		a character vector. If the latter, it will be written to a temporary file (see \code{file}).
+#' @param stopwords A character vector to be used for stopword detection. Comparison is done in lower case. You can also simply set 
+#'		\code{stopwords=tm::stopwords("en")} to use the english stopwords provided by the \code{tm} package.
+#' @param stemmer A function or method to perform stemming. For instance, you can set \code{stemmer=Snowball::SnowballStemmer} if you have
+#'		the \code{Snowball} package installed. As of now, you cannot provide further arguments to this function.
 #' @return An object of class \code{\link[koRpus]{kRp.tagged-class}}. If \code{debug=TRUE}, prints internal variable settings and attempts to return the
 #'		original output if the TreeTagger system call in a matrix.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}, support for Spanish contributed by Earl Brown \email{eabrown@@csumb.edu}
+#' @author m.eik michalke \email{meik.michalke@@hhu.de}, support for various laguages was contributed by Earl Brown (Spanish), Alberto Mirisola (Italian) and
+#'		Alexandre Brulet (French).
 #' @keywords misc
 #' @seealso \code{\link[koRpus:freq.analysis]{freq.analysis}}, \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
 #' \code{\link[koRpus]{kRp.tagged-class}}
@@ -87,11 +96,22 @@
 #' # after tagging, use the resulting object with other functions in this package:
 #' readability(tagged.results)
 #' lex.div(tagged.results)
+#' 
+#' ## enabling stopword detection and stemming
+#' # if you also installed the packages tm and Snowball,
+#' # you can use some of their features with koRpus:
+#' set.kRp.env(TT.cmd="manual", lang="en", TT.options=list(path="~/bin/treetagger",
+#'    preset="en"))
+#' tagged.results <- treetag("~/my.data/speech.txt",
+#'    stopwords=tm::stopwords("en"),
+#'    stemmer=Snowball::SnowballStemmer)
+#' # removing all stopwords now is simple:
+#' tagged.noStopWords <- kRp.filter.wclass(tagged.results, "stopword")
 #' }
 
 treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 					sentc.end=c(".","!","?",";",":"), encoding=NULL, TT.options=NULL, debug=FALSE, TT.tknz=TRUE,
-					format="file"){
+					format="file", stopwords=NULL, stemmer=NULL){
 
 	# TreeTagger uses slightly different presets on windows and unix machines,
 	# so we'll need to check the OS first
@@ -110,6 +130,8 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 	} else {}
 	if(identical(TT.options, "kRp.env")){
 		TT.options <- get.kRp.env(TT.options=TRUE)
+	} else if(!is.null(TT.options) && !is.list(TT.options)){
+		warning("You provided \"TT.options\", but not as a list!")
 	} else {}
 
 	if(identical(lang, "kRp.env")){
@@ -174,7 +196,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			#	TT.filter.command	<- c()
 			preset.definition <- as.list(as.environment(.koRpus.env))[["langSup"]][["treetag"]][["presets"]][[TT.options[["preset"]]]]
 			if(is.null(preset.definition)){
-				stop(simpleError(paste("Manual TreeTagger configuration: \"",TT.options[["preset"]],"\" is not a valid preset!", sep="")))
+				stop(simpleError(paste0("Manual TreeTagger configuration: \"",TT.options[["preset"]],"\" is not a valid preset!")))
 			} else {
 				matching.lang(lang, preset.definition[["lang"]])
 				preset.list <- preset.definition[["preset"]](TT.cmd=TT.cmd, TT.bin=TT.bin, TT.lib=TT.lib, unix.OS=unix.OS)
@@ -258,7 +280,8 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 				TT.tknz.opts <- list()
 			} else {}
 			given.tknz.options <- names(TT.tknz.opts)
-			tokenize.options <- c("split", "ign.comp", "heuristics", "heur.fix", "abbrev", "sentc.end", "detect")
+			tokenize.options <- c("split", "ign.comp", "heuristics", "heur.fix", "abbrev",
+				"sentc.end", "detect", "clean.raw", "perl")
 			for (this.opt in tokenize.options){
 				if(!this.opt %in% given.tknz.options) {
 					TT.tknz.opts[[this.opt]] <- eval(formals(tokenize)[[this.opt]])
@@ -269,11 +292,12 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			} else {}
 
 			# set this just for the debug printout
-			TT.tokenizer	<- "koRpus:::tokenize()"
+			TT.tokenizer	<- "koRpus::tokenize()"
 			# call tokenize() and write results to tempfile
 			tknz.tempfile <- tempfile(pattern="tokenize", fileext=".txt")
 			tknz.results <- tokenize(
 				takeAsFile,
+				format="file",
 				fileEncoding=input.enc,
 				split=TT.tknz.opts[["split"]],
 				ign.comp=TT.tknz.opts[["ign.comp"]],
@@ -283,11 +307,13 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 				tag=FALSE,
 				lang=lang,
 				sentc.end=TT.tknz.opts[["sentc.end"]],
-				detect=TT.tknz.opts[["detect"]]
+				detect=TT.tknz.opts[["detect"]],
+				clean.raw=TT.tknz.opts[["clean.raw"]],
+				perl=TT.tknz.opts[["perl"]]
 			)
 			# TreeTagger can produce mixed encoded results if fed with UTF-8 in Latin1 mode
 			tknz.results <- iconv(tknz.results, from="UTF-8", to=input.enc)
-			message(paste("Assuming '", input.enc, "' as encoding for the input file. If the results turn out to be erroneous, check the file for invalid characters, e.g. em.dashes or fancy quotes, and/or consider setting 'encoding' manually.", sep=""), call.=FALSE)
+			message(paste0("Assuming '", input.enc, "' as encoding for the input file. If the results turn out to be erroneous, check the file for invalid characters, e.g. em.dashes or fancy quotes, and/or consider setting 'encoding' manually."))
 			cat(paste(tknz.results, collapse="\n"), file=tknz.tempfile)
 			if(!isTRUE(debug)){
 				on.exit(unlink(tknz.tempfile), add=TRUE)
@@ -330,7 +356,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 		# create system call for unix and windows
 		if(isTRUE(unix.OS)){
 			if(isTRUE(TT.tknz)){
-				sys.tt.call <- paste(TT.tokenizer, TT.tknz.opts, paste("\"", takeAsFile, "\"", sep=""), "|",
+				sys.tt.call <- paste(TT.tokenizer, TT.tknz.opts, paste0("\"", takeAsFile, "\""), "|",
 					TT.lookup.command, TT.tagger, TT.opts, TT.params, TT.filter.command)
 			} else {
 				sys.tt.call <- paste("cat ", tknz.tempfile, "|",
@@ -338,7 +364,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			}
 		} else {
 			if(isTRUE(TT.tknz)){
-				sys.tt.call <- paste("perl ", TT.tokenizer, TT.tknz.opts, paste("\"", takeAsFile, "\"", sep=""), "|",
+				sys.tt.call <- paste("perl ", TT.tokenizer, TT.tknz.opts, paste0("\"", takeAsFile, "\""), "|",
 					TT.lookup.command, TT.tagger, TT.params, TT.opts, TT.filter.command)
 			} else {
 				sys.tt.call <- paste("type ", tknz.tempfile, "|",
@@ -363,8 +389,8 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			cat(paste("
 				TT.tokenizer: ",TT.tokenizer,
 				ifelse(isTRUE(TT.tknz),
-					paste("\n\t\t\t\tTT.tknz.opts: ",TT.tknz.opts, sep=""),
-					paste("\n\t\t\t\ttempfile: ",tknz.tempfile, sep="")),"
+					paste0("\n\t\t\t\tTT.tknz.opts: ",TT.tknz.opts),
+					paste0("\n\t\t\t\ttempfile: ",tknz.tempfile)),"
 				file: ",takeAsFile,"
 				TT.lookup.command: ",TT.lookup.command,"
 				TT.tagger: ",TT.tagger,"
@@ -409,6 +435,9 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 
 	# add word classes, comments and numer of letters ("wclass", "desc", "lttr")
 	tagged.mtrx <- treetag.com(tagged.mtrx, lang=lang)
+
+	# probably apply stopword detection and stemming
+	tagged.mtrx <- stopAndStem(tagged.mtrx, stopwords=stopwords, stemmer=stemmer, lowercase=TRUE)
 
 	results <- new("kRp.tagged", lang=lang, TT.res=tagged.mtrx)
 	## descriptive statistics

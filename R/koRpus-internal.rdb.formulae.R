@@ -42,12 +42,13 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# to validate the correctness of calculation. this doesn't mean they always came to identical
 	# results at once, since the accuracy of input data (like number of syllables or sentences)
 	# varies considerably. but if these differences were manually corrected, the results were similar:
-	# - ARI                   [OUT, RDS]
+	# - ARI                   [OUT, RDS, FRT]
 	#   - NRI                 [RDS (labeled as "simplified")]
 	# - Bormuth Mean Cloze    [RDS]
 	# - Coleman-Liau          [OUT, RDS]
 	# - Dale-Chall            [RDS]
 	#   - PSK                 [RDS]
+	#   - Dale-Chall (1948)   [OKP]
 	# - DRP                   [RDS]
 	# - Farr-Jenkins-Paterson [RDS]
 	#   - PSK                 [RDS]
@@ -59,6 +60,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# - FORCAST               [RDS]
 	# - Harris-Jacobson (HJ2) [RDS]
 	# - LIX                   [RDS]
+	# - Linsear Write         [FRT]
 	# - RIX                   [RDS]
 	# - SMOG                  [OUT, RDS]
 	# - Spache                [RDS]
@@ -67,7 +69,6 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# these measures produce plausible results, but need checking:
 	# - ARI simplified
 	# - Coleman Formulas (1-4)
-	# - Dale-Chall (1948)
 	# - Danielson-Bryan (1-2)
 	# - Dickes-Steiwer's Handformel
 	# - Easy Listening Formula
@@ -77,18 +78,19 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# - Flesch.nl
 	# - Fucks
 	# - Harris-Jacobson (1-5)
-	# - Linsear Write
 	# - Neue Wiener Sachtextformeln (1-4)
 	# - SMOG Qu
 	# - SMOG C
 	# - Strain
-	# - Tränkle-Bailer
+	# - Traenkle-Bailer
 	#
 	# these measures look bogus:
 	# - TRI
 	#
 	# tools used:
+	# FRT: http://www.readabilityformulas.com/free-readability-formula-tests.php
 	# GFI: http://gunning-fog-index.com
+	# OKP: http://www.lefthandlogic.com/htmdocs/tools/okapi/okapi.php
 	# OUT: http://www.online-utility.org/english/readability_test_and_improve.jsp
 	# RDS: Readability Studio, version 3.2.7.0 (14 jan 2011)
 	# TAL: http://www.textalyser.net
@@ -125,7 +127,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# this part calculates the percentage of words in the analyzed text
 	# that are not found in a given list of words. this list must be
 	# a data.frame/matrix with one column or a vector.
-	difficult.words <- function(words.only, word.list){
+	difficult.words <- function(words.only, word.list, only.once=FALSE){
 		# define the built-in word lists
 		# it's not enough to have the data file around
 		## this much doesn't work as of now, we can't ship any word list due to copyright restrictions
@@ -144,24 +146,31 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			} else if(word.list %in% c(
 				# list internal lists here ...
 				"some.free.word.list")){
-					wlist.to.load <- parse(text=paste("if(!exists(\"", word.list, "\", envir=.koRpus.env, inherits=FALSE)){
+					wlist.to.load <- parse(text=paste0("if(!exists(\"", word.list, "\", envir=.koRpus.env, inherits=FALSE)){
 						data(", word.list, ", package=\"koRpus\", envir=.koRpus.env)} else {}
-						local.word.list <- as.vector(unlist(get(\"", word.list, "\", envir=.koRpus.env)))", sep=""))
+						local.word.list <- as.vector(unlist(get(\"", word.list, "\", envir=.koRpus.env)))"))
 					eval(wlist.to.load)
 			} else {
-				stop(simpleError(paste("Invalid word list: \"", word.list, "\".\nPlease provide a valid file name, or a data.frame/matrix with one column, or a character vector!", sep="")))
+				stop(simpleError(paste0("Invalid word list: \"", word.list, "\".\nPlease provide a valid file name, or a data.frame/matrix with one column, or a character vector!")))
 			}
 		} else if((is.vector(word.list)) & length(word.list) > 1){
 			local.word.list <- word.list
 		} else {
-			stop(simpleError(paste("Invalid word list: \"", word.list, "\".\nPlease provide a valid file name, or a data.frame/matrix with one column, or a character vector!", sep="")))
+			stop(simpleError(paste0("Invalid word list: \"", word.list, "\".\nPlease provide a valid file name, or a data.frame/matrix with one column, or a character vector!")))
 		}
 		# make sure it's a vector, and we don't care about cases
 		local.word.list <- tolower(local.word.list)
 		local.tokens <- tolower(words.only)
-		# number of tokens not on the list
-		words.not.listed <- words.only[!local.tokens %in% local.word.list]
-		num.not.listed <- sum(!local.tokens %in% local.word.list)
+		# Space counts unfamiliar words only once
+		if(isTRUE(only.once)){
+			words.not.listed <- unique(words.only[!local.tokens %in% local.word.list])
+			# number of tokens not on the list
+			num.not.listed <- sum(!unique(local.tokens) %in% local.word.list)
+		} else {
+			words.not.listed <- words.only[!local.tokens %in% local.word.list]
+			# number of tokens not on the list
+			num.not.listed <- sum(!local.tokens %in% local.word.list)
+		}
 		pct.not.listed <- num.not.listed * 100 / length(local.tokens)
 		result <- list(words.not.listed=words.not.listed, num.not.listed=num.not.listed, pct.not.listed=pct.not.listed,
 			num.listed=(length(local.tokens)-num.not.listed), pct.listed=(100-pct.not.listed))
@@ -215,7 +224,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid",
 			"Flesch.nl", "Flesch.PSK", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
 			"Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS", "RIX", "SMOG", "SMOG.C",
-			"SMOG.de", "SMOG.simple", "Spache", "Spache.de", "Strain", "Traenkle.Bailer", "TRI",
+			"SMOG.de", "SMOG.simple", "Spache", "Spache.de", "Spache.old", "Strain", "Traenkle.Bailer", "TRI",
 			"Wheeler.Smith", "Wheeler.Smith.de")
 	# activate all?
 	if(identical(index, "all")){
@@ -820,17 +829,17 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 		all.results@ELF <- list(flavour=flavour, num.exsyls=ELF.exsyls, ELF=ELF.score)
 	} else {}
 
-## “Fasse-Dich-Kurz-Index” (FDK-Index, Rolf W. Schirm)
-# 1. Zählen Sie die Sätze (ohne Überschrift, Grus oder Anrede)
-# 2. Zählen Sie die Wörter, die mehr als zwei Silben haben (ohne Namen und Fachwörter)
-# 3. Errechnen Sie den “Fasse-Dich-Kurz-Index (FDK-Index)” nach der Formel:
+## "Fasse-Dich-Kurz-Index" (FDK-Index, Rolf W. Schirm)
+# 1. Zaehlen Sie die Saetze (ohne Ueberschrift, Gruss oder Anrede)
+# 2. Zaehlen Sie die Woerter, die mehr als zwei Silben haben (ohne Namen und Fachwoerter)
+# 3. Errechnen Sie den "Fasse-Dich-Kurz-Index (FDK-Index)" nach der Formel:
 #
-# FDK = Anzahl der Wörter mit mehr als 2 Silben * 10 / Anzah1 der Sätze
+# FDK = Anzahl der Woerter mit mehr als 2 Silben * 10 / Anzah1 der Saetze
 #
 # FDK bis 10: Sehr knapper Stil (Telegramm, Fernscheiben)
-# FDK 11 - 25: Zeitgemäßer Stil (kurz, knapp, präzise)
-# FDK 26 - 50: Weitschweifiger Stil (häufig im geschäftlichen Schriftverkehr)
-# FDK über 50: Schwülstiger, unklarer Stil
+# FDK 11 - 25: Zeitgemaesser Stil (kurz, knapp, praezise)
+# FDK 26 - 50: Weitschweifiger Stil (haeufig im geschaeftlichen Schriftverkehr)
+# FDK ueber 50: Schwuelstiger, unklarer Stil
 
 	## Farr-Jenkins-Paterson
 	# simplified Flesch RE
@@ -1022,7 +1031,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			# check for verbs ending in -es, -ed, or -ing (or anything else set in prms[["suffix"]])
 			# these endings must not be counted as syllables
 			FOG.verbs <- which(tagged.words.only@TT.res[["wclass"]] == "verb")
-			FOG.verb.suffix <- paste("(", paste(FOG.suffix, collapse="|"), ")$", sep="")
+			FOG.verb.suffix <- paste0("(", paste(FOG.suffix, collapse="|"), ")$")
 			FOG.verbs <- FOG.verbs[grepl(FOG.verb.suffix, tagged.words.only@TT.res[FOG.verbs,"token"])]
 			# count one syllable less for these
 			if(length(FOG.verbs) > 0){
@@ -1200,7 +1209,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 		}
 	} else {}
 
-	## Läsbarhetsindex (LIX)
+	## Laesbarhetsindex (LIX)
 	if("LIX" %in% index){
 		flavour <- "default"
 		valid.params <- c("char", "const")
@@ -1391,10 +1400,10 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			}
 			kRp.check.params(names(prms), valid.params, where="Spache")
 			kRp.check.params(valid.params, names(prms), where="Spache", missing=TRUE)
-			diff.words.all.txt <- difficult.words(txt.words.only, spache.word.list)
+			diff.words.all.txt <- difficult.words(txt.words.only, spache.word.list, only.once=TRUE)
 			diff.words.txt <- diff.words.all.txt[["pct.not.listed"]]
 			diff.words.nol <- diff.words.all.txt[["words.not.listed"]]
-			Spache.grade <- prms[["asl"]] * avg.sntc.len + prms[["dword"]] * diff.words.txt - prms[["const"]]
+			Spache.grade <- prms[["asl"]] * avg.sntc.len + prms[["dword"]] * diff.words.txt + prms[["const"]]
 			# preserve hard words in the desc slot
 			if(isTRUE(analyze.text)){
 				all.results@desc[["Spache.NOL"]] <- length(diff.words.nol)
@@ -1430,7 +1439,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 		all.results@Strain <- list(flavour=flavour, index=Strain.id)
 	} else {}
 
-	## Tränkle-Bailer
+	## Traenkle-Bailer
 	# new Dickes-Steiwer for german texts
 	if("Traenkle.Bailer" %in% index){
 		# this formula needs proper POS tags; skip if missing
@@ -1485,7 +1494,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	} else {}
 
 	## TRI -- Kuntzsch's Text-Redundanz-Index
-# zit. nach Klein, H. (2002). Lesbarkeit und Verständlichkeit von Texten (Teil 2). Technische Dokumentation, 2002/07.
+# zit. nach Klein, H. (2002). Lesbarkeit und Verstaendlichkeit von Texten (Teil 2). Technische Dokumentation, 2002/07.
 #		http://www.doku.net/ausgabe/200207.htm (2011-05-09)
 	if("TRI" %in% index){
 		flavour <- "default"
@@ -1545,14 +1554,14 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 # 	} else {}
 
 	## for the time being, give a warning until all implementations have been validated
-	needs.warning <- index %in% c("ARI.simple", "Coleman", "Dale.Chall.old", "Danielson.Bryan",
+	needs.warning <- index %in% c("ARI.simple", "Coleman", "Danielson.Bryan",
 			"Dickes.Steiwer", "ELF", "Flesch.de", "Flesch.es", "Flesch.fr",
-			"Flesch.nl", "Fucks", "Harris.Jacobson", "Linsear.Write", "nWS",
+			"Flesch.nl", "Fucks", "Harris.Jacobson", "nWS",
 			"SMOG.C", "SMOG.de", "Strain", "Traenkle.Bailer", "TRI")
 	if(any(needs.warning)){
-		warning(paste("Note: The implementations of these formulas are still subject to validation:\n  ",
+		warning(paste0("Note: The implementations of these formulas are still subject to validation:\n  ",
 		paste(index[needs.warning], collapse=", "),
-		"\n  Use the results with caution, even if they seem plausible!", sep=""), call.=FALSE)
+		"\n  Use the results with caution, even if they seem plausible!"), call.=FALSE)
 	} else {}
 	return(all.results)
 }

@@ -8,7 +8,9 @@
     heur.fix = list(pre = c("’", "'"), suf = c("’", "'")),
     abbrev = NULL, tag = TRUE, lang = "kRp.env",
     sentc.end = c(".", "!", "?", ";", ":"),
-    detect = c(parag = FALSE, hline = FALSE))
+    detect = c(parag = FALSE, hline = FALSE),
+    clean.raw = NULL, perl = FALSE, stopwords = NULL,
+    stemmer = NULL)
 }
 \arguments{
   \item{txt}{Either an open connection, the path to
@@ -35,10 +37,17 @@
   of the following: \itemize{ \item{\code{"abbr"}}{Assume
   that "letter-dot-letter-dot" combinations are
   abbreviations and leave them intact.}
-  \item{\code{"en"}}{Try to detect possesive suffixes like
+  \item{\code{"suf"}}{Try to detect possesive suffixes like
   "'s", or shorting suffixes like "'ll" and treat them as
-  one token} \item{\code{"fr"}}{Try to detect prefixes like
-  "s'" or "l'" and treat them as one token} }}
+  one token} \item{\code{"pre"}}{Try to detect prefixes
+  like "s'" or "l'" and treat them as one token} } Earlier
+  releases used the names \code{"en"} and \code{"fr"}
+  instead of \code{"suf"} and \code{"pre"}. They are still
+  working, that is \code{"en"} is equivalent to
+  \code{"suf"}, whereas \code{"fr"} is now equivalent to
+  both \code{"suf"} and \code{"pre"} (and not only
+  \code{"pre"} as in the past, which was missing the use of
+  suffixes in French).}
 
   \item{heur.fix}{A list with the named vectors \code{pre}
   and \code{suf}. These will be used if \code{heuristics}
@@ -67,6 +76,33 @@
   setting of \code{parag} and \code{hline} whether
   \code{tokenize} should try to detect paragraphs and
   headlines.}
+
+  \item{clean.raw}{A named list of character values,
+  indicating replacements that should globally be made to
+  the text prior to tokenizing it.  This is applied after
+  the text was converted into UTF-8 internally. In the
+  list, the name of each element represents a pattern which
+  is replaced by its value if met in the text. Since this
+  is done by calling \code{\link[base:gsub]{gsub}}, regular
+  expressions are basically supported. See the \code{perl}
+  attribute, too.}
+
+  \item{perl}{Logical, only relevant if \code{clean.raw} is
+  not \code{NULL}. If \code{perl=TRUE}, this is forwarded
+  to \code{\link[base:gsub]{gsub}} to allow for perl-like
+  regular expressions in \code{clean.raw}.}
+
+  \item{stopwords}{A character vector to be used for
+  stopword detection. Comparison is done in lower case. You
+  can also simply set \code{stopwords=tm::stopwords("en")}
+  to use the english stopwords provided by the \code{tm}
+  package.}
+
+  \item{stemmer}{A function or method to perform stemming.
+  For instance, you can set
+  \code{stemmer=Snowball::SnowballStemmer} if you have the
+  \code{Snowball} package installed. As of now, you cannot
+  provide further arguments to this function.}
 }
 \value{
   If \code{tag=FALSE}, a character vector with the
@@ -98,6 +134,30 @@
 \examples{
 \dontrun{
 tokenized.obj <- tokenize("~/mydata/corpora/russian_corpus/")
+
+## character manipulation
+# this is useful if you know of problematic characters in your
+# raw text files, but don't want to touch them directly. you
+# don't have to, as you can substitute them, even using regular
+# expressions. a simple example: replace all single quotes by
+# double quotes througout the text:
+tokenized.obj <- tokenize("~/my.data/speech.txt",
+   clean.raw=list("'"="\\""))
+# now replace all occurrances of the letter A followed
+# by two digits with the letter B, followed by the same
+# two digits:
+tokenized.obj <- tokenize("~/my.data/speech.txt",
+   clean.raw=list("(A)([[:digit:]]{2})"="B\\\\2"),
+   perl=TRUE)
+
+## enabling stopword detection and stemming
+# if you also installed the packages tm and Snowball,
+# you can use some of their features with koRpus:
+tokenized.obj <- tokenize("~/my.data/speech.txt",
+   stopwords=tm::stopwords("en"),
+   stemmer=Snowball::SnowballStemmer)
+# removing all stopwords now is simple:
+tokenized.noStopWords <- kRp.filter.wclass(tokenized.obj, "stopword")
 }
 }
 \keyword{misc}

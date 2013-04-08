@@ -123,7 +123,7 @@ readability.num <- function(
 			for(this.measure in index[index %in% measure]){
 				for (this.data in value){
 					if(is.null(data[[this.data]])){
-						warning(paste(this.measure, ": Missing data (", this.data, "), not calculated!", sep=""), call.=FALSE)
+						warning(paste0(this.measure, ": Missing data (", this.data, "), not calculated!"), call.=FALSE)
 						index <- index[!index %in% this.measure]
 					} else {}
 				}
@@ -141,7 +141,7 @@ readability.num <- function(
 			"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid",
 			"Flesch.nl", "Flesch.PSK", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
 			"Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS", "RIX", "SMOG", "SMOG.C",
-			"SMOG.de", "SMOG.simple", "Spache", "Spache.de", "Strain", "Traenkle.Bailer", "TRI",
+			"SMOG.de", "SMOG.simple", "Spache", "Spache.de", "Spache.old", "Strain", "Traenkle.Bailer", "TRI",
 			"Wheeler.Smith", "Wheeler.Smith.de")
 	# activate all?
 	if(identical(index, "all")){
@@ -151,7 +151,7 @@ readability.num <- function(
 	# check txt.features for minimum data
 	for (this.feature in c("sentences", "words")){
 		if(is.null(txt.features[[this.feature]])){
-			stop(simpleError(paste("Missing data: ", this.feature, "!", sep="")))
+			stop(simpleError(paste0("Missing data: ", this.feature, "!")))
 		} else {}
 	}
 
@@ -164,8 +164,8 @@ readability.num <- function(
 	if(any(index %in% need.sylls)){
 		# this only works for default parameters as of now
 		if(!all(c("all", "s1", "s2") %in% names(txt.features[["syllables"]]))){
-			stop(simpleError(paste("Missing information on syllable count. You need to at least define \"all\", \"s1\" and \"s2\" for these measures:\n\t",
-				paste(index[need.sylls %in% index], collapse=", "), sep="")))
+			stop(simpleError(paste0("Missing information on syllable count. You need to at least define \"all\", \"s1\" and \"s2\" for these measures:\n\t",
+				paste(index[need.sylls %in% index], collapse=", "))))
 		} else {}
 	} else {}
 	need.letters <- c("ARI", "ARI.NRI", "ARI.simple", "Bormuth", "Coleman.Liau",
@@ -175,8 +175,8 @@ readability.num <- function(
 	if(any(index %in% need.letters)){
 		# this only works for default parameters as of now
 		if(!all(c("all", "l5", "l6") %in% names(txt.features[["letters"]]))){
-			stop(simpleError(paste("Missing information on letter count. You need to at least define \"all\", \"l5\" and \"l6\" for these measures:\n\t",
-				paste(index[need.letters %in% index], collapse=", "), sep="")))
+			stop(simpleError(paste0("Missing information on letter count. You need to at least define \"all\", \"l5\" and \"l6\" for these measures:\n\t",
+				paste(index[need.letters %in% index], collapse=", "))))
 		} else {}
 	} else {}
 	
@@ -188,7 +188,7 @@ readability.num <- function(
 	index <- got.all.i.need("Dickes.Steiwer", data=txt.features, value="TTR")
 	index <- got.all.i.need(c("FOG", "FOG.NRI", "FOG.PSK"), data=txt.features, value="FOG.hard.words")
 	index <- got.all.i.need("Harris.Jacobson", data=txt.features, value="Harris.Jacobson.NOL")
-	index <- got.all.i.need(c("Spache", "Spache.de"), data=txt.features, value="Spache.NOL")
+	index <- got.all.i.need(c("Spache", "Spache.old", "Spache.de"), data=txt.features, value="Spache.NOL")
 	index <- got.all.i.need("Traenkle.Bailer", data=txt.features, value=c("prepositions", "conjunctions"))
 	index <- got.all.i.need("TRI", data=txt.features, value=c("foreign", "punct"))
 

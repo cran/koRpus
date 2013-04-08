@@ -21,9 +21,12 @@
 #' @param heuristics A vector to indicate if the tokenizer should use some heuristics. Can be none, one or several of the following:
 #'		\itemize{
 #'			\item{\code{"abbr"}}{Assume that "letter-dot-letter-dot" combinations are abbreviations and leave them intact.}
-#'			\item{\code{"en"}}{Try to detect possesive suffixes like "'s", or shorting suffixes like "'ll" and treat them as one token}
-#'			\item{\code{"fr"}}{Try to detect prefixes like "s'" or "l'" and treat them as one token}
+#'			\item{\code{"suf"}}{Try to detect possesive suffixes like "'s", or shorting suffixes like "'ll" and treat them as one token}
+#'			\item{\code{"pre"}}{Try to detect prefixes like "s'" or "l'" and treat them as one token}
 #'		}
+#'		Earlier releases used the names \code{"en"} and \code{"fr"} instead of \code{"suf"} and \code{"pre"}. They are still working, that is
+#'		\code{"en"} is equivalent to \code{"suf"}, whereas \code{"fr"} is now equivalent to both \code{"suf"} and \code{"pre"} (and not only
+#'		\code{"pre"} as in the past, which was missing the use of suffixes in French).
 #' @param heur.fix A list with the named vectors \code{pre} and \code{suf}. These will be used if \code{heuristics} were
 #'		set to use one of the presets that try to detect pre- and/or suffixes. Change them if you document uses other
 #'		characters than the ones defined by default.
@@ -35,6 +38,16 @@
 #' @param sentc.end A character vector with tokens indicating a sentence ending. Only needed if \code{tag=TRUE}.
 #' @param detect A named logical vector, indicating by the setting of \code{parag} and \code{hline} whether \code{tokenize} should try
 #'		to detect paragraphs and headlines.
+#' @param clean.raw A named list of character values, indicating replacements that should globally be made to the text prior to tokenizing it.
+#'		This is applied after the text was converted into UTF-8 internally. In the list, the name of each element represents a pattern which
+#'		is replaced by its value if met in the text. Since this is done by calling \code{\link[base:gsub]{gsub}}, regular expressions are basically
+#'		supported. See the \code{perl} attribute, too.
+#' @param perl Logical, only relevant if \code{clean.raw} is not \code{NULL}. If \code{perl=TRUE}, this is forwarded to \code{\link[base:gsub]{gsub}}
+#'		to allow for perl-like regular expressions in \code{clean.raw}.
+#' @param stopwords A character vector to be used for stopword detection. Comparison is done in lower case. You can also simply set 
+#'		\code{stopwords=tm::stopwords("en")} to use the english stopwords provided by the \code{tm} package.
+#' @param stemmer A function or method to perform stemming. For instance, you can set \code{stemmer=Snowball::SnowballStemmer} if you have
+#'		the \code{Snowball} package installed. As of now, you cannot provide further arguments to this function.
 #' @return If \code{tag=FALSE}, a character vector with the tokenized text. If \code{tag=TRUE}, returns an object of class \code{\link[koRpus]{kRp.tagged-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
@@ -42,12 +55,36 @@
 #' @examples
 #' \dontrun{
 #' tokenized.obj <- tokenize("~/mydata/corpora/russian_corpus/")
+#' 
+#' ## character manipulation
+#' # this is useful if you know of problematic characters in your
+#' # raw text files, but don't want to touch them directly. you
+#' # don't have to, as you can substitute them, even using regular
+#' # expressions. a simple example: replace all single quotes by
+#' # double quotes througout the text:
+#' tokenized.obj <- tokenize("~/my.data/speech.txt",
+#'    clean.raw=list("'"="\""))
+#' # now replace all occurrances of the letter A followed
+#' # by two digits with the letter B, followed by the same
+#' # two digits:
+#' tokenized.obj <- tokenize("~/my.data/speech.txt",
+#'    clean.raw=list("(A)([[:digit:]]{2})"="B\\2"),
+#'    perl=TRUE)
+#'
+#' ## enabling stopword detection and stemming
+#' # if you also installed the packages tm and Snowball,
+#' # you can use some of their features with koRpus:
+#' tokenized.obj <- tokenize("~/my.data/speech.txt",
+#'    stopwords=tm::stopwords("en"),
+#'    stemmer=Snowball::SnowballStemmer)
+#' # removing all stopwords now is simple:
+#' tokenized.noStopWords <- kRp.filter.wclass(tokenized.obj, "stopword")
 #' }
 
 tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 					ign.comp="-", heuristics="abbr", heur.fix=list(pre=c("\u2019","'"), suf=c("\u2019","'")),
 					abbrev=NULL, tag=TRUE, lang="kRp.env", sentc.end=c(".","!","?",";",":"),
-					detect=c(parag=FALSE, hline=FALSE)){
+					detect=c(parag=FALSE, hline=FALSE), clean.raw=NULL, perl=FALSE, stopwords=NULL, stemmer=NULL){
 
 	if(is.null(fileEncoding)){
 		fileEncoding <- ""
@@ -66,13 +103,13 @@ tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 			txt.file <- file.path(txt, dir(txt))
 			read.txt.files <- TRUE
 		} else {
-			stop(simpleError(paste("Unable to locate\n ",txt, sep="")))
+			stop(simpleError(paste0("Unable to locate\n ",txt)))
 		}
 	} else if(identical(format, "obj")){
 		takeAsTxt <- txt
 		read.txt.files <- FALSE
 	} else {
-		stop(simpleError(paste("Invalid value for format: ",format, sep="")))
+		stop(simpleError(paste0("Invalid value for format: ",format)))
 	}
 
 	## read file or text vector?
@@ -88,6 +125,11 @@ tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 		# process object
 		txt.vector <- enc2utf8(as.vector(takeAsTxt))
 	}
+	
+	## see if the text should be cleaned up further
+	if(!is.null(clean.raw)){
+		txt.vector <- clean.text(txt.vector, from.to=clean.raw, perl=perl)
+	} else {}
 
 	## run the tokenizer
 	# tokenz() is an internal function
@@ -102,6 +144,8 @@ tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
 		tagged.mtrx <- cbind(tokens, lemma="")
 		# add word classes, comments and numer of letters ("wclass", "desc", "lttr")
 		tagged.mtrx <- treetag.com(tagged.mtrx, lang=lang)
+		# probably apply stopword detection and stemming
+		tagged.mtrx <- stopAndStem(tagged.mtrx, stopwords=stopwords, stemmer=stemmer, lowercase=TRUE)
 		# create object, combine descriptives afterwards
 		tokens <- new("kRp.tagged", lang=lang, TT.res=tagged.mtrx)
 		## descriptive statistics

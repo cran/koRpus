@@ -36,6 +36,10 @@ read.hyph.pat <- function(file, lang, fileEncoding="UTF-8"){
 	hyphen.file.con <- file(file, open="r", encoding=fileEncoding)
 	hyphen.raw <- readLines(hyphen.file.con)
 	close(hyphen.file.con)
+	# explicitly set encoding of this vector to generate objects which
+	# do not cause warnings by R CMD check
+	hyphen.raw <- enc2utf8(hyphen.raw)
+	Encoding(hyphen.raw) <- "UTF-8"
 
 	# .se5ra -> .sera
 	hyphen.char <- gsub("[[:digit:]]", "", hyphen.raw)

@@ -50,7 +50,7 @@
 #'
 #' hyphenated.txt <- correct.hyph(hyphenated.txt, "Hilfe", "Hil-fe")
 #' }
-#' @exportMethod correct.tag
+#' @export
 #' @docType methods
 #' @rdname correct-methods
 setGeneric("correct.tag", function(obj, row, tag=NULL, lemma=NULL, check.token=NULL){standardGeneric("correct.tag")})
@@ -73,14 +73,14 @@ setMethod("correct.tag",
 				# before we attempt anything, let's check if this is a valid tag
 				valid.POS.tags <- kRp.POS.tags(lang, list.tags=TRUE)
 				if(is.na(match(tag, valid.POS.tags))){
-					stop(simpleError(paste("Not a valid POS tag for language \"", lang, "\": ", tag, sep="")))
+					stop(simpleError(paste0("Not a valid POS tag for language \"", lang, "\": ", tag)))
 				} else {}
 				all.POS.tags <- kRp.POS.tags(lang)
 				# this object will hold the columns "tag", "wclass" and "desc" for our tag
 				new.tag <- all.POS.tags[all.POS.tags[,"tag"] == tag, ]
 				for (cur.row in row){
 					if(!is.null(check.token) & !identical(local.obj.copy@TT.res[cur.row, "token"], check.token)){
-						stop(simpleError(paste("In row ", cur.row,", expected \"", check.token,"\" but got \"", local.obj.copy@TT.res[cur.row, "token"],"\"!", sep="")))
+						stop(simpleError(paste0("In row ", cur.row,", expected \"", check.token,"\" but got \"", local.obj.copy@TT.res[cur.row, "token"],"\"!")))
 					} else {}
 					local.obj.copy@TT.res[cur.row, c("tag","wclass","desc")] <- new.tag[c("tag","wclass","desc")]
 				}
@@ -88,7 +88,7 @@ setMethod("correct.tag",
 			if(!is.null(lemma)){
 				for (cur.row in row){
 					if(!is.null(check.token) & !identical(local.obj.copy@TT.res[cur.row, "token"], check.token)){
-						stop(simpleError(paste("In row ", cur.row,", expected \"", check.token,"\" but got \"", local.obj.copy@TT.res[cur.row, "token"],"\"!", sep="")))
+						stop(simpleError(paste0("In row ", cur.row,", expected \"", check.token,"\" but got \"", local.obj.copy@TT.res[cur.row, "token"],"\"!")))
 					} else {}
 					local.obj.copy@TT.res[cur.row, "lemma"] <- lemma
 				}
@@ -107,12 +107,13 @@ setMethod("correct.tag",
 )
 
 #' @rdname correct-methods
-#' @exportMethod correct.hyph
+#' @export
 setGeneric("correct.hyph", function(obj, word=NULL, hyphen=NULL, cache=TRUE){standardGeneric("correct.hyph")})
 
 #' @rdname correct-methods
 #' @aliases correct.hyph,kRp.hyphen-method
-#' @usage correct.hyph(obj, word=NULL, hyphen=NULL, cache=TRUE)
+# @usage correct.hyph(obj, word=NULL, hyphen=NULL, cache=TRUE)
+#' @export
 setMethod("correct.hyph",
     signature(obj="kRp.hyphen"),
     function (obj, word=NULL, hyphen=NULL, cache=TRUE){
@@ -126,7 +127,7 @@ setMethod("correct.hyph",
 				matching.rows <- which(local.obj.copy@hyphen[, "word"] == word)
 				# any matches at all?
 				if(length(matching.rows) == 0){
-					warning(paste("Sorry, no matches for \"", word,"\" in ", substitute(obj), "!", sep=""))
+					warning(paste0("Sorry, no matches for \"", word,"\" in ", substitute(obj), "!"))
 					return(obj)
 				} else {}
 
@@ -134,7 +135,7 @@ setMethod("correct.hyph",
 				old.word <- gsub("-", "", word)
 				new.word <- gsub("-", "", hyphen)
 				if(!identical(old.word, new.word)){
-					stop(simpleError(paste("\"", hyphen, "\" is not a valid hyphenation of \"", old.word, "\"!", sep="")))
+					stop(simpleError(paste0("\"", hyphen, "\" is not a valid hyphenation of \"", old.word, "\"!")))
 				} else {}
 				local.obj.copy@hyphen[matching.rows, "syll"] <- new.syll
 				local.obj.copy@hyphen[matching.rows, "word"] <- hyphen

@@ -2,7 +2,7 @@
 #' 
 #' This is just a convenient wrapper function for \code{\link[koRpus:readability]{readability}}.
 #'
-#' This function calculates the readability index ("läsbarhetsindex") by Björnsson. In contrast to \code{\link[koRpus:readability]{readability}},
+#' This function calculates the readability index ("l\"asbarhetsindex") by Bj\"ornsson. In contrast to \code{\link[koRpus:readability]{readability}},
 #' which by default calculates all possible indices, this function will only calculate the index value.
 #'
 #' This formula doesn't need syllable count.

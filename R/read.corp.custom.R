@@ -54,10 +54,10 @@ read.corp.custom <- function(corpus, format="file", fileEncoding="UTF-8", quiet=
 		corp.freq <- matrix(ncol=2, dimnames=list(c(), c("word", "freq")))[-1,]
 		type.counter <- 1
 		for (tp in types){
-			cat(paste("\t", floor(100*type.counter/num.types), "% complete, processing token ", type.counter, " of ", num.types, ": \"", tp, "\"", sep=""))
+			cat(paste0("\t", floor(100*type.counter/num.types), "% complete, processing token ", type.counter, " of ", num.types, ": \"", tp, "\""))
 			type.freq <- sum(match(tokens, tp), na.rm=TRUE)
 			if(!isTRUE(quiet)){
-				cat(paste(" (found ", type.freq, " times in ", num.tokens, " tokens)\n", sep=""))
+				cat(paste0(" (found ", type.freq, " times in ", num.tokens, " tokens)\n"))
 			} else {}
 			corp.freq <- rbind(corp.freq, c(word=tp, freq=type.freq))
 			type.counter <- type.counter + 1

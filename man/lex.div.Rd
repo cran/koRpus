@@ -144,7 +144,7 @@
   \frac{\lg{V}}{\lg{N}}^2}}}{lg(V0) = lg(V) / sqrt(1 -
   (lg(V) / lg(N)^2))} Earlier versions (\code{koRpus} <
   0.04-12) reported \eqn{a^2}, and not \eqn{a}. The measure
-  was derived from a formula by Müller (1969, as cited in
+  was derived from a formula by M\"uller (1969, as cited in
   Maas, 1972).  \eqn{\lg{}_{e}{V_0}} is equivalent to
   \eqn{\lg{V_0}}, only with \eqn{e} as the base for the
   logarithms. Also calculated are \eqn{a}, \eqn{\lg{V_0}}
@@ -202,9 +202,9 @@ lex.div(tagged.text)
   (MATTR).  \emph{Journal of Quantitative Linguistics},
   17(2), 94--100.
 
-  Maas, H.-D., (1972). Über den Zusammenhang zwischen
-  Wortschatzumfang und Länge eines Textes.
-  \emph{Zeitschrift für Literaturwissenschaft und
+  Maas, H.-D., (1972). \"Uber den Zusammenhang zwischen
+  Wortschatzumfang und L\"ange eines Textes.
+  \emph{Zeitschrift f\"ur Literaturwissenschaft und
   Linguistik}, 2(8), 73--96.
 
   McCarthy, P.M. & Jarvis, S. (2007). vocd: A theoretical

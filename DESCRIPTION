@@ -2,12 +2,12 @@ Package: koRpus
 Type: Package
 Title: An R Package for Text Analysis
 Author: m.eik michalke <meik.michalke@hhu.de>, with contributions from
-        Earl Brown <eabrown@csumb.edu>, Alberto Mirisola, and Laura
+        Earl Brown, Alberto Mirisola, Alexandre Brulet, and Laura
         Hauser
 Maintainer: m.eik michalke <meik.michalke@hhu.de>
 Depends: R (>= 2.10.0),methods
 Enhances: rkward
-Suggests: testthat
+Suggests: testthat,tm,Snowball
 Description: A set of tools to analyze texts. Includes, amongst others,
         functions for automatic language detection, hyphenation,
         several indices of lexical diversity (e.g., type token ratio,
@@ -25,10 +25,11 @@ Authors@R: c(person(given="Meik", family="Michalke",
         email="meik.michalke@hhu.de", role=c("aut", "cre")),
         person(given="Earl", family="Brown", email="eabrown@csumb.edu",
         role=c("ctb")), person(given="Alberto", family="Mirisola",
+        role=c("ctb")), person(given="Alexandre", family="Brulet",
         role=c("ctb")), person(given="Laura", family="Hauser",
         role=c("ctb")))
-Version: 0.04-36
-Date: 2012-08-27
+Version: 0.04-40
+Date: 2013-04-07
 Collate: 'ARI.R' 'bormuth.R' 'C.ld.R' 'kRp.tagged-class.R'
         'kRp.txt.freq-class.R' 'kRp.txt.trans-class.R'
         'kRp.TTR-class.R' 'kRp.analysis-class.R' 'koRpus-internal.R'
@@ -44,9 +45,10 @@ Collate: 'ARI.R' 'bormuth.R' 'C.ld.R' 'kRp.tagged-class.R'
         'kRp.corp.freq-class.R' 'koRpus-internal.rdb.formulae.R'
         'koRpus-internal.rdb.params.grades.R'
         'koRpus-internal.roxy.all.R' 'koRpus-package.R' 'kRp.cluster.R'
-        'kRp.POS.tags.R' 'kRp.text.analysis.R' 'kRp.text.paste.R'
-        'kRp.text.transform.R' 'lang.support-de.R' 'lang.support-en.R'
-        'lang.support-es.R' 'lang.support-it.R' 'lang.support-ru.R'
+        'kRp.POS.tags.R' 'kRp.taggedText-methods.R'
+        'kRp.text.analysis.R' 'kRp.text.paste.R' 'kRp.text.transform.R'
+        'lang.support-de.R' 'lang.support-en.R' 'lang.support-es.R'
+        'lang.support-fr.R' 'lang.support-it.R' 'lang.support-ru.R'
         'lex.div.num.R' 'lex.div.R' 'linsear.write.R' 'LIX.R' 'maas.R'
         'manage.hyph.pat.R' 'MATTR.R' 'MSTTR.R' 'MTLD.R' 'nWS.R'
         'plot.kRp.tagged.R' 'query-methods.R' 'readability.num.R'
@@ -60,6 +62,7 @@ Collate: 'ARI.R' 'bormuth.R' 'C.ld.R' 'kRp.tagged-class.R'
         'summary.kRp.txt.freq.R' 'textFeatures.R' 'tokenize.R'
         'traenkle.bailer.R' 'treetag.R' 'TRI.R' 'TTR.R' 'U.ld.R'
         'wheeler.smith.R'
-Packaged: 2012-08-27 20:46:14 UTC; m
+Packaged: 2013-04-07 18:56:55 UTC; m
+NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2012-08-28 05:32:05
+Date/Publication: 2013-04-08 00:07:46

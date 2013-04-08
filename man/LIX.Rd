@@ -29,7 +29,7 @@
 }
 \details{
   This function calculates the readability index
-  ("läsbarhetsindex") by Björnsson. In contrast to
+  ("l\"asbarhetsindex") by Bj\"ornsson. In contrast to
   \code{\link[koRpus:readability]{readability}}, which by
   default calculates all possible indices, this function
   will only calculate the index value.

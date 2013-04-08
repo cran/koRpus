@@ -13,7 +13,8 @@
   which should be removed. The default value
   \code{"nonpunct"} has special meaning and will cause the
   result of \code{kRp.POS.tags(lang, c("punct","sentc"),
-  list.classes=TRUE)} to be used.}
+  list.classes=TRUE)} to be used.  Another valid value is
+  "stopword" to remove all detected stopwords.}
 
   \item{corp.rm.tag}{A character vector with valid POS tags
   which should be removed.}

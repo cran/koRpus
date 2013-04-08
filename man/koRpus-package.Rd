@@ -2,14 +2,14 @@
 \name{koRpus-package}
 \alias{koRpus}
 \alias{koRpus-package}
-\title{An R Package for Text Analysis.}
+\title{The koRpus Package}
 \description{
   An R Package for Text Analysis.
 }
 \details{
   \tabular{ll}{ Package: \tab koRpus\cr Type: \tab
-  Package\cr Version: \tab 0.04-36\cr Date: \tab
-  2012-08-27\cr Depends: \tab R (>= 2.10.0),methods\cr
+  Package\cr Version: \tab 0.04-40\cr Date: \tab
+  2013-04-07\cr Depends: \tab R (>= 2.10.0),methods\cr
   Enhances: \tab rkward\cr Encoding: \tab UTF-8\cr License:
   \tab GPL (>= 3)\cr LazyLoad: \tab yes\cr URL: \tab
   http://reaktanz.de/?c=hacking&s=koRpus\cr }
@@ -28,7 +28,9 @@
   to the author(s)!
 }
 \author{
-  Meik Michalke \email{meik.michalke@hhu.de}
+  Meik Michalke \email{meik.michalke@hhu.de}, with
+  contributions from Earl Brown \email{eabrown@csumb.edu},
+  Alberto Mirisola, Alexandre Brulet, Laura Hauser
 }
 \keyword{package}
 

@@ -14,6 +14,7 @@
 #'	\item {\code{"en"}} {--- English (UK)}
 #'	\item {\code{"en.us"}} {--- English (US)}
 #'	\item {\code{"es"}} {--- Spanish}
+#'	\item {\code{"fr"}} {--- French}
 #'	\item {\code{"it"}} {--- Italian}
 #'	\item {\code{"ru"}} {--- Russian}
 #' }
@@ -98,7 +99,7 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 
 	if(!isTRUE(quiet)){
 		# feed back the hypenation we're using
-		message(paste("Hyphenation (language: ", lang, ")", sep=""))
+		message(paste0("Hyphenation (language: ", lang, ")"))
 	} else {}
 	# extract only the pattern matrix
 	hyph.pattern <- hyph.pattern@pattern
@@ -114,13 +115,16 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 	# counter to get some feedback
 	.iter.counter <- new.env()
 	assign("counter", 1, envir=.iter.counter)
+	if(!isTRUE(quiet)){
+		# give some feedback, so we know the machine didn't just freeze...
+		prgBar <- txtProgressBar(min=0, max=length(words), style=3)
+	} else {}
+
 	hyphenate.results <- t(sapply(words, function(word){
 		if(!isTRUE(quiet)){
-			# give some feedback, so we know the machine didn't just freeze...
+			# update prograss bar
 			iteration.counter <- get("counter", envir=.iter.counter)
-			if(identical(iteration.counter %% 50, 0)){
-				message(paste(" reached token ", iteration.counter,"...", sep=""))
-			} else {}
+			setTxtProgressBar(prgBar, iteration.counter)
 			assign("counter", iteration.counter + 1, envir=.iter.counter)
 		} else {}
 
@@ -154,7 +158,7 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		## convert to lowercase
 		word <- tolower(word)
 		## transform "word" to ".word."
-		word.dotted <- paste(".", word, ".", sep="")
+		word.dotted <- paste0(".", word, ".")
 		word.length <- nchar(word.dotted)
 
 		## create word fragments ".w", ".wo", ".wor"... "rd."
@@ -205,7 +209,7 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 				hyph.word <- unlist(strsplit(word.orig, split=""))
 			}
 			for (letter in add.hyphen) {
-				hyph.word[letter] <- paste(hyph.word[letter], "-", sep="")
+				hyph.word[letter] <- paste0(hyph.word[letter], "-")
 			}
 			hyph.word <- paste(hyph.word, collapse="")
 			# in cases where previous hyphenations were already removed and here returned,
@@ -224,6 +228,10 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		} else {}
 		return(subset(hyph.result, select=-token))
 	}))
+	if(!isTRUE(quiet)){
+		# close prograss bar
+		close(prgBar)
+	} else {}
 
 	# final result tuning
 	hyph.df <- data.frame(

@@ -2,8 +2,8 @@
 #'
 #' This is just a convenient wrapper function for \code{\link[koRpus:readability]{readability}}.
 #'
-#' This function calculates the Readability Index (RIX) by Anderson, which is a simplified version of the läsbarhetsindex (LIX)
-#' by Björnsson. In contrast to \code{\link[koRpus:readability]{readability}},
+#' This function calculates the Readability Index (RIX) by Anderson, which is a simplified version of the l\"asbarhetsindex (LIX)
+#' by Bj\"ornsson. In contrast to \code{\link[koRpus:readability]{readability}},
 #' which by default calculates all possible indices, this function will only calculate the index value.
 #'
 #' This formula doesn't need syllable count.

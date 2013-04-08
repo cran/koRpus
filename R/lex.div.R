@@ -39,7 +39,7 @@
 #'		Wrapper function: \code{\link[koRpus:K.ld]{K.ld}}}
 #'	\item{\code{"Maas"}:}{Maas' indices (\eqn{a}, \eqn{\lg{V_0}} & \eqn{\lg{}_{e}{V_0}}): \deqn{a^2 = \frac{\lg{N} - \lg{V}}{\lg{N}^2}}{a^2 = lg(N) - lg(V) / lg(N)^2}
 #'  \deqn{\lg{V_0} = \frac{\lg{V}}{\sqrt{1 - \frac{\lg{V}}{\lg{N}}^2}}}{lg(V0) = lg(V) / sqrt(1 - (lg(V) / lg(N)^2))}
-#'		Earlier versions (\code{koRpus} < 0.04-12) reported \eqn{a^2}, and not \eqn{a}. The measure was derived from a formula by Müller (1969, as cited in Maas, 1972).
+#'		Earlier versions (\code{koRpus} < 0.04-12) reported \eqn{a^2}, and not \eqn{a}. The measure was derived from a formula by M\"uller (1969, as cited in Maas, 1972).
 #'		\eqn{\lg{}_{e}{V_0}} is equivalent to \eqn{\lg{V_0}}, only with \eqn{e} as the base for the logarithms. Also calculated are \eqn{a}, \eqn{\lg{V_0}} (both not the same
 #'		as before) and \eqn{V'} as measures of relative vocabulary growth while the text progresses. To calculate these measures, the first half of the text and the full text
 #'		will be examined (see Maas, 1972, p. 67 ff. for details).
@@ -96,7 +96,7 @@
 #'		Covington, M.A. & McFall, J.D. (2010). Cutting the Gordian Knot: The Moving-Average Type-Token Ratio (MATTR). 
 #'			\emph{Journal of Quantitative Linguistics}, 17(2), 94--100.
 #'
-#'		Maas, H.-D., (1972). Über den Zusammenhang zwischen Wortschatzumfang und Länge eines Textes. \emph{Zeitschrift für 
+#'		Maas, H.-D., (1972). \"Uber den Zusammenhang zwischen Wortschatzumfang und L\"ange eines Textes. \emph{Zeitschrift f\"ur 
 #'			Literaturwissenschaft und Linguistik}, 2(8), 73--96.
 #'
 #' 	McCarthy, P.M. & Jarvis, S. (2007). vocd: A theoretical and empirical evaluation. \emph{Language Testing}, 24(4), 459--488.
@@ -305,7 +305,7 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	## calculate MSTTR
 	if("MSTTR" %in% measure){
 		if(num.all.tokens < segment){
-			warning(paste("MSTTR: Skipped calculation, segment size is ", segment, ", but the text has only ", num.all.tokens, " tokens!", sep=""))
+			warning(paste0("MSTTR: Skipped calculation, segment size is ", segment, ", but the text has only ", num.all.tokens, " tokens!"))
 		} else {
 			full.iter <- num.all.tokens %/% segment
 			msttr.dropped <- num.all.tokens %% segment
@@ -327,7 +327,7 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	if(any(c("MATTR", "MATTR.char") %in% measure)){
 		# check if there are less tokens than window size
 		if(num.all.tokens <= window){
-			warning(paste("MATTR: Skipped calculation, window size is ", window, ", but the text has only ", num.all.tokens, " tokens!", sep=""))
+			warning(paste0("MATTR: Skipped calculation, window size is ", window, ", but the text has only ", num.all.tokens, " tokens!"))
 		} else {
 			mattr.list <- list()
 			# take the first n tokens
@@ -501,20 +501,25 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	# set up the base function
 	ttr.calc.chars <- function(txt.tokens, type="TTR"){
 		if(!isTRUE(quiet)){
-			message(paste(type, ".char: Calculate ",type," values", sep=""))
+			message(paste0(type, ".char: Calculate ",type," values"))
+			# give some feedback, so we know the machine didn't just freeze...
+			prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
 		} else {}
 		char.results <- t(sapply(1:num.all.steps, function(x){
 					curr.token <- x * char.steps
 					if(!isTRUE(quiet)){
-						# just some feedback, so we know the machine didn't just freeze...
-						if(identical(curr.token %% 50, 0)){
-							message(paste(" reached token 1 to ", curr.token,"...", sep=""))
-						} else {}
+						# update progress bar
+						setTxtProgressBar(prgBar, x)
 					} else {}
 					char.temp <- c(token=curr.token, value=ttr.calc(txt.tokens=txt.all.tokens[1:curr.token], type=type))
 					return(char.temp)
 				}
 			))
+		if(!isTRUE(quiet)){
+			# close prograss bar
+			close(prgBar)
+		} else {}
+		return(char.results)
 	}
 
 	# do the actual calculations
@@ -558,18 +563,24 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	if("Maas" %in% char){
 		lex.div.results@Maas.char <- ttr.calc.chars(txt.all.tokens, type="Maas")
 		maas.lgV.chars <- function(base){
+			if(!isTRUE(quiet)){
+				# give some feedback, so we know the machine didn't just freeze...
+				prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
+			} else {}
 			lgV0.char.res <- t(sapply(1:num.all.steps, function(x){
 						curr.token <- x * char.steps
 						if(!isTRUE(quiet)){
-							# just some feedback, so we know the machine didn't just freeze...
-							if(identical(curr.token %% 50, 0)){
-								message(paste(" reached token 1 to ", curr.token,"...", sep=""))
-							} else {}
+							# update progress bar
+							setTxtProgressBar(prgBar, x)
 						} else {}
 						lgV0.char.temp <- c(token=curr.token, value=lgV0.calc(txt.all.tokens[1:curr.token], x=0, log.base=base))
 						return(lgV0.char.temp)
 					}
 				))
+			if(!isTRUE(quiet)){
+				# close prograss bar
+				close(prgBar)
+			} else {}
 			return(lgV0.char.res)
 		}
 		if(!isTRUE(quiet)){
@@ -586,39 +597,47 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	if("K" %in% char){
 		if(!isTRUE(quiet)){
 			message("K.char: Calculate K values")
+			# just some feedback, so we know the machine didn't just freeze...
+			prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
 		} else {}
 		lex.div.results@K.char <- t(sapply(1:num.all.steps, function(x){
 					curr.token <- x * char.steps
 					if(!isTRUE(quiet)){
-						# just some feedback, so we know the machine didn't just freeze...
-						if(identical(curr.token %% 50, 0)){
-							message(paste(" reached token 1 to ", curr.token,"...", sep=""))
-						} else {}
+						# update progress bar
+						setTxtProgressBar(prgBar, x)
 					} else {}
 					k.char.temp <- c(token=curr.token, value=k.calc(txt.all.tokens[1:curr.token]))
 					return(k.char.temp)
 				}
 			))
+		if(!isTRUE(quiet)){
+			# close prograss bar
+			close(prgBar)
+		} else {}
 	} else {}
 
 	## calculate HD-D characteristics
 	if("HD-D" %in% char){
 		if(!isTRUE(quiet)){
 			message("HDD.char: Calculate HD-D values")
+			# just some feedback, so we know the machine didn't just freeze...
+			prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
 		} else {}
 		lex.div.results@HDD.char <- t(sapply(1:num.all.steps, function(x){
 					curr.token <- x * char.steps
 					if(!isTRUE(quiet)){
-						# just some feedback, so we know the machine didn't just freeze...
-						if(identical(curr.token %% 50, 0)){
-							message(paste(" reached token 1 to ", curr.token,"...", sep=""))
-						} else {}
+						# update progress bar
+						setTxtProgressBar(prgBar, x)
 					} else {}
 					hdd.value <- hdd.calc(txt.all.tokens[1:curr.token], drawn=rand.sample)[["HDD"]]
 					hdd.char.temp <- c(token=curr.token, value=hdd.value)
 					return(hdd.char.temp)
 				}
 			))
+		if(!isTRUE(quiet)){
+			# close prograss bar
+			close(prgBar)
+		} else {}
 	} else {}
 
 	## calculate MTLD characteristics
@@ -626,31 +645,19 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	if("MTLD" %in% char){
 		if(!isTRUE(quiet)){
 			message("MTLD.char: Calculate MTLD values")
+			# just some feedback, so we know the machine didn't just freeze...
+			prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
 		} else {}
 		# if MTLD results have not yet been calculated, do it now to get the full "all.forw" data
 		if(is.na(match("MTLD", measure))){
 			MTLD <- mtld.calc(txt.all.tokens)
 		} else {}
 		mtld.char.forw <- lex.div.results@MTLD[["all.forw"]]
-# 		MTLD.char.results <- t(sapply(1:num.all.steps, function(x){
-# 					curr.token <- x * char.steps
-# 					if(!isTRUE(quiet)){
-# 						# just some feedback, so we know the machine didn't just freeze...
-# 						if(identical(curr.token %% 50, 0)){
-# 							message(paste(" reached token 1 to ", curr.token,"...", sep=""))
-# 						} else {}
-# 					} else {}
-# 					mtld.char.temp <- c(token=curr.token, value=mtld.calc(txt.all.tokens[1:curr.token])[["MTLD"]])
-# 					return(mtld.char.temp)
-# 				}
-# 			))
 		lex.div.results@MTLD.char <- t(sapply(1:num.all.steps, function(x){
 					curr.token <- x * char.steps
 					if(!isTRUE(quiet)){
-						# just some feedback, so we know the machine didn't just freeze...
-						if(identical(curr.token %% 50, 0)){
-							message(paste(" reached token 1 to ", curr.token,"...", sep=""))
-						} else {}
+						# update progress bar
+						setTxtProgressBar(prgBar, x)
 					} else {}
 					mtld.char.back <- mtld.calc(txt.all.tokens[1:curr.token], back.only=TRUE)
 					# after the iteration process, line numbers are not identical to token numbers
@@ -658,12 +665,16 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 					mtld.forw.value <- mtld.char.forw[which(mtld.char.forw[["end"]] == curr.token), "factors"]
 					mtld.char.mean <- mean(c(mtld.forw.value, mtld.back.value))
 					# uncomment to debug:
-					# print(paste("token: ", curr.token, "(", txt.all.tokens[curr.token],") forw: ", mtld.forw.value, "back: ", mtld.back.value, " -- MTLD: ", mtld.char.mean, sep=""))
+					# print(paste0("token: ", curr.token, "(", txt.all.tokens[curr.token],") forw: ", mtld.forw.value, "back: ", mtld.back.value, " -- MTLD: ", mtld.char.mean))
 					mtld.char.value <- curr.token / mtld.char.mean
 					mtld.char.temp <- c(token=curr.token, value=mtld.char.value)
 					return(mtld.char.temp)
 				}
 			))
+		if(!isTRUE(quiet)){
+			# close prograss bar
+			close(prgBar)
+		} else {}
 	} else {}
 
 	lex.div.results@param <- list(segment=segment, factor.size=factor.size, rand.sample=rand.sample, case.sens=case.sens, lemmatize=lemmatize)
@@ -678,9 +689,9 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	## for the time being, give a warning until all implementations have been validated
 	needs.warning <- measure %in% c("MATTR","S","K")
 	if(any(needs.warning)){
-		warning(paste("Note: The implementations of these formulas are still subject to validation:\n  ",
+		warning(paste0("Note: The implementations of these formulas are still subject to validation:\n  ",
 		paste(measure[needs.warning], collapse=", "),
-		"\n  Use the results with caution, even if they seem plausible!", sep=""), call.=FALSE)
+		"\n  Use the results with caution, even if they seem plausible!"), call.=FALSE)
 	} else {}
 	return(lex.div.results)
 }

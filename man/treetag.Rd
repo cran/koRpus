@@ -6,7 +6,8 @@
     lang = "kRp.env",
     sentc.end = c(".", "!", "?", ";", ":"),
     encoding = NULL, TT.options = NULL, debug = FALSE,
-    TT.tknz = TRUE, format = "file")
+    TT.tknz = TRUE, format = "file", stopwords = NULL,
+    stemmer = NULL)
 }
 \arguments{
   \item{file}{Either a connection or a character vector,
@@ -58,21 +59,23 @@
   {\code{"de-utf8"}} {German, UTF-8} \item {\code{"de"}}
   {German} \item {\code{"en"}} {English} \item
   {\code{"es-utf8"}} {Spanish, UTF-8} \item {\code{"es"}}
-  {Spanish} \item {\code{"ru"}} {Russian, UTF-8} } you can
-  omit all the following elements, because they will be
-  filled with defaults. Of course this only makes sense if
-  you have a working default installation.} \item
-  {\code{tokenizer}} {Mandatory: A character string, naming
-  the tokenizer to be called. Interpreted relative to
-  \code{path/cmd/}.} \item {\code{tknz.opts}} {Optional: A
-  character string with the options to hand over to the
-  tokenizer. You don't need to specify "-a" if
-  \code{abbrev} is given. If \code{TT.tknz=FALSE}, you can
-  pass configurational options to
-  \code{\link[koRpus:tokenize]{tokenize}} by provinding
-  them as a named list (instead of a character string)
-  here.} \item {\code{tagger}} {Mandatory: A character
-  string, naming the tagger-command to be called.
+  {Spanish} \item {\code{"fr-utf8"}} {French, UTF-8} \item
+  {\code{"fr"}} {French} \item {\code{"it-utf8"}} {Italian,
+  UTF-8} \item {\code{"it"}} {Italian} \item {\code{"ru"}}
+  {Russian, UTF-8} } you can omit all the following
+  elements, because they will be filled with defaults. Of
+  course this only makes sense if you have a working
+  default installation.} \item {\code{tokenizer}}
+  {Mandatory: A character string, naming the tokenizer to
+  be called. Interpreted relative to \code{path/cmd/}.}
+  \item {\code{tknz.opts}} {Optional: A character string
+  with the options to hand over to the tokenizer. You don't
+  need to specify "-a" if \code{abbrev} is given. If
+  \code{TT.tknz=FALSE}, you can pass configurational
+  options to \code{\link[koRpus:tokenize]{tokenize}} by
+  provinding them as a named list (instead of a character
+  string) here.} \item {\code{tagger}} {Mandatory: A
+  character string, naming the tagger-command to be called.
   Interpreted relative to \code{path/bin/}.} \item
   {\code{abbrev}} {Optional: A character string, naming the
   abbreviation list to be used. Interpreted relative to
@@ -112,6 +115,18 @@
   whether you want to scan files or analyze the text in a
   given object, like a character vector. If the latter, it
   will be written to a temporary file (see \code{file}).}
+
+  \item{stopwords}{A character vector to be used for
+  stopword detection. Comparison is done in lower case. You
+  can also simply set \code{stopwords=tm::stopwords("en")}
+  to use the english stopwords provided by the \code{tm}
+  package.}
+
+  \item{stemmer}{A function or method to perform stemming.
+  For instance, you can set
+  \code{stemmer=Snowball::SnowballStemmer} if you have the
+  \code{Snowball} package installed. As of now, you cannot
+  provide further arguments to this function.}
 }
 \value{
   An object of class
@@ -153,12 +168,23 @@ tagged.results <- treetag("~/my.data/speech.txt")
 # after tagging, use the resulting object with other functions in this package:
 readability(tagged.results)
 lex.div(tagged.results)
+
+## enabling stopword detection and stemming
+# if you also installed the packages tm and Snowball,
+# you can use some of their features with koRpus:
+set.kRp.env(TT.cmd="manual", lang="en", TT.options=list(path="~/bin/treetagger",
+   preset="en"))
+tagged.results <- treetag("~/my.data/speech.txt",
+   stopwords=tm::stopwords("en"),
+   stemmer=Snowball::SnowballStemmer)
+# removing all stopwords now is simple:
+tagged.noStopWords <- kRp.filter.wclass(tagged.results, "stopword")
 }
 }
 \author{
   m.eik michalke \email{meik.michalke@hhu.de}, support for
-  Spanish contributed by Earl Brown
-  \email{eabrown@csumb.edu}
+  various laguages was contributed by Earl Brown (Spanish),
+  Alberto Mirisola (Italian) and Alexandre Brulet (French).
 }
 \references{
   Schmid, H. (1994). Probabilistic part-of-speec tagging

@@ -2,7 +2,7 @@
 #' 
 #' This is just a convenient wrapper function for \code{\link[koRpus:readability]{readability}}.
 #'
-#' This function calculates the two formulae by Tränkle-Bailer, which are based on the Dickes-Steiwer formulae.
+#' This function calculates the two formulae by Tr\"ankle-Bailer, which are based on the Dickes-Steiwer formulae.
 #' In contrast to \code{\link[koRpus:readability]{readability}}, which by default calculates all possible indices,
 #' this function will only calculate the index values.
 #'

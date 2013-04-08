@@ -53,8 +53,8 @@ guess.lang <- function(txt.file, udhr.path, comp.length=300, keep.udhr=FALSE, qu
 	# see if text is long enough
 	text.length <- length(text.sliced)
 	if(text.length < comp.length){
-		warning(paste("Text is shorter (", text.length, " characters) than defined comp.length  (", comp.length,
-			" characters).\n  Full text was used and comp.length ignored.", sep=""))
+		warning(paste0("Text is shorter (", text.length, " characters) than defined comp.length  (", comp.length,
+			" characters).\n  Full text was used and comp.length ignored."))
 		txt.short <- paste(text.sliced, collapse="")
 	} else {
 		txt.short <- paste(text.sliced[1:comp.length], collapse="")
@@ -63,7 +63,7 @@ guess.lang <- function(txt.file, udhr.path, comp.length=300, keep.udhr=FALSE, qu
 	udhr.comressed <- sapply(1:dim(udhr)[1], function(num.udhr){
 			curr.udhr <- udhr[num.udhr,]
 			if(!isTRUE(quiet)){
-				cat(paste("Comparing text to ", curr.udhr["name"], sep=""), "...\n", sep="")
+				cat(paste0("Comparing text to ", curr.udhr["name"]), "...\n", sep="")
 			} else {}
 			udhr.plain <- paste(curr.udhr["text"])
 			udhr.plus.text <- paste(curr.udhr["text"], txt.short, collapse="")

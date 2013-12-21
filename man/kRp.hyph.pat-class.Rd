@@ -8,7 +8,8 @@
 \details{This class is used for objects that are returned by \code{\link[koRpus:read.hyph.pat]{read.hyph.pat}}.}
 \keyword{classes}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
-\section{Slots}{\describe{\item{\code{lang}:}{(\code{\link{character}}) A character string, naming the language that is assumed for the patterns in this object}\item{\code{pattern}:}{(\code{\link{matrix}}) A matrix with three colums:
+\section{Slots}{\describe{\item{\code{lang}:}{(\code{\link{character}}) A character string,
+      naming the language that is assumed for the patterns in this object}\item{\code{pattern}:}{(\code{\link{matrix}}) A matrix with three colums:
 \describe{
 \item{\code{orig}:}{The unchanged patgen patterns.}
 \item{\code{char}:}{Only the characters used for matching.}

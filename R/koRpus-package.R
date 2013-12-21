@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab koRpus\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.04-40\cr
-#' Date: \tab 2013-04-07\cr
+#' Version: \tab 0.05-3\cr
+#' Date: \tab 2013-12-21\cr
 #' Depends: \tab R (>= 2.10.0),methods\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
@@ -18,13 +18,14 @@
 #' and readability (e.g., Flesch, SMOG, LIX, Dale-Chall). Basic import functions for language corpora
 #' are also provided, to enable frequency analyses (supports Celex and Leipzig Corpora Collection file formats).
 #'
-#' Note: For full functionality a local installation of TreeTagger is recommended.
+#' Note: For full functionality a local installation of TreeTagger is recommended. Also, due to some restrictions
+#' on CRAN, the full package sources are only available from the project homepage.
 #' Be encouraged to send feedback to the author(s)!
 #'
-#' @aliases koRpus-package koRpus
+#' @aliases koRpus-package
 #' @name koRpus-package
 #' @docType package
 #' @title The koRpus Package
-#' @author Meik Michalke \email{meik.michalke@@hhu.de}, with contributions from Earl Brown \email{eabrown@@csumb.edu}, Alberto Mirisola, Alexandre Brulet, Laura Hauser
+#' @author m.eik michalke, with contributions from Earl Brown, Alberto Mirisola, Alexandre Brulet, Laura Hauser
 #' @keywords package
 NULL

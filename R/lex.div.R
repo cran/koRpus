@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Analyze lexical diversity
 #' 
 #' This function analyzes the lexical diversity/complexity of a text corpus.
@@ -52,6 +70,12 @@
 #'		both calculations is the final MTLD result.
 #'
 #'		Wrapper function: \code{\link[koRpus:MTLD]{MTLD}}}
+#'	\item{\code{"MTLD-MA"}:}{The \emph{Moving-Average Measure of Textual Lexical Diversity} (Jarvis, no year) combines factor counting and a moving
+#'		window similar to MATTR: After each full factor the the next one is calculated from one token after the last starting point. This is repeated
+#'		until the end of text is reached for the first time. The average of all full factor lengths is the final MTLD-MA result. Factors below the
+#'		\code{min.tokens} threshold are dropped.
+#'
+#'		Wrapper function: \code{\link[koRpus:MTLD]{MTLD}}}
 #'	\item{\code{"HD-D"}:}{The \emph{HD-D} value can be interpreted as the idealized version of \emph{vocd-D} (see McCarthy & Jarvis, 2007). For each type,
 #'		the probability is computed (using the hypergeometric distribution) of drawing it at least one time when drawing randomly a certain
 #'		number of tokens from the text -- 42 by default. The sum of these probabilities make up the HD-D value. The sum of probabilities relative to
@@ -70,15 +94,19 @@
 #'		\code{\link[koRpus]{kRp.analysis-class}} or  \code{\link[koRpus]{kRp.txt.trans-class}}, containing the tagged text to be analyzed.
 #' @param segment An integer value for MSTTR, defining how many tokens should form one segment.
 #' @param factor.size A real number between 0 and 1, defining the MTLD factor size.
+#' @param min.tokens An integer value, how many tokens a full factor must at least have to be considered for the MTLD-MA result.
 #' @param rand.sample An integer value, how many tokens should be assumed to be drawn for calculating HD-D.
 #' @param window An integer value for MATTR, defining how many tokens the moving window should include.
 #' @param case.sens Logical, whether types should be counted case sensitive.
 #' @param lemmatize Logical, whether analysis should be carried out on the lemmatized tokens rather than all running word forms.
+#' @param detailed Logical, whether full details of the analysis should be calculated. This currently affects MTLD and MTLD-MA, defining
+#'		if all factors should be kept in the object. This slows down calculations considerably.
 #' @param measure A character vector defining the measures which should be calculated. Valid elements are "TTR", "MSTTR", "MATTR", "C", "R", 
-#		"CTTR", "U", "S", "K", "Maas", "HD-D" and "MTLD".
+#'		"CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD" and "MTLD-MA".
 #' @param char A character vector defining whether data for plotting characteristic curves should be calculated. Valid elements are 
-#'		"TTR","MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D" and "MTLD".
+#'		"TTR","MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD" and "MTLD-MA".
 #' @param char.steps An integer value defining the stepwidth for characteristic curves, in tokens.
+#' @param log.base A numeric value defining the base of the logarithm. See \code{\link[base:log]{log}} for details.
 #' @param force.lang A character string defining the language to be assumed for the text, by force. See details.
 #' @param keep.tokens Logical. If \code{TRUE} all raw tokens and types will be preserved in the resulting object, in a slot called 
 #'		\code{tt}. For the types, also their frequency in the analyzed text will be listed.
@@ -87,6 +115,7 @@
 #'		\code{kRp.POS.tags(lang, c("punct","sentc"), list.classes=TRUE)} to be used.
 #' @param corp.rm.tag A character vector with POS tags which should be dropped.
 #' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
+#'		\code{TRUE} will also suppress all potential warnings regarding the validation status of measures.
 #' @return An object of class \code{\link[koRpus]{kRp.TTR-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords LD
@@ -111,11 +140,11 @@
 #' \dontrun{
 #' lex.div(tagged.text)
 #' }
-lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=100,
-		case.sens=FALSE, lemmatize=FALSE,
-		measure=c("TTR","MSTTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD"),
-		char=c("TTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD"),
-		char.steps=5,
+lex.div <- function(txt, segment=100, factor.size=0.72, min.tokens=9, rand.sample=42, window=100,
+		case.sens=FALSE, lemmatize=FALSE, detailed=FALSE,
+		measure=c("TTR","MSTTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD","MTLD-MA"),
+		char=c("TTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD","MTLD-MA"),
+		char.steps=5, log.base=10,
 		force.lang=NULL,
 		keep.tokens=FALSE,
 		corp.rm.class="nonpunct",
@@ -141,6 +170,7 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	# - R                    [AYG]
 	# - TTR                  [TAL]
 	# - U                    [AYG]
+	# - MTLD-MA              [JMC]
 	# 
 	# these measures produce plausible results, but need checking:
 	# - MATTR
@@ -162,8 +192,8 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 		stop(simpleError(paste("Invalid segment value (must be > 0):",factor.size)))
 	} else {}
 	# check for optional measures
-	if(!any(measure %in% c("TTR","MSTTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD")) &
-		!any(char %in% c("TTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD"))){
+	if(!any(measure %in% c("TTR","MSTTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD","MTLD-MA")) &
+		!any(char %in% c("TTR","MATTR","C","R","CTTR","U","S","K","Maas","HD-D","MTLD","MTLD-MA"))){
 			stop(simpleError(paste("You didn't specify at least one valid measure or characteristic!")))
 	} else {}
 
@@ -183,73 +213,42 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 
 	# calling internal function tagged.txt.rm.classes()
 	txt.all.clean <- tagged.txt.rm.classes(tagged.text@TT.res,
-			lemma=lemmatize, lang,
+			# "lemma" only affects the results if "as.vector=TRUE"
+			# so lemmatizing will be done by type.freq() below
+			lemma=FALSE, lang=lang,
 			corp.rm.class=corp.rm.class,
 			corp.rm.tag=corp.rm.tag,
 			as.vector=FALSE)
-	txt.all.tokens <- txt.all.clean[,"token"]
-	txt.type.freq <- type.freq(txt.all.clean, case.sens=case.sens)
+	if(isTRUE(lemmatize)){
+		txt.all.tokens <- txt.all.clean[,"lemma"]
+	} else {
+		txt.all.tokens <- txt.all.clean[,"token"]
+	}
+	txt.type.freq <- type.freq(txt.all.clean, case.sens=case.sens, lemma=FALSE)
+	txt.lemma.freq <- type.freq(txt.all.clean, case.sens=case.sens, lemma=TRUE, fail.if.no.lemmas=lemmatize)
 	txt.all.types <- txt.type.freq[,"type"]
+	txt.all.lemmas <- txt.lemma.freq[,"type"]
 	if(!isTRUE(case.sens)){
 		txt.all.tokens <- tolower(txt.all.tokens)
 	} else {}
 	num.all.tokens <- length(txt.all.tokens)
 	num.all.types <- length(txt.all.types)
-	# global value for steps if char=c(something)
-	num.all.steps <- num.all.tokens %/% char.steps
-
+	num.all.lemmas <- length(txt.all.lemmas)
+	num.type.or.lemma <- ifelse(isTRUE(lemmatize), num.all.lemmas, num.all.types)
 	# some sanity checks
 	if(num.all.tokens < 100){
-		warning("Text is relatively short (<100 tokens), results are probably not reliable!")
+		warning("Text is relatively short (<100 tokens), results are probably not reliable!", call.=FALSE)
 	} else {}
 
-	# function to calculate Yule's K
-	k.calc <- function(txt.tokens){
-		N <- length(txt.tokens)
-		txt.types <- unique(txt.tokens)
-		# first analize types for their frequencies
-		type.freqs <- sapply(txt.types, function(x){
-				return(sum(match(txt.tokens, x), na.rm=TRUE))
-			})
-		# now count the frequencies of frequencies
-		freq.freqs <- t(sapply(unique(type.freqs), function(x){
-				frq.frq <- sum(match(type.freqs, x), na.rm=TRUE)
-				return(c(X=x, fx=frq.frq))
-			}))
-		# calculate the sum of all fx * X^2
-		freq.sum <- sum(freq.freqs[, "X"]^2 * freq.freqs[, "fx"])
+	if(!is.null(char)){
+		if(num.all.tokens < char.steps){
+			warning("Text is shorter than step size, adjusting \"char.steps\" to 1!", call.=FALSE)
+			char.steps <- 1
+		} else {}
+		# global value for steps if char=c(something)
+		num.all.steps <- num.all.tokens %/% char.steps
+	} else {}
 
-		# fill in the whole equasion
-		result <- 1e4 * (freq.sum - N) / N^2
-
-		return(result)
-	}
-
-	# function to calculate HD-D
-	hdd.calc <- function(hdd.tokens, drawn){
-		hdd.types <- unique(hdd.tokens)
-		num.hdd.tokens <- length(hdd.tokens)
-		num.hdd.types <- length(hdd.types)
-		# get probability from hypergeometric distribution for each type
-		hdd.type.probs <- sapply(hdd.types, function(x){
-				num.types.in.tokens <- sum(match(hdd.tokens, x), na.rm=TRUE)
-				num.nontypes <- num.hdd.tokens - num.types.in.tokens
-				# probability of having the type at least once is the inverse of not drawing it at all
-				# if 'drawn' is larger than number of tokens, set probability to 1
-				if(drawn > num.hdd.tokens){
-					type.prob <- 1
-				} else {
-					type.prob <- 1 - dhyper(0, num.types.in.tokens, num.nontypes, drawn)
-				}
-				return(type.prob)
-			})
-		summary.probs <- summary(hdd.type.probs)
-		sd.probs <- sd(hdd.type.probs)
-		hdd.result <- sum(hdd.type.probs)
-		hdd.ATTR <- hdd.result / drawn
-		results <- list(HDD=hdd.result, ATTR=hdd.ATTR, type.probs=sort(hdd.type.probs, decreasing=TRUE), summary=summary.probs, sd=sd.probs)
-		return(results)
-	}
 
 	# initialize result object
 	lex.div.results <- new("kRp.TTR")
@@ -262,103 +261,55 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 
 	## calculate TTR
 	if("TTR" %in% measure){
-		lex.div.results@TTR <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="TTR")
+		lex.div.results@TTR <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="TTR")
 	} else {}
 
 	## calculate Herdan's C: log(types) / log(tokens)
 	if("C" %in% measure){
-		lex.div.results@C.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="C")
+		lex.div.results@C.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="C", log.base=log.base)
 	} else {}
 
 	## calculate Guiraud's R: types / sqrt(tokens)
 	if("R" %in% measure){
-		lex.div.results@R.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="R")
+		lex.div.results@R.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="R")
 	} else {}
 
 	## calculate Carroll's CTTR: types / 2*sqrt(tokens)
 	if("CTTR" %in% measure){
-		lex.div.results@CTTR <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="CTTR")
+		lex.div.results@CTTR <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="CTTR")
 	} else {}
 
 	## calculate Uber Index U: (log(tokens))^2 / (log(tokens) - log(types)) 
 	if("U" %in% measure){
-		lex.div.results@U.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="U")
+		lex.div.results@U.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="U", log.base=log.base)
 	} else {}
 
 	## calculate Summer's S: LogLog(types) / LogLog(tokens)
 	if("S" %in% measure){
-		lex.div.results@S.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="S")
+		lex.div.results@S.ld <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="S", log.base=log.base)
 	} else {}
 
 	## calculate Maas' a and lgV0 indices
 	if("Maas" %in% measure){
-		lex.div.results@Maas <- ttr.calc(num.tokens=num.all.tokens, num.types=num.all.types, type="Maas")
-		lex.div.results@lgV0 <- lgV0.calc(num.tokens=num.all.tokens, num.types=num.all.types, x=0)
-		lex.div.results@lgeV0 <- lgV0.calc(num.tokens=num.all.tokens, num.types=num.all.types, x=0, log.base=exp(1))
+		lex.div.results@Maas <- ttr.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, type="Maas", log.base=log.base)
+		lex.div.results@lgV0 <- lgV0.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, x=0)
+		lex.div.results@lgeV0 <- lgV0.calc(num.tokens=num.all.tokens, num.types=num.type.or.lemma, x=0, log.base=exp(1))
 		# calculate relative lexical growth, using first half of the text and full text
 		Maas.txt.half <- txt.all.tokens[1:(num.all.tokens %/% 2)]
 		Maas.num.tokens.half <- length(Maas.txt.half)
 		Maas.num.types.half <- length(unique(Maas.txt.half))
-		lex.div.results@Maas.grw <- lex.growth(N1=Maas.num.tokens.half, V1=Maas.num.types.half, N2=num.all.tokens, V2=num.all.types)
+		lex.div.results@Maas.grw <- lex.growth(N1=Maas.num.tokens.half, V1=Maas.num.types.half, N2=num.all.tokens, V2=num.type.or.lemma)
 	} else {}
 
 	## calculate MSTTR
 	if("MSTTR" %in% measure){
-		if(num.all.tokens < segment){
-			warning(paste0("MSTTR: Skipped calculation, segment size is ", segment, ", but the text has only ", num.all.tokens, " tokens!"))
-		} else {
-			full.iter <- num.all.tokens %/% segment
-			msttr.dropped <- num.all.tokens %% segment
-			# iterate over all tokens
-			msttr.iters <- sapply(0:(full.iter-1), function(x){
-												segm.start <- (x*segment)+1
-												segm.end <- (x*segment)+segment
-												ttr <- ttr.calc(txt.tokens=txt.all.tokens[segm.start:segm.end])
-												return(ttr)
-											})
-			msttr.res <- mean(msttr.iters)
-			msttr.sd <- sd(msttr.iters)
-			lex.div.results@MSTTR <- list(MSTTR=msttr.res, TTR.seg=msttr.iters, dropped=msttr.dropped, sd=msttr.sd)
-		}
+		lex.div.results@MSTTR <- MSTTR.calc(txt.tokens=txt.all.tokens, segment=segment, num.tokens=num.all.tokens)
 	} else {}
 
 	## calculate MATTR
 	# needed also for characteristics
 	if(any(c("MATTR", "MATTR.char") %in% measure)){
-		# check if there are less tokens than window size
-		if(num.all.tokens <= window){
-			warning(paste0("MATTR: Skipped calculation, window size is ", window, ", but the text has only ", num.all.tokens, " tokens!"))
-		} else {
-			mattr.list <- list()
-			# take the first n tokens
-			mattr.win.tokens <- txt.all.tokens[1:window]
-			# fill the initial type list
-			for (this.token in mattr.win.tokens){
-				mattr.list[[this.token]] <- list.add.type(this.token=this.token, type.list=mattr.list)
-			}
-
-			# initialize vector with TTRs
-			mattr.all.TTR <- c(length(mattr.list) / window)
-			# give the entry the name of the last token
-			names(mattr.all.TTR) <- txt.all.tokens[window]
-
-			# now move through the remaining text.
-			# at each step, drop the first token and add the next unused one
-			nextToken <- window + 1
-			while (nextToken <= num.all.tokens) {
-				# remove the first token
-				mattr.list[[txt.all.tokens[nextToken - window]]] <- list.drop.type(this.token=txt.all.tokens[nextToken - window], type.list=mattr.list)
-				# add the next one
-				mattr.list[[txt.all.tokens[nextToken]]] <- list.add.type(this.token=txt.all.tokens[nextToken], type.list=mattr.list)
-				# calculate new TTR
-				mattr.all.TTR <- c(mattr.all.TTR, length(mattr.list) / window)
-				names(mattr.all.TTR)[length(mattr.all.TTR)] <- txt.all.tokens[nextToken]
-				# prepare for next round
-				nextToken <- nextToken + 1
-			}
-
-			lex.div.results@MATTR <- list(MATTR=mean(mattr.all.TTR), TTR.win=mattr.all.TTR, sd=sd(mattr.all.TTR))
-		}
+		lex.div.results@MATTR <- MATTR.calc(txt.tokens=txt.all.tokens, window=window, num.tokens=num.all.tokens)
 	} else {}
 
 	## Yule's K, frequency correction
@@ -372,134 +323,27 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	} else {}
 
 	## calculate MTLD
-	if("MTLD" %in% measure | "MTLD" %in% char){
-		# implemented as a function, to be re-used for characteristic data calculation
-		# to get only the backwards data (used for characteristics), set "back.only=TRUE)"
-		mtld.calc <- function(mtld.txt, back.only=FALSE){
-			mtld.num.tokens <- length(mtld.txt)
-			# make this another function, to use it forward and backward
-			mtld.sub.calc <- function(mtld.sub.txt){
-				# initialize values and start at first word
-				# factors begin with 0,division by zero might occur?!
-				mtld.factors <- 0
-				# subfactors begin with 0, since there is no rest when you've just started
-				mtld.sub.factors <- 0
-				mtld.ttr <- 1
-				mtld.start <- 1
-				mtld.words <- 2
-				mtld.last.factor <- FALSE
-				# initialize list of types
-				mtld.type.list <- list()
-				mtld.type.list[[mtld.sub.txt[1]]] <- 1
-				mtld.all.results <- data.frame(start=NA, end=NA, token=NA, TTR=NA, factors=NA, stringsAsFactors=FALSE)[-1,]
-
-				while((mtld.start + 1) < mtld.num.tokens){
-					while(mtld.ttr > factor.size){
-						# update the type list
-						mtld.type.list[[mtld.sub.txt[mtld.words]]] <- list.add.type(this.token=mtld.sub.txt[mtld.words], type.list=mtld.type.list)
-						mtld.ttr <- length(mtld.type.list) / (mtld.words - mtld.start + 1)
-							# did the last token make this a full factor?
-							if(mtld.ttr > factor.size){
-								# if this is the case, calculate a partial factor value to add
-								mtld.sub.factors <- mtld.factors + ((1 - mtld.ttr) / (1 - factor.size))
-							} else {
-								mtld.sub.factors <- mtld.factors + 1
-							}
-						mtld.all.results <- rbind(mtld.all.results, data.frame(
-							start=mtld.start,
-							end=mtld.words,
-							token=mtld.sub.txt[mtld.words],
-							TTR=mtld.ttr,
-							factors=mtld.sub.factors,
-							stringsAsFactors=FALSE))
-						# see if we reached the end of tokens
-						if(mtld.words == mtld.num.tokens){
-							mtld.last.factor <- TRUE
-							break
-						} else {}
-						mtld.words <- mtld.words + 1
-					}
-
-					# check if we need to increase the factor value
-					if(!isTRUE(mtld.last.factor)){
-						mtld.factors <- mtld.factors + 1
-					} else {
-						mtld.factors <- mtld.sub.factors
-					}
-
-					# set values to go on from here
-					mtld.start <- mtld.words
-					mtld.words <- mtld.start + 1
-					# reset TTR for next round
-					mtld.ttr <- 1
-					# reset list of types
-					mtld.type.list <- list()
-					mtld.type.list[[mtld.sub.txt[mtld.start]]] <- 1
-				}
-				# individual factor lengths
-				mtld.factor.starts <- unique(mtld.all.results[["start"]])
-				mtld.factor.lengths <- c()
-				mtld.factor.lengths.complete <- c()
-				for (this.start in mtld.factor.starts){
-					this.end <- max(mtld.all.results[["end"]][mtld.all.results[["start"]] == this.start])
-					mtld.factor.lengths[length(mtld.factor.lengths) + 1]  <- this.end - this.start + 1
-					# only complete factors
-					if(mtld.all.results[["TTR"]][mtld.all.results[["end"]] == this.end] <= factor.size){
-						mtld.factor.lengths.complete[length(mtld.factor.lengths.complete) + 1]  <- this.end - this.start + 1
-					} else {}
-				}
-				# check if any full factors appeared at all
-				if(is.null(mtld.factor.lengths.complete)){
-					mtld.factor.lengths.complete <- 0
-				} else {}
-
-				mtld.results <- list(
-					MTLD.all=mtld.all.results,
-					factors=mtld.factors,
-					lengths=mtld.factor.lengths,
-					lengths.complete=mtld.factor.lengths.complete)
-			} # end function mtld.sub.calc()
-
-			if(isTRUE(back.only)){
-				mtld.results <- mtld.sub.calc(rev(mtld.txt))[["MTLD.all"]]
-			} else {
-				mtld.res.forw <- mtld.sub.calc(mtld.txt)
-				mtld.res.back <- mtld.sub.calc(rev(mtld.txt))
-				mtld.res.mean <- mean(c(mtld.res.forw[["factors"]], mtld.res.back[["factors"]]))
-				mtld.len.mean <- mean(c(mtld.res.forw[["lengths"]], mtld.res.back[["lengths"]]))
-				mtld.len.sd <- sd(c(mtld.res.forw[["lengths"]], mtld.res.back[["lengths"]]))
-				mtld.len.mean.cmp <- mean(c(mtld.res.forw[["lengths.complete"]], mtld.res.back[["lengths.complete"]]))
-				mtld.len.sd.cmp <- sd(c(mtld.res.forw[["lengths.complete"]], mtld.res.back[["lengths.complete"]]))
-				# this is the final MTLD value
-				mtld.res.value <- mtld.num.tokens / mtld.res.mean
-				mtld.results <- list(
-					MTLD=mtld.res.value,
-					all.forw=mtld.res.forw[["MTLD.all"]],
-					all.back=mtld.res.back[["MTLD.all"]],
-					factors=c(forw=mtld.res.forw[["factors"]], mean=mtld.res.mean, back=mtld.res.back[["factors"]]),
-					lengths=list(
-						forw=mtld.res.forw[["lengths"]],
-						forw.compl=mtld.res.forw[["lengths.complete"]],
-						mean=mtld.len.mean,
-						mean.compl=mtld.len.mean.cmp,
-						sd=mtld.len.sd,
-						sd.compl=mtld.len.sd.cmp,
-						back=mtld.res.back[["lengths"]],
-						back.compl=mtld.res.back[["lengths.complete"]]
-					)
-				)
-			}
-			return(mtld.results)
-		} # end function mtld.calc()
+	if("MTLD" %in% measure){
+		lex.div.results@MTLD <- MTLD.calc(txt.all.tokens, factor.size=factor.size, num.tokens=num.all.tokens, detailed=detailed)
 	} else {}
 
-	if(!is.na(match("MTLD", measure))){
-		lex.div.results@MTLD <- mtld.calc(txt.all.tokens)
+	## calculate MTLD-MA
+	if("MTLD-MA" %in% measure){
+		# characteristics need detailed results, so discard another setting if present to speed up things
+		# the alternative would be to calculate this twice, so it's a no-brainer
+		# to comply with user preferences, we'll drop the detailed stuff again, see MTLDMA.char section!
+		if("MTLD-MA" %in% char && !isTRUE(detailed)){
+			detailed.mtldma <- TRUE
+		} else {
+			detailed.mtldma <- detailed
+		}
+		lex.div.results@MTLDMA <- MTLDMA.calc(txt.all.tokens, factor.size=factor.size, num.tokens=num.all.tokens, min.tokens=min.tokens,
+			detailed=detailed.mtldma, quiet=quiet)
 	} else {}
 
 	## calculate TTR, C, R, CTTR, U, S and Maas characteristics
 	# set up the base function
-	ttr.calc.chars <- function(txt.tokens, type="TTR"){
+	ttr.calc.chars <- function(txt.tokens, type="TTR", log.base=log.base){
 		if(!isTRUE(quiet)){
 			message(paste0(type, ".char: Calculate ",type," values"))
 			# give some feedback, so we know the machine didn't just freeze...
@@ -511,7 +355,7 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 						# update progress bar
 						setTxtProgressBar(prgBar, x)
 					} else {}
-					char.temp <- c(token=curr.token, value=ttr.calc(txt.tokens=txt.all.tokens[1:curr.token], type=type))
+					char.temp <- c(token=curr.token, value=ttr.calc(txt.tokens=txt.all.tokens[1:curr.token], type=type, log.base=log.base))
 					return(char.temp)
 				}
 			))
@@ -528,7 +372,7 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	} else {}
 
 	if("C" %in% char){
-		lex.div.results@C.char <- ttr.calc.chars(txt.all.tokens, type="C")
+		lex.div.results@C.char <- ttr.calc.chars(txt.all.tokens, type="C", log.base=log.base)
 	} else {}
 
 	if("R" %in% char){
@@ -540,17 +384,17 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	} else {}
 
 	if("U" %in% char){
-		lex.div.results@U.char <- ttr.calc.chars(txt.all.tokens, type="U")
+		lex.div.results@U.char <- ttr.calc.chars(txt.all.tokens, type="U", log.base=log.base)
 	} else {}
 
 	if("S" %in% char){
-		lex.div.results@S.char <- ttr.calc.chars(txt.all.tokens, type="S")
+		lex.div.results@S.char <- ttr.calc.chars(txt.all.tokens, type="S", log.base=log.base)
 	} else {}
 
 	if("MATTR" %in% char && num.all.tokens > window){
-		# mattr.all.TTR should be available, otherwise try
-		# lex.div.results@MATTR$TTR.win
+		# mattr.all.TTR should be available in lex.div.results@MATTR$TTR.win
 		# characteristics are just the progressing mean of these TTRs
+		mattr.all.TTR <- slot(lex.div.results, "MATTR")$TTR.win
 		mattr.num.TTRs <- length(mattr.all.TTR)
 		mattr.num.all.steps <- mattr.num.TTRs %/% char.steps
 		lex.div.results@MATTR.char <- t(sapply(1:mattr.num.all.steps, function(x){
@@ -561,7 +405,7 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	} else {}
 
 	if("Maas" %in% char){
-		lex.div.results@Maas.char <- ttr.calc.chars(txt.all.tokens, type="Maas")
+		lex.div.results@Maas.char <- ttr.calc.chars(txt.all.tokens, type="Maas", log.base=log.base)
 		maas.lgV.chars <- function(base){
 			if(!isTRUE(quiet)){
 				# give some feedback, so we know the machine didn't just freeze...
@@ -641,27 +485,27 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 	} else {}
 
 	## calculate MTLD characteristics
-	# this can probably be be much faster, as actually only all.back needs to be recalculated in the loop
 	if("MTLD" %in% char){
 		if(!isTRUE(quiet)){
 			message("MTLD.char: Calculate MTLD values")
 			# just some feedback, so we know the machine didn't just freeze...
 			prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
 		} else {}
-		# if MTLD results have not yet been calculated, do it now to get the full "all.forw" data
-		if(is.na(match("MTLD", measure))){
-			MTLD <- mtld.calc(txt.all.tokens)
-		} else {}
-		mtld.char.forw <- lex.div.results@MTLD[["all.forw"]]
+		if(isTRUE(is.na(lex.div.results@MTLD[["all.forw"]]))){
+			mtld.char.forw <- mtld.sub.calc(txt.tokens=txt.all.tokens, factor.size=factor.size,
+				num.tokens=num.all.tokens, detailed=TRUE)[["MTLD.all"]]
+		} else {
+			# if MTLD results have already been calculated, recycle the "all.forw" data
+			mtld.char.forw <- lex.div.results@MTLD[["all.forw"]]
+		}
 		lex.div.results@MTLD.char <- t(sapply(1:num.all.steps, function(x){
 					curr.token <- x * char.steps
 					if(!isTRUE(quiet)){
 						# update progress bar
 						setTxtProgressBar(prgBar, x)
 					} else {}
-					mtld.char.back <- mtld.calc(txt.all.tokens[1:curr.token], back.only=TRUE)
-					# after the iteration process, line numbers are not identical to token numbers
-					mtld.back.value <- mtld.char.back[which(mtld.char.back[["end"]] == curr.token), "factors"]
+					mtld.back.value <- mtld.sub.nodata(txt.tokens=rev(txt.all.tokens[1:curr.token]), factor.size=factor.size,
+						partial=TRUE, stopAtFirstFactor=FALSE, detailed=FALSE)[["factors"]]
 					mtld.forw.value <- mtld.char.forw[which(mtld.char.forw[["end"]] == curr.token), "factors"]
 					mtld.char.mean <- mean(c(mtld.forw.value, mtld.back.value))
 					# uncomment to debug:
@@ -677,18 +521,66 @@ lex.div <- function(txt, segment=100, factor.size=0.72, rand.sample=42, window=1
 		} else {}
 	} else {}
 
-	lex.div.results@param <- list(segment=segment, factor.size=factor.size, rand.sample=rand.sample, case.sens=case.sens, lemmatize=lemmatize)
+	## calculate MTLD-MA characteristics
+	if("MTLD-MA" %in% char){
+		# this needs the detailed results, already taken care of by calculating MTLDMA in the first place
+		all.factorEnds <- sapply(lex.div.results@MTLDMA[["all"]], function(x) max(x[["end"]]))
+		all.factorLengths <- lex.div.results@MTLDMA[["lengths"]][["all"]]
+		# if the text is too short, no usable results can be expected
+		if(!is.null(all.factorLengths) && length(all.factorEnds) > 0){
+			if(!isTRUE(quiet)){
+				message("MTLDMA.char: Calculate MTLD-MA values")
+				# just some feedback, so we know the machine didn't just freeze...
+				prgBar <- txtProgressBar(min=0, max=num.all.steps, style=3)
+			} else {}
+			lex.div.results@MTLDMA.char <- t(sapply(1:num.all.steps, function(x){
+						curr.token <- x * char.steps
+						if(!isTRUE(quiet)){
+							# update progress bar
+							setTxtProgressBar(prgBar, x)
+						} else {}
+						# well, of course a factor can't be complete if there's less text than the very first factor
+						if(curr.token < all.factorEnds[1]){
+							mtldma.value <- NA
+						} else {
+							# see at which point a next full factor would need more text than we have
+							lastValidIndex <- min(which(all.factorEnds > curr.token)) - 1
+							relevantFactorLenghts <- all.factorLengths[1:lastValidIndex]
+							mtldma.value <- mean(relevantFactorLenghts[relevantFactorLenghts > min.tokens])
+						}
+						# uncomment to debug:
+						# print(paste0("token: ", curr.token, "(", txt.all.tokens[curr.token],") -- MTLD-MA: ", mtldma.value, "lastValidIndex: ", lastValidIndex))
+						mtldma.char.temp <- c(token=curr.token, value=mtldma.value)
+						return(mtldma.char.temp)
+					}
+				))
+			if(!isTRUE(quiet)){
+				# close prograss bar
+				close(prgBar)
+			} else {}
+		} else {
+			warning("MTLDMA.char: Not even one factor found, skipping!", call.=FALSE)
+		}
+		if(!isTRUE(detailed)){
+			# in case the user actually didn't want details, remove them from the result
+			# anything else would seem confusing
+			lex.div.results@MTLDMA[["all"]] <- NA
+		} else {}
+	}
+
+	lex.div.results@param <- list(segment=segment, factor.size=factor.size, min.tokens=min.tokens,
+		rand.sample=rand.sample, window=window, case.sens=case.sens, lemmatize=lemmatize, log.base=log.base)
 
 	# keep raw text material only if explicitly told so
 	if(isTRUE(keep.tokens)){
-		lex.div.results@tt <- list(tokens=txt.all.tokens, types=txt.type.freq, num.tokens=num.all.tokens, num.types=num.all.types)
+		lex.div.results@tt <- list(tokens=txt.all.tokens, types=txt.type.freq, lemmas=txt.lemma.freq, num.tokens=num.all.tokens, num.types=num.all.types, num.lemmas=num.all.lemmas)
 	} else {
-		lex.div.results@tt <- list(tokens=character(), types=character(), num.tokens=num.all.tokens, num.types=num.all.types)
+		lex.div.results@tt <- list(tokens=character(), types=character(), lemmas=character(), num.tokens=num.all.tokens, num.types=num.all.types, num.lemmas=num.all.lemmas)
 	}
 
 	## for the time being, give a warning until all implementations have been validated
 	needs.warning <- measure %in% c("MATTR","S","K")
-	if(any(needs.warning)){
+	if(!isTRUE(quiet) && any(needs.warning)){
 		warning(paste0("Note: The implementations of these formulas are still subject to validation:\n  ",
 		paste(measure[needs.warning], collapse=", "),
 		"\n  Use the results with caution, even if they seem plausible!"), call.=FALSE)

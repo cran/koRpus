@@ -44,10 +44,11 @@
   Certain internationalisations of the parameters are also
   implemented. They can be used by setting
   \code{parameters} to \code{"es"} (Fernandez-Huerta),
-  \code{"nl"} (Douma), \code{"de"} or \code{"fr"}
-  (Kandel-Moles). If \code{parameters="PSK"}, the revised
-  parameters by Powers-Sumner-Kearl (1958) are used to
-  calculate a grade level.
+  \code{"es-s"} (Szigriszt), \code{"nl"} (Douma),
+  \code{"de"} or \code{"fr"} (Kandel-Moles). If
+  \code{parameters="PSK"}, the revised parameters by
+  Powers-Sumner-Kearl (1958) are used to calculate a grade
+  level.
 }
 \examples{
 \dontrun{

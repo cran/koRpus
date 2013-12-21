@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' A simple tokenizer
 #'
 #' This tokenizer can be used to try replace TreeTagger. Its results are not as detailed when it comes to word classes, and no
@@ -47,7 +65,7 @@
 #' @param stopwords A character vector to be used for stopword detection. Comparison is done in lower case. You can also simply set 
 #'		\code{stopwords=tm::stopwords("en")} to use the english stopwords provided by the \code{tm} package.
 #' @param stemmer A function or method to perform stemming. For instance, you can set \code{stemmer=Snowball::SnowballStemmer} if you have
-#'		the \code{Snowball} package installed. As of now, you cannot provide further arguments to this function.
+#'		the \code{Snowball} package installed (or \code{SnowballC::wordStem}). As of now, you cannot provide further arguments to this function.
 #' @return If \code{tag=FALSE}, a character vector with the tokenized text. If \code{tag=TRUE}, returns an object of class \code{\link[koRpus]{kRp.tagged-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
@@ -77,6 +95,11 @@
 #' tokenized.obj <- tokenize("~/my.data/speech.txt",
 #'    stopwords=tm::stopwords("en"),
 #'    stemmer=Snowball::SnowballStemmer)
+#' # alternatively, use the SnowballC package:
+#' tokenized.obj <- tokenize("~/my.data/speech.txt",
+#'    stopwords=tm::stopwords("en"),
+#'    stemmer=SnowballC::wordStem)
+#'
 #' # removing all stopwords now is simple:
 #' tokenized.noStopWords <- kRp.filter.wclass(tokenized.obj, "stopword")
 #' }

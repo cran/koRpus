@@ -24,7 +24,9 @@ The slot \code{meta} simply contains all information from the "meta.txt" of the 
 \item{\code{rank.min}:}{Rank in corpus data, \code{\link{rank}} ties method "min"}
 \item{\code{rank.rel.avg}:}{Relative rank, i.e. percentile of \code{"rank.avg"}}
 \item{\code{rank.rel.min}:}{Relative rank, i.e. percentile of \code{"rank.min"}}
-}}\item{\code{desc}:}{(\code{\link{data.frame}}) Descriptive information. It contains six numbers from the \code{meta} information, for convenient accessibility:
+} The slot might have additional columns,
+      depending on the input material.}\item{\code{desc}:}{(\code{\link{data.frame}}) Descriptive information. It contains six numbers from the \code{meta} information,
+      for convenient accessibility:
 \describe{
 \item{\code{tokens}:}{Number of running word forms}
 \item{\code{types}:}{Number of distinct word forms}
@@ -32,5 +34,5 @@ The slot \code{meta} simply contains all information from the "meta.txt" of the 
 \item{\code{chars.p.sntc}:}{Average sentence length in characters}
 \item{\code{chars.p.wform}:}{Average word form length}
 \item{\code{chars.p.word}:}{Average running word length}
-}}}}
+} The slot might have additional columns, depending on the input material.}}}
 

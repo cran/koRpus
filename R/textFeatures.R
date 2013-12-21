@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Extract text features for authorship analysis
 #' 
 #' This function combines several of \code{koRpus}' methods to extract the 9-Feature Set for
@@ -67,9 +85,7 @@ textFeatures <- function(text, hyphen=NULL){
 		stop(simpleError("Please tokenize text first!"))
 	}
 
-	# calculate type-token-ratio
-	text.TTR <- text@desc[["TTR"]]
-	text.types <- length(tolower(unique(tagged.text.nopunct@TT.res[["token"]])))
+	text.types <- length(tolower(unique(taggedText(tagged.text.nopunct)[["token"]])))
 	# get syllable count
 	if(is.null(hyphen)){
 		text.hyph <- hyphen(tagged.text.nopunct, quiet=TRUE)
@@ -80,14 +96,16 @@ textFeatures <- function(text, hyphen=NULL){
 	# calculate readability measures
 	text.rdb <- readability(tagged.text, hyphen=text.hyph, index=c("Flesch", "FOG"))
 
+	text.desc <- describe(tagged.text)
+	rdb.desc <- describe(text.rdb)
 	results <- data.frame(
 		uniqWd=text.types,
-		complx=text.TTR,
-		sntCt=tagged.text@desc[["sentences"]],
-		sntLen=tagged.text@desc[["avg.sentc.length"]],
+		complx=rdb.desc[["TTR"]],
+		sntCt=text.desc[["sentences"]],
+		sntLen=text.desc[["avg.sentc.length"]],
 		syllCt=text.hyph@desc[["avg.syll.word"]],
-		charCt=tagged.text@desc[["all.chars"]],
-		lttrCt=tagged.text@desc[["letters"]],
+		charCt=text.desc[["all.chars"]],
+		lttrCt=text.desc[["letters"]][["all"]],
 		FOG=text.rdb@FOG[["FOG"]],
 		flesch=text.rdb@Flesch[["RE"]]
 	)

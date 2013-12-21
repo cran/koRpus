@@ -3,7 +3,8 @@
 \title{Calculate lexical diversity}
 \usage{
   lex.div.num(num.tokens, num.types,
-    measure = c("TTR", "C", "R", "CTTR", "U", "S", "Maas"))
+    measure = c("TTR", "C", "R", "CTTR", "U", "S", "Maas"),
+    log.base = 10, quiet = FALSE)
 }
 \arguments{
   \item{num.tokens}{Numeric, the number of tokens.}
@@ -12,6 +13,14 @@
 
   \item{measure}{A character vector defining the measures
   to calculate.}
+
+  \item{log.base}{A numeric value defining the base of the
+  logarithm. See \code{\link[base:log]{log}} for details.}
+
+  \item{quiet}{Logical. If \code{FALSE}, short status
+  messages will be shown.  \code{TRUE} will also suppress
+  all potential warnings regarding the validation status of
+  measures.}
 }
 \value{
   An object of class \code{\link[koRpus]{kRp.TTR-class}}.

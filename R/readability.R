@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Measure readability
 #'
 #' This function calculates several readability indices.
@@ -106,7 +124,8 @@
 #' 	\item{\code{"Flesch"}:}{\emph{Flesch Reading Ease}:
 #'			\deqn{ 206.835 - 1.015 \times \frac{W}{St} - 84.6 \times \frac{Sy}{W}}
 #'			Certain internationalisations of the parameters are also implemented. They can be used by setting
-#'			the \code{Flesch} parameter to \code{"es"} (Fernandez-Huerta), \code{"nl"} (Douma), \code{"de"} (Amstad's Verst\"andlichkeitsindex), or \code{"fr"} (Kandel-Moles).
+#'			the \code{Flesch} parameter to \code{"es"} (Fernandez-Huerta),  \code{"es-s"} (Szigriszt), \code{"nl"} (Douma),
+#'			\code{"de"} (Amstad's Verst\"andlichkeitsindex), or \code{"fr"} (Kandel-Moles).
 #'			If \code{parameters} is set to \code{Flesch="PSK"}, the revised parameters by Powers-Sumner-Kearl (1958) are used
 #'			to calculate a grade level:
 #'			\deqn{Flesch_{PSK} = 0.0778 \times \frac{W}{St} + 4.55 \times \frac{Sy}{W} - 2.2029}
@@ -270,6 +289,7 @@
 #' @param nonword.tag A character vector with POS tags which should be ignored for readability analysis. Will only be
 #'		of consequence if \code{hyphen} is not set!
 #' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
+#'		\code{TRUE} will also suppress all potential warnings regarding the validation status of measures.
 #' @param ... Additional options for the specified \code{tagger} function
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}

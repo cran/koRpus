@@ -83,7 +83,9 @@
   of consequence if \code{hyphen} is not set!}
 
   \item{quiet}{Logical. If \code{FALSE}, short status
-  messages will be shown.}
+  messages will be shown.  \code{TRUE} will also suppress
+  all potential warnings regarding the validation status of
+  measures.}
 
   \item{...}{Additional options for the specified
   \code{tagger} function}
@@ -234,13 +236,13 @@
   \frac{Sy}{W}} Certain internationalisations of the
   parameters are also implemented. They can be used by
   setting the \code{Flesch} parameter to \code{"es"}
-  (Fernandez-Huerta), \code{"nl"} (Douma), \code{"de"}
-  (Amstad's Verst\"andlichkeitsindex), or \code{"fr"}
-  (Kandel-Moles).  If \code{parameters} is set to
-  \code{Flesch="PSK"}, the revised parameters by
-  Powers-Sumner-Kearl (1958) are used to calculate a grade
-  level: \deqn{Flesch_{PSK} = 0.0778 \times \frac{W}{St} +
-  4.55 \times \frac{Sy}{W} - 2.2029}
+  (Fernandez-Huerta), \code{"es-s"} (Szigriszt),
+  \code{"nl"} (Douma), \code{"de"} (Amstad's
+  Verst\"andlichkeitsindex), or \code{"fr"} (Kandel-Moles).
+  If \code{parameters} is set to \code{Flesch="PSK"}, the
+  revised parameters by Powers-Sumner-Kearl (1958) are used
+  to calculate a grade level: \deqn{Flesch_{PSK} = 0.0778
+  \times \frac{W}{St} + 4.55 \times \frac{Sy}{W} - 2.2029}
 
   Wrapper function: \code{\link[koRpus:flesch]{flesch}} }
   \item{\code{"Flesch.Kincaid"}:}{\emph{Flesch-Kincaid

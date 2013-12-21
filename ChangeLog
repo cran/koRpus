@@ -1,5 +1,107 @@
 ChangeLog for package koRpus
 
+changes in version 0.05-3 (2013-12-21)
+fixed:
+  - due to a logical bug in calls to internal functions, the "lemmatize"
+    argument if lex.div() didn't really have any effect
+  - using file names with readability() and its wrappers was broken, works
+    again now
+changed:
+  - the "tt" slot in class kRp.TTR gained two new entries, "lemmas" and
+    "num.lemmas", kindly suggested by roberto trunfio
+  - show() method for kRp.TTR objects now also lists the number of lemmas (if
+    found)
+  - parameters of Flesch formulae were slightly changed to me more accurate
+    (from rounded values of 206.84 to 206.835) where applicable
+  - Flesch-Szigriszt and Fernandez-Huerta have been validated against INFLESZ v1.0,
+    so the warning was removed
+  - readability.num() now gracefully accepts a single number of syllables
+    for formulae who don't need to know more
+  - added a proper GPL notice at the beginning of each R file
+  - adjustet tests according to the changes made
+added:
+  - alternative Flesch parameters for spanish texts according to Szigriszt
+    were added as parameters="es2", kindly suggested by carlos ortega
+removed:
+  - this is the first version of the package with slightly reduced sources
+    on CRAN -- the debian directory, GPL license file and hyphenation pattern ChangeLog
+    had to be removed. if you want the full sources to this package, please
+    use the packages provided at http://reaktanz.de/?c=hacking&s=koRpus
+
+changes in version 0.05-2 (2013-10-27)
+fixed:
+  - added two previously undocumented (and hence missing) italian tags "FW"
+    and "LS"
+  - removed some ::: operators which were not neccessary
+  - updated slot "param" of kRp.TTR objects to include "min.tokens",
+    "rand.sample", "window" and "log.base"
+changed:
+  - moved some parts of treetag() and kRp.text.paste() to internal functions
+    for easier re-use of its functionality
+added:
+  - support for marco baroni's TreeTagger tagset for italian was added
+  - added SnowballC to the suggested packages, as tokenize() and treetag()
+    can also use SnowballC::wordStem() for stemming
+  - new function read.tagged() can be used to import already tagged texts
+  - new argument "apply.sentc.end" in function treetag()
+  - new argument "log.base" in functions lex.div() and lex.div.num()
+
+changes in version 0.05-1 (2013-05-05)
+fixed:
+  - DRP() readability formula tried to fetch a non-existing variable and
+    hence didn't calculate; this also fixed a problem with summary(), if DRP
+    results were expected in the object; tests had to be corrected as well
+  - textFeatures() gets number of letters and TTR again
+  - MTLD calculation (lex.div()) now counts a factor as full if it is <
+    factor.size, it was implemented as <= factor.size before (thanks to scott
+    jarvis for insight on the details)
+  - summary() for kRp.TTR objects always showed MTLD, even if it was empty
+changed:
+  - vignette now describes the use of taggedText() and describe(), instead of
+    direct access to slots
+  - readability() now assumes that if there's any text, it represents at
+    least one sentence, even if no sentence ending punctuation can be found
+  - "quiet=TRUE" in readability(), readability.num(), lex.div() and
+    lex.div.num() will now also suppress all warnings regarding validation status
+  - MTLD calculation (lex.div()) was optimized and takes less than half of
+    the time it used to. it also gained a new boolean argument "detailed", which
+    is FALSE by default. this means that the full factor results are skipped
+    now, which boosts performance even more (six times as fast as before)
+  - the caching mechanism for hyphen() was restructured into internal
+    functions, allowing for better access to the cached data
+  - set.kRp.env() and get.kRp.env() have new signatures, namely, all
+    previously hardcoded parameters have been replaced by the more flexible "...".
+    usage stays the same, so there's no need to change any scripts, as long as
+    you called all parameters by name, not only by position!
+  - object class kRp.corp.freq can now have additional columns in slots
+    "words" and "desc". this flexibility allows for using this class with valence
+    data as well
+  - query() now examines the desired columns to decide whether character or
+    numeric operations are to be done
+  - performance of hyphen() has been massively improved if cache=TRUE
+  - guess.lang() now also standardizes the difference values; this was added
+    to the respective summary() method, which also produces nicer output
+  - the source code was re-organized a bit, to ensure classes and methods are
+    found in an appropriate order; the collate roclet of roxygen2 had
+    problems with this when running in R 3.0.0
+added:
+  - new function read.BAWL() to import BAWL-R data
+  - new demo application for use with the "shiny" package, can be found in
+    $SRC/inst/shiny
+  - lex.div() now supports a new method for calculating MTLD (MTLDMA,
+    moving-average)
+  - new getter method hyphenText() to access the "hyphen" slot in kRp.hyphen
+    objects
+  - getter methods language() and describe() for kRp.hyphen objects also added
+  - added "quiet" argument to lex.div.num()
+  - guess.lang() can now analyze a given text directly, not only from files
+  - set.kRp.env() can now explicitly unset parameters in the environment
+  - set.kRp.env() and get.kRp.env() know a new parameter,
+    "hyphen.cache.file", which can be set to a file name to read from/write to the hyphenation
+    cache. this way you can easily restore cached hyphenation rules over
+    sessions. if this parameter is set, it will be used by hyphen() automatically if
+    called with "cache=TRUE"
+
 changes in version 0.04-40 (2013-04-07)
 fixed:
   - removed some non-ASCII characters, mostly from comments, to keep the

@@ -60,7 +60,8 @@ my.LCC.data <- read.corp.LCC("~/mydata/corpora/de05_3M.zip")
 # new format tar archive
 my.LCC.data <- read.corp.LCC("~/mydata/corpora/rus_web_2002_300K-text.tar")
 # in case the tar archive was already unpacked
-my.LCC.data <- read.corp.LCC("~/mydata/corpora/rus_web_2002_300K-text", prefix="rus_web_2002_300K-")
+my.LCC.data <- read.corp.LCC("~/mydata/corpora/rus_web_2002_300K-text",
+      prefix="rus_web_2002_300K-")
 
 tagged.results <- treetag("/some/text.txt")
 freq.analysis(tagged.results, corp.freq=my.LCC.data)

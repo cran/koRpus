@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' A function to call TreeTagger
 #'
 #' This function calls a local installation of TreeTagger[1] to tokenize and POS tag the given text.
@@ -19,6 +37,7 @@
 #' @param rm.sgml Logical, whether SGML tags should be ignored and removed from output
 #' @param lang A character string naming the language of the analyzed corpus. See \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all supported languages.
 #'		If set to \code{"kRp.env"} this is got from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}.
+#' @param apply.sentc.end Logical, whethter the tokens defined in \code{sentc.end} should be searched and set to a sentence ending tag.
 #' @param sentc.end A character vector with tokens indicating a sentence ending. This adds to TreeTaggers results, it doesn't really replace them.
 #' @param encoding A character string defining the character encoding of the input file, like  \code{"Latin1"} or \code{"UTF-8"}. If \code{NULL},
 #'		the encoding will either be taken from a preset (if defined in \code{TT.options}), or fall back to \code{""}. Hence you can overwrite the preset encoding with this parameter.
@@ -67,7 +86,7 @@
 #' @param stopwords A character vector to be used for stopword detection. Comparison is done in lower case. You can also simply set 
 #'		\code{stopwords=tm::stopwords("en")} to use the english stopwords provided by the \code{tm} package.
 #' @param stemmer A function or method to perform stemming. For instance, you can set \code{stemmer=Snowball::SnowballStemmer} if you have
-#'		the \code{Snowball} package installed. As of now, you cannot provide further arguments to this function.
+#'		the \code{Snowball} package installed (or \code{SnowballC::wordStem}). As of now, you cannot provide further arguments to this function.
 #' @return An object of class \code{\link[koRpus]{kRp.tagged-class}}. If \code{debug=TRUE}, prints internal variable settings and attempts to return the
 #'		original output if the TreeTagger system call in a matrix.
 #' @author m.eik michalke \email{meik.michalke@@hhu.de}, support for various laguages was contributed by Earl Brown (Spanish), Alberto Mirisola (Italian) and
@@ -105,13 +124,18 @@
 #' tagged.results <- treetag("~/my.data/speech.txt",
 #'    stopwords=tm::stopwords("en"),
 #'    stemmer=Snowball::SnowballStemmer)
+#' # alternatively, use the SnowballC package:
+#' tagged.results <- treetag("~/my.data/speech.txt",
+#'    stopwords=tm::stopwords("en"),
+#'    stemmer=SnowballC::wordStem)
+#'
 #' # removing all stopwords now is simple:
 #' tagged.noStopWords <- kRp.filter.wclass(tagged.results, "stopword")
 #' }
 
 treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
-					sentc.end=c(".","!","?",";",":"), encoding=NULL, TT.options=NULL, debug=FALSE, TT.tknz=TRUE,
-					format="file", stopwords=NULL, stemmer=NULL){
+	apply.sentc.end=TRUE, sentc.end=c(".","!","?",";",":"), encoding=NULL, TT.options=NULL, debug=FALSE, TT.tknz=TRUE,
+	format="file", stopwords=NULL, stemmer=NULL){
 
 	# TreeTagger uses slightly different presets on windows and unix machines,
 	# so we'll need to check the OS first
@@ -137,12 +161,7 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 	if(identical(lang, "kRp.env")){
 		lang <- get.kRp.env(lang=TRUE)
 	} else {}
-	# helper function to match language definitions
-	matching.lang <- function(lang, lang.preset){
-		if(!identical(lang, lang.preset)){
-			warning("Language \"",lang,"\" doesn't match the preset \"", lang.preset,"\". If you run into errors, you have been warned!" )
-		} else {}
-	}
+
 	if(identical(treetagger, "tokenize")){
 		stop(simpleError("Sorry, you can't use treetag() and tokenize() at the same time!"))
 	} else {}
@@ -198,7 +217,8 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 			if(is.null(preset.definition)){
 				stop(simpleError(paste0("Manual TreeTagger configuration: \"",TT.options[["preset"]],"\" is not a valid preset!")))
 			} else {
-				matching.lang(lang, preset.definition[["lang"]])
+				# check for matching language definitions
+				matching.lang(lang=lang, lang.preset=preset.definition[["lang"]])
 				preset.list <- preset.definition[["preset"]](TT.cmd=TT.cmd, TT.bin=TT.bin, TT.lib=TT.lib, unix.OS=unix.OS)
 			}
 			TT.tokenizer		<- preset.list[["TT.tokenizer"]]
@@ -425,9 +445,11 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
 	tagged.mtrx <- matrix(unlist(strsplit(tagged.text, "\t")), ncol=3, byrow=TRUE, dimnames=list(c(),c("token","tag","lemma")))
 
 	# add sentence endings as defined
-	sntc.end.tag <- kRp.POS.tags(lang, tags="sentc", list.tags=TRUE)[[1]]
-	matched.sentc.tokens <- tagged.mtrx[, "token"] %in% sentc.end
-	tagged.mtrx[matched.sentc.tokens, "tag"] <- sntc.end.tag
+	if(isTRUE(apply.sentc.end)){
+		sntc.end.tag <- kRp.POS.tags(lang, tags="sentc", list.tags=TRUE)[[1]]
+		matched.sentc.tokens <- tagged.mtrx[, "token"] %in% sentc.end
+		tagged.mtrx[matched.sentc.tokens, "tag"] <- sntc.end.tag
+	} else {}
 	## for debugging:
 	if(isTRUE(debug)){
 		return(tagged.mtrx)

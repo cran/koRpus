@@ -3,7 +3,7 @@
 \title{A function to call TreeTagger}
 \usage{
   treetag(file, treetagger = "kRp.env", rm.sgml = TRUE,
-    lang = "kRp.env",
+    lang = "kRp.env", apply.sentc.end = TRUE,
     sentc.end = c(".", "!", "?", ";", ":"),
     encoding = NULL, TT.options = NULL, debug = FALSE,
     TT.tknz = TRUE, format = "file", stopwords = NULL,
@@ -35,6 +35,10 @@
   \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all
   supported languages.  If set to \code{"kRp.env"} this is
   got from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}.}
+
+  \item{apply.sentc.end}{Logical, whethter the tokens
+  defined in \code{sentc.end} should be searched and set to
+  a sentence ending tag.}
 
   \item{sentc.end}{A character vector with tokens
   indicating a sentence ending. This adds to TreeTaggers
@@ -125,7 +129,8 @@
   \item{stemmer}{A function or method to perform stemming.
   For instance, you can set
   \code{stemmer=Snowball::SnowballStemmer} if you have the
-  \code{Snowball} package installed. As of now, you cannot
+  \code{Snowball} package installed (or
+  \code{SnowballC::wordStem}). As of now, you cannot
   provide further arguments to this function.}
 }
 \value{
@@ -177,6 +182,11 @@ set.kRp.env(TT.cmd="manual", lang="en", TT.options=list(path="~/bin/treetagger",
 tagged.results <- treetag("~/my.data/speech.txt",
    stopwords=tm::stopwords("en"),
    stemmer=Snowball::SnowballStemmer)
+# alternatively, use the SnowballC package:
+tagged.results <- treetag("~/my.data/speech.txt",
+   stopwords=tm::stopwords("en"),
+   stemmer=SnowballC::wordStem)
+
 # removing all stopwords now is simple:
 tagged.noStopWords <- kRp.filter.wclass(tagged.results, "stopword")
 }

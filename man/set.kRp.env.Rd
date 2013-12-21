@@ -2,21 +2,24 @@
 \alias{set.kRp.env}
 \title{A function to set information on your koRpus environmenton}
 \usage{
-  set.kRp.env(TT.cmd = NULL, lang = NULL,
-    TT.options = NULL)
+  set.kRp.env(...)
 }
 \arguments{
-  \item{TT.cmd}{A character string pointing to the tagger
+  \item{...}{Named parameters to set in the koRpus
+  environment. Valid arguments are: \describe{
+  \item{TT.cmd}{ A character string pointing to the tagger
   command you want to use for basic text analysis, or
   \code{"manual"} if you want to set \code{TT.options} as
   well. Set to \code{"tokenize"} to use
-  \code{\link[koRpus:tokenize]{tokenize}}.}
-
-  \item{lang}{A character string specifying a valid
-  language.}
-
-  \item{TT.options}{A list with arguments to be used as
+  \code{\link[koRpus:tokenize]{tokenize}}.} \item{lang}{ A
+  character string specifying a valid language.}
+  \item{TT.options}{ A list with arguments to be used as
   \code{TT.options} by \code{treetag}.}
+  \item{hyph.cache.file}{ A character string specifying a
+  path to a file to use for storing already hyphenated
+  data, used by \code{hyphen}.} } To explicitly unset a
+  value again, set it to an empty character string (e.g.,
+  \code{lang=""}).}
 }
 \value{
   Returns an invisible \code{NULL}.

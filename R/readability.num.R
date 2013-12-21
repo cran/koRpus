@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Calculate readability
 #' 
 #' This function is a stripped down version of \code{\link[koRpus:readability]{readability}}. It does not analyze text,
@@ -138,8 +156,8 @@ readability.num <- function(
 	all.valid.fixed.indices <- c("ARI", "ARI.NRI", "ARI.simple", "Bormuth", "Coleman", "Coleman.Liau",
 			"Dale.Chall", "Dale.Chall.old", "Dale.Chall.PSK", "Danielson.Bryan",
 			"Dickes.Steiwer", "DRP", "ELF", "Farr.Jenkins.Paterson", "Farr.Jenkins.Paterson.PSK",
-			"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid",
-			"Flesch.nl", "Flesch.PSK", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
+			"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid", "Flesch.nl",
+			"Flesch.PSK", "Flesch.Szigriszt", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
 			"Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS", "RIX", "SMOG", "SMOG.C",
 			"SMOG.de", "SMOG.simple", "Spache", "Spache.de", "Spache.old", "Strain", "Traenkle.Bailer", "TRI",
 			"Wheeler.Smith", "Wheeler.Smith.de")
@@ -157,11 +175,18 @@ readability.num <- function(
 
 	need.sylls <- c("Coleman", "ELF", "Farr.Jenkins.Paterson", "Farr.Jenkins.Paterson.PSK",
 		"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid", "Flesch.nl",
-		"Flesch.PSK", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL", "Linsear.Write",
-		"nWS", "SMOG", "SMOG.C", "SMOG.de", "SMOG.simple", "Strain", "TRI", "Wheeler.Smith",
-		"Wheeler.Smith.de")
+		"Flesch.PSK", "Flesch.Szigriszt", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
+		"Linsear.Write", "nWS", "SMOG", "SMOG.C", "SMOG.de", "SMOG.simple", "Strain", "TRI",
+		"Wheeler.Smith", "Wheeler.Smith.de")
+	# these indices are ok with only the global number of syllables
+	global.sylls.ok <- c("Coleman", "Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid",
+		"Flesch.nl", "Flesch.PSK", "Flesch.Szigriszt", "Strain")
 	# check if we have syllables, if needed
 	if(any(index %in% need.sylls)){
+		# if a global number is ok, rewrite the given value to remain compatible nonetheless
+		if(all(index %in% global.sylls.ok) && length(txt.features[["syllables"]]) == 1){
+			txt.features[["syllables"]] <- c(all=txt.features[["syllables"]], s1=0, s2=0)
+		} else {}
 		# this only works for default parameters as of now
 		if(!all(c("all", "s1", "s2") %in% names(txt.features[["syllables"]]))){
 			stop(simpleError(paste0("Missing information on syllable count. You need to at least define \"all\", \"s1\" and \"s2\" for these measures:\n\t",
@@ -198,7 +223,7 @@ readability.num <- function(
 		Harris.Jacobson=txt.features[["Harris.Jacobson.NOL"]],
 		Spache=txt.features[["Spache.NOL"]])
 
-	results <- koRpus:::kRp.rdb.formulae(index=index, analyze.text=FALSE, txt.features=txt.features, parameters=parameters,
+	results <- kRp.rdb.formulae(index=index, analyze.text=FALSE, txt.features=txt.features, parameters=parameters,
 		word.lists=word.lists, ...)
 
 	return(results)

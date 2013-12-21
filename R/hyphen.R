@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Automatic hyphenation
 #'
 #' This function implements word hyphenation, based on Liang's algorithm.
@@ -40,7 +58,8 @@
 #' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
 #' @param cache Logical. \code{hyphen()} can cache results to speed up the process. If this option is set to \code{TRUE}, the
 #'		current cache will be queried and new tokens also be added. Caches are language-specific and reside in an environment,
-#'		i.e., they are cleaned at the end of a session.
+#'		i.e., they are cleaned at the end of a session. If you want to save these for later use, see the option \code{hyphen.cache.file}
+#'		in \code{\link[koRpus:set.kRp.env]{set.kRp.env}}.
 #' @return An object of class \code{\link[koRpus]{kRp.hyphen-class}}
 #' @keywords hyphenation
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
@@ -96,6 +115,14 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		# overwrites lang in tagged.text
 		lang <- hyph.pattern@lang
 	}
+	if(isTRUE(cache)){
+		# check if cached hyphenation data has been set with set.kRp.env().
+		# if so, the data will directly be coped to koRpus' environment
+		read.hyph.cache.file(lang=lang, file=get.kRp.env(hyph.cache.file=TRUE, errorIfUnset=FALSE), quiet=quiet)
+		# set a variable to check if we changed the data at all, to later skip the writing back part if possible
+		writeBackCache <- new.env()
+		assign("changed", FALSE, envir=writeBackCache)
+	} else {}
 
 	if(!isTRUE(quiet)){
 		# feed back the hypenation we're using
@@ -129,19 +156,14 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		} else {}
 
 		if(isTRUE(cache)){
-			# get current koRpus environment
-			all.kRp.env <- as.list(as.environment(.koRpus.env))
-			recent.cache <- all.kRp.env[["hyphenCache"]][[lang]]
-			# could be there is no such entries in the environment yet
-			if(is.null(recent.cache)){
-				recent.cache <- data.frame(token="", syll=0, word="", stringsAsFactors=FALSE)[-1,]
-			} else {
-				# check if this word was hyphenated before
-				cached.word <- recent.cache[recent.cache[,"token"] == word,]
-				if(nrow(cached.word) == 1){
-					return(subset(cached.word, select=-token))
-				} else {}
-			}
+			# get the cache, or start a new one if needed
+			recent.cache <- get.hyph.cache(lang=lang)
+			# check if the word has been hyphenated before...
+			cached.word <- check.hyph.cache(lang=lang, token=word, cache=recent.cache)
+			# ... and if so, we can stop here
+			if(!is.null(cached.word)){
+				return(cached.word)
+			} else {}
 		} else {}
 
 		# consider min length of word?
@@ -222,9 +244,8 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		}
 		if(isTRUE(cache)){
 			# append result to environment
-			recent.cache <- rbind(recent.cache, hyph.result)
-			all.kRp.env[["hyphenCache"]][[lang]] <- recent.cache
-			list2env(all.kRp.env, envir=as.environment(.koRpus.env))
+			set.hyph.cache(lang=lang, append=hyph.result, cache=recent.cache)
+			assign("changed", TRUE, envir=writeBackCache)
 		} else {}
 		return(subset(hyph.result, select=-token))
 	}))
@@ -254,6 +275,12 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 		avg.syll.word=avg.syll.word,
 		syll.per100=syll.per100
 	)
+
+	if(isTRUE(cache) && isTRUE(get("changed", envir=writeBackCache))){
+		# check if cached hyphenation data has been set with set.kRp.env().
+		# if so and if we added to it here, the current data will be written back to that file
+		write.hyph.cache.file(lang=lang, file=get.kRp.env(hyph.cache.file=TRUE, errorIfUnset=FALSE), quiet=quiet)
+	} else {}
 
 	results <- new("kRp.hyphen", lang=lang, desc=desc.stat.res, hyphen=hyph.df)
 

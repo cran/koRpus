@@ -1,6 +1,5 @@
 \docType{package}
 \name{koRpus-package}
-\alias{koRpus}
 \alias{koRpus-package}
 \title{The koRpus Package}
 \description{
@@ -8,8 +7,8 @@
 }
 \details{
   \tabular{ll}{ Package: \tab koRpus\cr Type: \tab
-  Package\cr Version: \tab 0.04-40\cr Date: \tab
-  2013-04-07\cr Depends: \tab R (>= 2.10.0),methods\cr
+  Package\cr Version: \tab 0.05-3\cr Date: \tab
+  2013-12-21\cr Depends: \tab R (>= 2.10.0),methods\cr
   Enhances: \tab rkward\cr Encoding: \tab UTF-8\cr License:
   \tab GPL (>= 3)\cr LazyLoad: \tab yes\cr URL: \tab
   http://reaktanz.de/?c=hacking&s=koRpus\cr }
@@ -24,12 +23,13 @@
   Corpora Collection file formats).
 
   Note: For full functionality a local installation of
-  TreeTagger is recommended. Be encouraged to send feedback
-  to the author(s)!
+  TreeTagger is recommended. Also, due to some restrictions
+  on CRAN, the full package sources are only available from
+  the project homepage. Be encouraged to send feedback to
+  the author(s)!
 }
 \author{
-  Meik Michalke \email{meik.michalke@hhu.de}, with
-  contributions from Earl Brown \email{eabrown@csumb.edu},
+  m.eik michalke, with contributions from Earl Brown,
   Alberto Mirisola, Alexandre Brulet, Laura Hauser
 }
 \keyword{package}

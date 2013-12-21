@@ -101,7 +101,8 @@
   \item{stemmer}{A function or method to perform stemming.
   For instance, you can set
   \code{stemmer=Snowball::SnowballStemmer} if you have the
-  \code{Snowball} package installed. As of now, you cannot
+  \code{Snowball} package installed (or
+  \code{SnowballC::wordStem}). As of now, you cannot
   provide further arguments to this function.}
 }
 \value{
@@ -156,6 +157,11 @@ tokenized.obj <- tokenize("~/my.data/speech.txt",
 tokenized.obj <- tokenize("~/my.data/speech.txt",
    stopwords=tm::stopwords("en"),
    stemmer=Snowball::SnowballStemmer)
+# alternatively, use the SnowballC package:
+tokenized.obj <- tokenize("~/my.data/speech.txt",
+   stopwords=tm::stopwords("en"),
+   stemmer=SnowballC::wordStem)
+
 # removing all stopwords now is simple:
 tokenized.noStopWords <- kRp.filter.wclass(tokenized.obj, "stopword")
 }

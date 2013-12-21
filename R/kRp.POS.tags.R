@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Get elaborated word tag definitions
 #'
 #' This function can be used to get a set of part-of-speech (POS) tags for a given language. These tag sets should conform
@@ -10,6 +28,7 @@
 #'	\item \code{"es"} --- Spanish, according to \url{http://www.ims.uni-stuttgart.de/ftp/pub/corpora/spanish-tagset.txt}
 #'	\item \code{"fr"} --- French, according to \url{http://www.ims.uni-stuttgart.de/~schmid/french-tagset.html}
 #'	\item \code{"it"} --- Italian, according to \url{ftp://ftp.ims.uni-stuttgart.de/pub/corpora/italian-tagset.txt}
+#'		and \url{http://sslmit.unibo.it/~baroni/collocazioni/itwac.tagset.txt}, respectively
 #'	\item \code{"ru"} --- Russian, according to the MSD tagset by Sharoff, Kopotev, Erjavec, Feldman & Divjak (2008)
 #' }
 #' For the internal tokenizer a small subset of tags is also defined, available through \code{lang="kRp"}. If you don't know the language your text was written in, the function \code{\link[koRpus:guess.lang]{guess.lang}}

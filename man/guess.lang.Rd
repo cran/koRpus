@@ -3,7 +3,8 @@
 \title{Guess language a text is written in}
 \usage{
   guess.lang(txt.file, udhr.path, comp.length = 300,
-    keep.udhr = FALSE, quiet = TRUE, in.mem = TRUE)
+    keep.udhr = FALSE, quiet = TRUE, in.mem = TRUE,
+    format = "file")
 }
 \arguments{
   \item{txt.file}{A character vector pointing to the file
@@ -29,6 +30,10 @@
   \code{memCompress}), which is probably the faster method.
   Otherwise temporary files are created and automatically
   removed on exit.}
+
+  \item{format}{Either "file" or "obj". If the latter,
+  \code{txt.file} is not interpreted as a file path but the
+  text to analyze itself.}
 }
 \value{
   An object of class \code{\link[koRpus]{kRp.lang-class}}.

@@ -3,13 +3,15 @@
 \title{Analyze lexical diversity}
 \usage{
   lex.div(txt, segment = 100, factor.size = 0.72,
-    rand.sample = 42, window = 100, case.sens = FALSE,
-    lemmatize = FALSE,
-    measure = c("TTR", "MSTTR", "MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD"),
-    char = c("TTR", "MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD"),
-    char.steps = 5, force.lang = NULL, keep.tokens = FALSE,
-    corp.rm.class = "nonpunct", corp.rm.tag = c(),
-    quiet = FALSE)
+    min.tokens = 9, rand.sample = 42, window = 100,
+    case.sens = FALSE, lemmatize = FALSE, detailed = FALSE,
+    measure = c("TTR", "MSTTR", "MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D",
+      "MTLD", "MTLD-MA"),
+    char = c("TTR", "MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD",
+      "MTLD-MA"),
+    char.steps = 5, log.base = 10, force.lang = NULL,
+    keep.tokens = FALSE, corp.rm.class = "nonpunct",
+    corp.rm.tag = c(), quiet = FALSE)
 }
 \arguments{
   \item{txt}{An object of either class
@@ -25,6 +27,10 @@
   \item{factor.size}{A real number between 0 and 1,
   defining the MTLD factor size.}
 
+  \item{min.tokens}{An integer value, how many tokens a
+  full factor must at least have to be considered for the
+  MTLD-MA result.}
+
   \item{rand.sample}{An integer value, how many tokens
   should be assumed to be drawn for calculating HD-D.}
 
@@ -38,17 +44,27 @@
   carried out on the lemmatized tokens rather than all
   running word forms.}
 
+  \item{detailed}{Logical, whether full details of the
+  analysis should be calculated. This currently affects
+  MTLD and MTLD-MA, defining if all factors should be kept
+  in the object. This slows down calculations
+  considerably.}
+
   \item{measure}{A character vector defining the measures
   which should be calculated. Valid elements are "TTR",
-  "MSTTR", "MATTR", "C", "R",}
+  "MSTTR", "MATTR", "C", "R", "CTTR", "U", "S", "K",
+  "Maas", "HD-D", "MTLD" and "MTLD-MA".}
 
   \item{char}{A character vector defining whether data for
   plotting characteristic curves should be calculated.
   Valid elements are "TTR","MATTR", "C", "R", "CTTR", "U",
-  "S", "K", "Maas", "HD-D" and "MTLD".}
+  "S", "K", "Maas", "HD-D", "MTLD" and "MTLD-MA".}
 
   \item{char.steps}{An integer value defining the stepwidth
   for characteristic curves, in tokens.}
+
+  \item{log.base}{A numeric value defining the base of the
+  logarithm. See \code{\link[base:log]{log}} for details.}
 
   \item{force.lang}{A character string defining the
   language to be assumed for the text, by force. See
@@ -69,7 +85,9 @@
   should be dropped.}
 
   \item{quiet}{Logical. If \code{FALSE}, short status
-  messages will be shown.}
+  messages will be shown.  \code{TRUE} will also suppress
+  all potential warnings regarding the validation status of
+  measures.}
 }
 \value{
   An object of class \code{\link[koRpus]{kRp.TTR-class}}.
@@ -166,6 +184,17 @@
   by the number of factors. The procedure is done twice,
   both forward and backward for all tokens, and the mean of
   both calculations is the final MTLD result.
+
+  Wrapper function: \code{\link[koRpus:MTLD]{MTLD}}}
+  \item{\code{"MTLD-MA"}:}{The \emph{Moving-Average Measure
+  of Textual Lexical Diversity} (Jarvis, no year) combines
+  factor counting and a moving window similar to MATTR:
+  After each full factor the the next one is calculated
+  from one token after the last starting point. This is
+  repeated until the end of text is reached for the first
+  time. The average of all full factor lengths is the final
+  MTLD-MA result. Factors below the \code{min.tokens}
+  threshold are dropped.
 
   Wrapper function: \code{\link[koRpus:MTLD]{MTLD}}}
   \item{\code{"HD-D"}:}{The \emph{HD-D} value can be

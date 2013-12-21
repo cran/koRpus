@@ -1,3 +1,21 @@
+# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package koRpus.
+#
+# koRpus is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# koRpus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
+
+
 # this internal function does the real readability calculations,
 # so it's mostly called by kRp.rdb.formulae()
 
@@ -52,10 +70,12 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# - DRP                   [RDS]
 	# - Farr-Jenkins-Paterson [RDS]
 	#   - PSK                 [RDS]
-	# - Flesch                [OUT, RDS, TAL]
+	# - Flesch                [OUT, RDS, TAL, LLB, JRT]
 	#   - PSK                 [RDS]
-	# - Flesch-Kincaid        [OUT, RDS]
-	# - FOG                   [GFI, RDS, OUT]
+	#   - Szigriszt (es)      [INF]
+	#   - Flesch.es           [INF]
+	# - Flesch-Kincaid        [OUT, RDS, JRT]
+	# - FOG                   [GFI, RDS, OUT, JRT]
 	#   - PSK                 [RDS]
 	# - FORCAST               [RDS]
 	# - Harris-Jacobson (HJ2) [RDS]
@@ -73,7 +93,6 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# - Dickes-Steiwer's Handformel
 	# - Easy Listening Formula
 	# - Flesch.de
-	# - Flesch.es
 	# - Flesch.fr
 	# - Flesch.nl
 	# - Fucks
@@ -90,6 +109,9 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	# tools used:
 	# FRT: http://www.readabilityformulas.com/free-readability-formula-tests.php
 	# GFI: http://gunning-fog-index.com
+	# INF: INFLESZ v1.0, http://www.legibilidad.com/home/descargas.html
+	# JRT: http://juicystudio.com/services/readability.php
+	# LLB: http://www.leichtlesbar.ch
 	# OKP: http://www.lefthandlogic.com/htmdocs/tools/okapi/okapi.php
 	# OUT: http://www.online-utility.org/english/readability_test_and_improve.jsp
 	# RDS: Readability Studio, version 3.2.7.0 (14 jan 2011)
@@ -222,7 +244,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			"Dale.Chall", "Dale.Chall.old", "Dale.Chall.PSK", "Danielson.Bryan",
 			"Dickes.Steiwer", "DRP", "ELF", "Farr.Jenkins.Paterson", "Farr.Jenkins.Paterson.PSK",
 			"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid",
-			"Flesch.nl", "Flesch.PSK", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
+			"Flesch.nl", "Flesch.PSK", "Flesch.Szigriszt", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
 			"Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS", "RIX", "SMOG", "SMOG.C",
 			"SMOG.de", "SMOG.simple", "Spache", "Spache.de", "Spache.old", "Strain", "Traenkle.Bailer", "TRI",
 			"Wheeler.Smith", "Wheeler.Smith.de")
@@ -233,7 +255,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 
 	need.sylls <- c("Coleman", "ELF", "Farr.Jenkins.Paterson", "Farr.Jenkins.Paterson.PSK",
 		"Flesch", "Flesch.de", "Flesch.es", "Flesch.fr", "Flesch.Kincaid",
-		"Flesch.nl", "Flesch.PSK", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
+		"Flesch.nl", "Flesch.PSK", "Flesch.Szigriszt", "FOG", "FOG.NRI", "FOG.PSK", "FORCAST", "FORCAST.RGL",
 		"Linsear.Write", "nWS", "SMOG", "SMOG.C", "SMOG.de", "SMOG.simple",
 		"Strain", "TRI", "Wheeler.Smith", "Wheeler.Smith.de")
 
@@ -275,7 +297,8 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			tagged.words.only <- kRp.filter.wclass(txt.freq, corp.rm.class=nonword.class, corp.rm.tag=nonword.tag)
 		}
 		txt.desc <- txt.freq@desc
-		tagged.text <- tag.kRp.txt(txt.file, lang=lang, objects.only=TRUE)
+		# set objects.only=FALSE to enable automatic tagging if a file name is given
+		tagged.text <- tag.kRp.txt(txt.file, lang=lang, objects.only=FALSE)
 
 		# check how to handle the hyphen parameter
 		# first see if there's results to re-use
@@ -310,15 +333,17 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 		} else {}
 
 		## some global calculations, for use in several indices
+		# we'll use some default minimum values for the number of sentences
+		# and average sentence length
 		txt.words.only <- txt.desc$all.words
-		num.sentences <- txt.desc$sentences
+		num.sentences <- ifelse(txt.desc$sentences < 1, 1, txt.desc$sentences)
 		num.words <- txt.desc$words
 		num.all.chars <- txt.desc$all.chars
 		# txt.desc$letters had all digits removed
 		num.letters <- txt.desc$letters[["all"]]
 		lttr.distrib <- txt.desc$lttr.distrib
 		fixed.letters <- txt.desc$letters
-		avg.sntc.len <- txt.desc$avg.sentc.length
+		avg.sntc.len <- ifelse(txt.desc$sentences < 1, num.words, txt.desc$avg.sentc.length)
 		avg.word.len <- txt.desc$avg.word.length
 		sntc.per.word <- num.sentences / num.words
 		sntc.per100 <- sntc.per.word * 100
@@ -788,7 +813,7 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			warning("DRP: Missing Bormuth Mean Cloze, hence not calculated.", call.=FALSE)
 		} else {
 			# re-use the Bormuth score that we just calculated
-			drp.final <- (1 - all.results@Bormuth[["bmc"]]) * 100
+			drp.final <- (1 - all.results@Bormuth[["mean.cloze"]]) * 100
 			all.results@DRP <- list(DRP=drp.final)
 		}
 	} else {}
@@ -889,12 +914,17 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 			if(identical(prms, "es")){
 				# Fernandez-Huerta
 				flavour <- "es (Fernandez-Huerta)"
-				prms <- c(const=206.84, asl=1.02, asw=60)
+				prms <- c(const=206.835, asl=1.02, asw=60)
+			} else {}
+			if(identical(prms, "es-s")){
+				# Fernandez-Huerta
+				flavour <- "es (Szigriszt)"
+				prms <- c(const=206.835, asl=1, asw=62.3)
 			} else {}
 			if(identical(prms, "nl")){
 				# Douma
 				flavour <- "nl (Douma)"
-				prms <- c(const=206.84, asl=0.33, asw=77)
+				prms <- c(const=206.835, asl=0.33, asw=77)
 			} else {}
 			if(identical(prms, "fr")){
 				# Kandel & Moles
@@ -931,6 +961,13 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 	} else {}
 	if("Flesch.es" %in% index){
 		all.results@Flesch.es <- kRp.rdb.formulae(txt.freq, hyphen=hyphen, index=c("Flesch"), parameters=list(Flesch="es"),
+			fileEncoding=fileEncoding, tagger=tagger, force.lang=force.lang, sentc.tag=sentc.tag,
+			nonword.class=nonword.class, nonword.tag=nonword.tag, analyze.text=analyze.text, txt.features=txt.features, quiet=TRUE)@Flesch
+	} else {}
+	if("Flesch.Szigriszt" %in% index){
+		# Flesch-Szigriszt (Indice de Legibilidad de Flesch-Szigriszt (IFSZ))
+		# see http://www.legibilidad.com/home/acercade.html
+		all.results@Flesch.Szigriszt <- kRp.rdb.formulae(txt.freq, hyphen=hyphen, index=c("Flesch"), parameters=list(Flesch="es-s"),
 			fileEncoding=fileEncoding, tagger=tagger, force.lang=force.lang, sentc.tag=sentc.tag,
 			nonword.class=nonword.class, nonword.tag=nonword.tag, analyze.text=analyze.text, txt.features=txt.features, quiet=TRUE)@Flesch
 	} else {}
@@ -1555,10 +1592,10 @@ kRp.rdb.formulae <- function(txt.file=NULL,
 
 	## for the time being, give a warning until all implementations have been validated
 	needs.warning <- index %in% c("ARI.simple", "Coleman", "Danielson.Bryan",
-			"Dickes.Steiwer", "ELF", "Flesch.de", "Flesch.es", "Flesch.fr",
+			"Dickes.Steiwer", "ELF", "Flesch.de", "Flesch.fr",
 			"Flesch.nl", "Fucks", "Harris.Jacobson", "nWS",
 			"SMOG.C", "SMOG.de", "Strain", "Traenkle.Bailer", "TRI")
-	if(any(needs.warning)){
+	if(!isTRUE(quiet) && any(needs.warning)){
 		warning(paste0("Note: The implementations of these formulas are still subject to validation:\n  ",
 		paste(index[needs.warning], collapse=", "),
 		"\n  Use the results with caution, even if they seem plausible!"), call.=FALSE)

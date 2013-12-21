@@ -1,6 +1,138 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.05-3 (2013-12-21)}{
+  \subsection{fixed}{
+    \itemize{
+      \item due to a logical bug in calls to internal functions, the \code{"lemmatize"}
+        argument if \code{lex.div()} didn't really have any effect
+      \item using file names with \code{readability()} and its wrappers was broken, works
+        again now
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item the \code{"tt"} slot in class kRp.TTR gained two new entries, \code{"lemmas"} and
+        \code{"num.lemmas"}, kindly suggested by roberto trunfio
+      \item \code{show()} method for kRp.TTR objects now also lists the number of lemmas (if
+        found)
+      \item parameters of Flesch formulae were slightly changed to me more accurate
+        (from rounded values of 206.84 to 206.835) where applicable
+      \item Flesch-Szigriszt and Fernandez-Huerta have been validated against INFLESZ v1.0,
+        so the warning was removed
+      \item \code{readability.num()} now gracefully accepts a single number of syllables
+        for formulae who don't need to know more
+      \item added a proper GPL notice at the beginning of each R file
+      \item adjustet tests according to the changes made
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item alternative Flesch parameters for spanish texts according to Szigriszt
+        were added as parameters=\code{"es2"}, kindly suggested by carlos ortega
+    }
+  }
+  \subsection{removed}{
+    \itemize{
+      \item this is the first version of the package with slightly reduced sources
+        on CRAN -- the debian directory, GPL license file and hyphenation pattern ChangeLog
+        had to be removed. if you want the full sources to this package, please
+        use the packages provided at http://reaktanz.de/?c=hacking&s=koRpus
+    }
+  }
+}
+\section{Changes in koRpus version 0.05-2 (2013-10-27)}{
+  \subsection{fixed}{
+    \itemize{
+      \item added two previously undocumented (and hence missing) italian tags \code{"FW"}
+        and \code{"LS"}
+      \item removed some ::: operators which were not neccessary
+      \item updated slot \code{"param"} of kRp.TTR objects to include \code{"min.tokens"},
+        \code{"rand.sample"}, \code{"window"} and \code{"log.base"}
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item moved some parts of \code{treetag()} and \code{kRp.text.paste()} to internal functions
+        for easier re-use of its functionality
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item support for marco baroni's TreeTagger tagset for italian was added
+      \item added SnowballC to the suggested packages, as \code{tokenize()} and \code{treetag()}
+        can also use \code{SnowballC::wordStem()} for stemming
+      \item new function \code{read.tagged()} can be used to import already tagged texts
+      \item new argument \code{"apply.sentc.end"} in function \code{treetag()}
+      \item new argument \code{"log.base"} in functions \code{lex.div()} and \code{lex.div.num()}
+    }
+  }
+}
+\section{Changes in koRpus version 0.05-1 (2013-05-05)}{
+  \subsection{fixed}{
+    \itemize{
+      \item \code{DRP()} readability formula tried to fetch a non-existing variable and
+        hence didn't calculate; this also fixed a problem with \code{summary()}, if DRP
+        results were expected in the object; tests had to be corrected as well
+      \item \code{textFeatures()} gets number of letters and TTR again
+      \item MTLD calculation (\code{lex.div()}) now counts a factor as full if it is <
+        factor.size, it was implemented as <= factor.size before (thanks to scott
+        jarvis for insight on the details)
+      \item \code{summary()} for kRp.TTR objects always showed MTLD, even if it was empty
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item vignette now describes the use of \code{taggedText()} and \code{describe()}, instead of
+        direct access to slots
+      \item \code{readability()} now assumes that if there's any text, it represents at
+        least one sentence, even if no sentence ending punctuation can be found
+      \item "quiet=TRUE" in \code{readability()}, \code{readability.num()}, \code{lex.div()} and
+        \code{lex.div.num()} will now also suppress all warnings regarding validation status
+      \item MTLD calculation (\code{lex.div()}) was optimized and takes less than half of
+        the time it used to. it also gained a new boolean argument \code{"detailed"}, which
+        is FALSE by default. this means that the full factor results are skipped
+        now, which boosts performance even more (six times as fast as before)
+      \item the caching mechanism for \code{hyphen()} was restructured into internal
+        functions, allowing for better access to the cached data
+      \item \code{set.kRp.env()} and \code{get.kRp.env()} have new signatures, namely, all
+        previously hardcoded parameters have been replaced by the more flexible \code{"..."}.
+        usage stays the same, so there's no need to change any scripts, as long as
+        you called all parameters by name, not only by position!
+      \item object class kRp.corp.freq can now have additional columns in slots
+        \code{"words"} and \code{"desc"}. this flexibility allows for using this class with valence
+        data as well
+      \item \code{query()} now examines the desired columns to decide whether character or
+        numeric operations are to be done
+      \item performance of \code{hyphen()} has been massively improved if cache=TRUE
+      \item \code{guess.lang()} now also standardizes the difference values; this was added
+        to the respective \code{summary()} method, which also produces nicer output
+      \item the source code was re-organized a bit, to ensure classes and methods are
+        found in an appropriate order; the collate roclet of roxygen2 had
+        problems with this when running in R 3.0.0
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item new function \code{read.BAWL()} to import BAWL-R data
+      \item new demo application for use with the \code{"shiny"} package, can be found in
+        $SRC/inst/shiny
+      \item \code{lex.div()} now supports a new method for calculating MTLD (MTLDMA,
+        moving-average)
+      \item new getter method \code{hyphenText()} to access the \code{"hyphen"} slot in kRp.hyphen
+        objects
+      \item getter methods \code{language()} and \code{describe()} for kRp.hyphen objects also added
+      \item added \code{"quiet"} argument to \code{lex.div.num()}
+      \item \code{guess.lang()} can now analyze a given text directly, not only from files
+      \item \code{set.kRp.env()} can now explicitly unset parameters in the environment
+      \item \code{set.kRp.env()} and \code{get.kRp.env()} know a new parameter,
+        \code{"hyphen.cache.file"}, which can be set to a file name to read from/write to the hyphenation
+        cache. this way you can easily restore cached hyphenation rules over
+        sessions. if this parameter is set, it will be used by \code{hyphen()} automatically if
+        called with "cache=TRUE"
+    }
+  }
+}
 \section{Changes in koRpus version 0.04-40 (2013-04-07)}{
   \subsection{fixed}{
     \itemize{

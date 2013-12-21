@@ -2,13 +2,23 @@
 \name{taggedText}
 \alias{describe}
 \alias{describe<-}
+\alias{describe<-,kRp.hyphen-method}
+\alias{describe,kRp.hyphen-method}
 \alias{describe<-,kRp.taggedText-method}
 \alias{describe,kRp.taggedText-method}
 \alias{describe<-,-methods}
 \alias{describe,-methods}
+\alias{hyphenText}
+\alias{hyphenText<-}
+\alias{hyphenText<-,kRp.hyphen-method}
+\alias{hyphenText,kRp.hyphen-method}
+\alias{hyphenText<-,-methods}
+\alias{hyphenText,-methods}
 \alias{is.taggedText}
 \alias{language}
 \alias{language<-}
+\alias{language<-,kRp.hyphen-method}
+\alias{language,kRp.hyphen-method}
 \alias{language<-,kRp.taggedText-method}
 \alias{language,kRp.taggedText-method}
 \alias{language<-,-methods}
@@ -35,7 +45,9 @@
   \itemize{ \item{\code{taggedText()} }{returns the
   \code{TT.res} slot.} \item{\code{describe()} }{returns
   the \code{desc} slot.} \item{\code{language()} }{returns
-  the \code{lang} slot.} }
+  the \code{lang} slot.} \item{\code{hyphenText()}
+  }{returns the \code{hyphen} slot from objects of class
+  \code{kRp.hyphen}.} }
 }
 \examples{
 \dontrun{

@@ -36,7 +36,8 @@
 }
 \examples{
 \dontrun{
-set.kRp.env(TT.cmd="manual", lang="en", TT.options=list(path="~/bin/treetagger", preset="en"))
+set.kRp.env(TT.cmd="manual", lang="en", TT.options=list(path="~/bin/treetagger",
+      preset="en"))
 tagged.txt <- treetag("example_text.txt")
 tagged.txt.features <- textFeatures(tagged.txt)
 }

@@ -50,10 +50,12 @@
   \url{http://www.ims.uni-stuttgart.de/~schmid/french-tagset.html}
   \item \code{"it"} --- Italian, according to
   \url{ftp://ftp.ims.uni-stuttgart.de/pub/corpora/italian-tagset.txt}
-  \item \code{"ru"} --- Russian, according to the MSD
-  tagset by Sharoff, Kopotev, Erjavec, Feldman & Divjak
-  (2008) } For the internal tokenizer a small subset of
-  tags is also defined, available through
+  and
+  \url{http://sslmit.unibo.it/~baroni/collocazioni/itwac.tagset.txt},
+  respectively \item \code{"ru"} --- Russian, according to
+  the MSD tagset by Sharoff, Kopotev, Erjavec, Feldman &
+  Divjak (2008) } For the internal tokenizer a small subset
+  of tags is also defined, available through
   \code{lang="kRp"}. If you don't know the language your
   text was written in, the function
   \code{\link[koRpus:guess.lang]{guess.lang}} should be

@@ -1,5 +1,11 @@
 ChangeLog for package koRpus
 
+changes in version 0.05-4 (2014-01-22)
+fixed:
+  - PCRE 8.34 caused the tests to fail because of problems with regular expressions
+    in internal tokenizing function tokenz(); fixed by ensuring that "-" is being escaped
+    as "\\-"
+
 changes in version 0.05-3 (2013-12-21)
 fixed:
   - due to a logical bug in calls to internal functions, the "lemmatize"
@@ -11,7 +17,7 @@ changed:
     "num.lemmas", kindly suggested by roberto trunfio
   - show() method for kRp.TTR objects now also lists the number of lemmas (if
     found)
-  - parameters of Flesch formulae were slightly changed to me more accurate
+  - parameters of Flesch formulae were slightly changed to be more accurate
     (from rounded values of 206.84 to 206.835) where applicable
   - Flesch-Szigriszt and Fernandez-Huerta have been validated against INFLESZ v1.0,
     so the warning was removed

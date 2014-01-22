@@ -7,8 +7,8 @@
 }
 \details{
   \tabular{ll}{ Package: \tab koRpus\cr Type: \tab
-  Package\cr Version: \tab 0.05-3\cr Date: \tab
-  2013-12-21\cr Depends: \tab R (>= 2.10.0),methods\cr
+  Package\cr Version: \tab 0.05-4\cr Date: \tab
+  2014-01-22\cr Depends: \tab R (>= 2.10.0),methods\cr
   Enhances: \tab rkward\cr Encoding: \tab UTF-8\cr License:
   \tab GPL (>= 3)\cr LazyLoad: \tab yes\cr URL: \tab
   http://reaktanz.de/?c=hacking&s=koRpus\cr }

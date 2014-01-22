@@ -1,6 +1,15 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.05-4 (2014-01-22)}{
+  \subsection{fixed}{
+    \itemize{
+      \item PCRE 8.34 caused the tests to fail because of problems with regular expressions
+        in internal tokenizing function \code{tokenz()}; fixed by ensuring that "-" is being escaped
+        as "\\\\-"
+    }
+  }
+}
 \section{Changes in koRpus version 0.05-3 (2013-12-21)}{
   \subsection{fixed}{
     \itemize{
@@ -16,7 +25,7 @@
         \code{"num.lemmas"}, kindly suggested by roberto trunfio
       \item \code{show()} method for kRp.TTR objects now also lists the number of lemmas (if
         found)
-      \item parameters of Flesch formulae were slightly changed to me more accurate
+      \item parameters of Flesch formulae were slightly changed to be more accurate
         (from rounded values of 206.84 to 206.835) where applicable
       \item Flesch-Szigriszt and Fernandez-Huerta have been validated against INFLESZ v1.0,
         so the warning was removed

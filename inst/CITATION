@@ -1,13 +1,13 @@
 bibentry("Manual",
 		title="koRpus: An R Package for Text Analysis",
 		author="m.eik michalke",
-		year="2013",
-		note="(Version 0.05-3)",
+		year="2014",
+		note="(Version 0.05-4)",
 		url="http://reaktanz.de/?c=hacking&s=koRpus",
 
 		textVersion =
-		paste("michalke, m. (2013). ",
-				"koRpus: An R Package for Text Analysis (Version 0.05-3). ",
+		paste("michalke, m. (2014). ",
+				"koRpus: An R Package for Text Analysis (Version 0.05-4). ",
 				"Available from http://reaktanz.de/?c=hacking&s=koRpus",
 				sep=""),
 

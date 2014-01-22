@@ -159,27 +159,21 @@ kRp.tab.hyph <- list(
 
 kRp.dialog.hyph <- rk.XML.dialog(kRp.tab.hyph, label="Hyphenation")
 
-# 		<connect client="rowHyph.enabled" governor="chkCustomHyph.state" />
-# 		<convert id="logicCustomHyphen" mode="equals" sources="radCustomHyph.string" standard="custom" />
-# 		<connect client="frameCustomHyphen.visible" governor="logicCustomHyphen" />
-# 		<connect client="varHyphenCustom.required" governor="logicCustomHyphen" />
-# 		<convert id="logicSaveHyphen" mode="equals" sources="radCustomHyph.string" standard="auto" />
-# 		<connect client="saveHyphen.enabled" governor="logicSaveHyphen" />
-
-
-# 		echo("hyphenated.text.obj <- hyphen(tagged.text.obj, hyph.pattern=\""+TTlang+"\", quiet=TRUE)\n");
 kRp.hyph.js.calc <- rk.paste.JS(
-# 	echo("hyphenated.text.obj <- hyphen(tagged.text.obj, hyph.pattern=\"", TTlang, "\", quiet=TRUE)\n")
 	echo("hyphenated.text.obj <- hyphen(", kRp.hyph.data, ", quiet=TRUE)\n")
+)
+
+kRp.hyph.js.print <- rk.paste.JS(
+	rk.JS.vars(kRp.hyph.chk.show),
+	ite(kRp.hyph.chk.show, echo("rk.print(hyphenated.text.obj@hyphen)\n"))
 )
 
 kRp.hyph.component <- rk.plugin.component("Hyphenation",
 	xml=list(
-# 		logic=pd.lgc.sect,
 		dialog=kRp.dialog.hyph),
  	js=list(
- 		calculate=kRp.hyph.js.calc#,
-# 		printout=pd.js.print
+ 		calculate=kRp.hyph.js.calc,
+ 		printout=kRp.hyph.js.print
 	),
 	guess.getter=guess.getter,
 	hierarchy=menu.hierarchy,
@@ -238,7 +232,7 @@ kRp.rdb.chk.Coleman <- rk.XML.cbox(label="Coleman (C 1-4)", value="Coleman", chk
 kRp.rdb.chk.ELF <- rk.XML.cbox(label="Easy Listening Formula", value="ELF", chk=TRUE, id.name="ELF")
 kRp.rdb.chk.TRI <- rk.XML.cbox(label="Kuntzsch's Text-Redundanz-Index", value="TRI", chk=TRUE, id.name="TRI")
 
-kRp.rdb.frm.needSylls <- rk.XML.frame(
+kRp.rdb.col.needSylls <- rk.XML.col(
 	rk.XML.text("Selecting one of these indices will automatically activate syllable count."),
 	rk.XML.row(
 		rk.XML.col(
@@ -280,7 +274,7 @@ kRp.rdb.chk.DRP <- rk.XML.cbox(label="Degrees of Reading Power", value="DRP", ch
 kRp.rdb.brw.lDaleChall <- rk.XML.browser(label="Long Dale-Chall word list:", filter="*.txt", required=FALSE, id.name="readbWLldc")
 kRp.rdb.brw.sDaleChall <- rk.XML.browser(label="Short Dale-Chall word list:", filter="*.txt", required=FALSE, id.name="readbWLsdc")
 
-kRp.rdb.frm.NeedWL <- rk.XML.frame(
+kRp.rdb.col.NeedWL <- rk.XML.col(
 	rk.XML.text("If you select one of these indices you will also need to provide word lists as indicated below."),
 	rk.XML.row(
 		rk.XML.col(
@@ -313,18 +307,19 @@ kRp.rdb.frm.show <- rk.XML.frame(
 
 kRp.rdb.saveobj <- rk.XML.saveobj(label="Keep results", initial="readability.obj", chk=TRUE, id.name="saveReadb")
 
-kRp.tab.rdb <- list(
-	rk.XML.row(
+kRp.tab.rdb <- rk.XML.tabbook(label="Readability",
+	tabs=list(
+	"Data and Basic Indices"=rk.XML.row(
 		rk.XML.col(kRp.hyph.vars),
 		rk.XML.col(
  			kRp.hyph.data,
 			rk.XML.stretch(),
-	kRp.rdb.frm.rdb,
-	kRp.rdb.frm.needSylls,
-	kRp.rdb.frm.NeedWL,
-	kRp.rdb.frm.show,
-	kRp.rdb.saveobj
-	))
+		kRp.rdb.frm.rdb,
+		kRp.rdb.frm.show,
+		kRp.rdb.saveobj)),
+	"Using Syllables"=kRp.rdb.col.needSylls,
+	"Using Word Lists"=kRp.rdb.col.NeedWL
+	)
 )
 
 kRp.dialog.rdb <- rk.XML.dialog(kRp.tab.rdb, label="Readability")

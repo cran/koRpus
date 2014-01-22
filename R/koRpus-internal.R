@@ -1094,6 +1094,11 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
 				encoding="unknown", heur.fix=list(pre=c("\u2019","'"), suf=c("\u2019","'")), tag=FALSE,
 				sntc=c(".","!","?",";",":"), detect=c(parag=FALSE, hline=FALSE)){
 
+	## clean ign.comp for use in regexp
+	ign.comp.rex <- ign.comp
+	ign.comp.rex[ign.comp.rex %in% "-"] <- "\\-"
+	ign.comp.rex <- paste(ign.comp.rex, collapse="")
+
 	## prep the text
 	# if headlines and paragraphs should be autodetected
 	if(any(detect)){
@@ -1192,14 +1197,14 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
 					# take care of probably already applied prefix/suffix heuristics here:
 					} else if(grepl("([\\p{L}\\p{M}\\p{N}]+)([^\\p{L}\\p{M}\\p{N}\\s]+)|([^\\p{L}\\p{M}\\p{N}\\s]+)([\\p{L}\\p{M}\\p{N}]+)", tkn.nonheur, perl=TRUE)){
 						# this should be some other punctuation or strange stuff...
-						tkn <- gsub(paste0("([^\\p{L}\\p{M}\\p{N}",paste(ign.comp, collapse=""),"])([\\p{L}\\p{M}\\p{N}])"), "\\1 \\2", tkn, perl=TRUE)
-						tkn <- gsub(paste0("([\\p{L}\\p{M}\\p{N}])([^\\p{L}\\p{M}\\p{N}",paste(ign.comp, collapse=""),"])"), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([^\\p{L}\\p{M}\\p{N}",ign.comp.rex,"])([\\p{L}\\p{M}\\p{N}])"), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([\\p{L}\\p{M}\\p{N}])([^\\p{L}\\p{M}\\p{N}",ign.comp.rex,"])"), "\\1 \\2", tkn, perl=TRUE)
 					} else {}
 					# is there clusters of undefined nonword stuff left?
 					if(grepl("([^\\p{L}\\p{M}\\p{N}\\s]{2,})", tkn, perl=TRUE)){
 						# as long as it's not dots:
-						tkn <- gsub(paste0("([^\\s])([^\\p{L}\\p{M}\\p{N}.",paste(ign.comp, collapse=""),"\\s])"), "\\1 \\2", tkn, perl=TRUE)
-						tkn <- gsub(paste0("([^\\p{L}\\p{M}\\p{N}.",paste(ign.comp, collapse=""),"\\s])([^\\s])"), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([^\\p{Zs}])([^\\p{L}\\p{M}\\p{N}.",ign.comp.rex,"\\p{Zs}])"), "\\1 \\2", tkn, perl=TRUE)
+						tkn <- gsub(paste0("([^\\p{L}\\p{M}\\p{N}.",ign.comp.rex,"\\p{Zs}])([^\\p{Zs}])"), "\\1 \\2", tkn, perl=TRUE)
 						# keep "..." intact
 						tkn <- gsub("([^\\p{L}\\p{M}\\p{N}.\\s])([.])", "\\1 \\2", tkn, perl=TRUE)
 					} else {}

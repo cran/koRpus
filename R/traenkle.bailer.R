@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,8 +27,8 @@
 #' This formula doesn't need syllable count.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param TB1 A numeric vector with named magic numbers for the first of the formulas.
 #' @param TB2 A numeric vector with named magic numbers for the second of the formulas.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
@@ -38,17 +38,17 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' 	traenkle.bailer(tagged.text)
+#'   traenkle.bailer(tagged.text)
 #' }
 
 traenkle.bailer <- function(txt.file,
-			TB1=c(const=224.6814, awl=79.8304, asl=12.24032, prep=1.292857),
-			TB2=c(const=234.1063, awl=96.11069, prep=2.05444, conj=1.02805), ...){
-	all.parameters <- list(TB1=TB1, TB2=TB2)
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, index="Traenkle.Bailer", parameters=list(Traenkle.Bailer=all.parameters), ...)
-	} else {
-		results <- readability(txt.file=txt.file, index="Traenkle.Bailer", parameters=list(Traenkle.Bailer=all.parameters), ...)
-	}
-	return(results)
+      TB1=c(const=224.6814, awl=79.8304, asl=12.24032, prep=1.292857),
+      TB2=c(const=234.1063, awl=96.11069, prep=2.05444, conj=1.02805), ...){
+  all.parameters <- list(TB1=TB1, TB2=TB2)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, index="Traenkle.Bailer", parameters=list(Traenkle.Bailer=all.parameters), ...)
+  } else {
+    results <- readability(txt.file=txt.file, index="Traenkle.Bailer", parameters=list(Traenkle.Bailer=all.parameters), ...)
+  }
+  return(results)
 }

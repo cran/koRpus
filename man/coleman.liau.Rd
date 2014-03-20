@@ -2,10 +2,9 @@
 \alias{coleman.liau}
 \title{Readability: Coleman-Liau Index}
 \usage{
-  coleman.liau(txt.file,
-    ecp = c(const = 141.8401, char = 0.21459, sntc = 1.079812),
-    grade = c(ecp = -27.4004, const = 23.06395),
-    short = c(awl = 5.88, spw = 29.6, const = 15.8), ...)
+coleman.liau(txt.file, ecp = c(const = 141.8401, char = 0.21459, sntc =
+  1.079812), grade = c(ecp = -27.4004, const = 23.06395), short = c(awl =
+  5.88, spw = 29.6, const = 15.8), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -32,20 +31,20 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Coleman-Liau index. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Coleman-Liau index. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{

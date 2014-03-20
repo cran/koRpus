@@ -2,9 +2,8 @@
 \alias{linsear.write}
 \title{Readability: Linsear Write Index}
 \usage{
-  linsear.write(txt.file, hyphen = NULL,
-    parameters = c(short.syll = 2, long.syll = 3, thrs = 20),
-    ...)
+linsear.write(txt.file, hyphen = NULL, parameters = c(short.syll = 2,
+  long.syll = 3, thrs = 20), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -25,19 +24,18 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the Linsear Write index. In
-  contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the Linsear Write index. In
+contrast to \code{\link[koRpus:readability]{readability}},
+which by default calculates all possible indices, this
+function will only calculate the index value.
 }
 \examples{
 \dontrun{

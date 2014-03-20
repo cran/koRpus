@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -26,8 +26,8 @@
 #' This formula doesn't need syllable count.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param ecp A numeric vector with named magic numbers, defining the relevant parameters for the cloze percentage estimate.
 #' @param grade A numeric vector with named magic numbers, defining the relevant parameters to calculate grade equvalent for ECP values.
 #' @param short A numeric vector with named magic numbers, defining the relevant parameters for the short form of the formula.
@@ -42,15 +42,15 @@
 #' }
 
 coleman.liau <- function(txt.file,
-				ecp=c(const=141.8401, char=0.21459, sntc=1.079812),
-				grade=c(ecp=-27.4004, const=23.06395),
-				short=c(awl=5.88, spw=29.6, const=15.8), ...){
-	# combine parameters
-	param.list <- list(ecp=ecp, grade=grade, short=short)
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, index="Coleman.Liau", parameters=list(Coleman.Liau=param.list), ...)
-	} else {
-		results <- readability(txt.file=txt.file, index="Coleman.Liau", parameters=list(Coleman.Liau=param.list), ...)
-	}
-	return(results)
+        ecp=c(const=141.8401, char=0.21459, sntc=1.079812),
+        grade=c(ecp=-27.4004, const=23.06395),
+        short=c(awl=5.88, spw=29.6, const=15.8), ...){
+  # combine parameters
+  param.list <- list(ecp=ecp, grade=grade, short=short)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, index="Coleman.Liau", parameters=list(Coleman.Liau=param.list), ...)
+  } else {
+    results <- readability(txt.file=txt.file, index="Coleman.Liau", parameters=list(Coleman.Liau=param.list), ...)
+  }
+  return(results)
 }

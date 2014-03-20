@@ -2,7 +2,7 @@
 \alias{read.hyph.pat}
 \title{Reading patgen-compatible hyphenation pattern files}
 \usage{
-  read.hyph.pat(file, lang, fileEncoding = "UTF-8")
+read.hyph.pat(file, lang, fileEncoding = "UTF-8")
 }
 \arguments{
   \item{file}{A character string with a valid path to a
@@ -18,22 +18,22 @@
   files should all be UTF-8 encoded.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus:kRp.hyph.pat-class]{kRp.hyph.pat-class}}.
+An object of class
+\code{\link[koRpus:kRp.hyph.pat-class]{kRp.hyph.pat-class}}.
 }
 \description{
-  This function reads hyphenation pattern files, to be used
-  with \code{\link[koRpus:hyphen]{hyphen}}.
+This function reads hyphenation pattern files, to be used
+with \code{\link[koRpus:hyphen]{hyphen}}.
 }
 \details{
-  Hyphenation patterns that can be used are available from
-  CTAN[1]. But actually any file with only the patterns
-  themselves, one per line, should work.
+Hyphenation patterns that can be used are available from
+CTAN[1]. But actually any file with only the patterns
+themselves, one per line, should work.
 
-  The language designation is of no direct consequence
-  here, but if the resulting pattern object is to be used
-  by other functions in this package, it should resamble
-  the designation that's used for the same language there.
+The language designation is of no direct consequence here,
+but if the resulting pattern object is to be used by other
+functions in this package, it should resamble the
+designation that's used for the same language there.
 }
 \examples{
 \dontrun{
@@ -41,12 +41,12 @@ read.hyph.pat("~/patterns/hyph-en-us.pat.txt", lang="en_us")
 }
 }
 \references{
-  [1]
-  \url{http://tug.ctan.org/tex-archive/language/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/}
+[1]
+\url{http://tug.ctan.org/tex-archive/language/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/}
 }
 \seealso{
-  \code{\link[koRpus:hyphen]{hyphen}},
-  \code{\link[koRpus:manage.hyph.pat]{manage.hyph.pat}}
+\code{\link[koRpus:hyphen]{hyphen}},
+\code{\link[koRpus:manage.hyph.pat]{manage.hyph.pat}}
 }
 \keyword{hyphenation}
 

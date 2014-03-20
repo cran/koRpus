@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -29,43 +29,43 @@
 #' can replace these tags, which probably preserves more of the original layout.
 #'
 #' @param txt Either an open connection, the path to directory with txt files to read and tokenize, or a vector object
-#'		already holding the text corpus.
+#'    already holding the text corpus.
 #' @param format Either "file" or "obj", depending on whether you want to scan files or analyze the given object.
 #' @param fileEncoding A character string naming the encoding of all files.
 #' @param split A regular expression to define the basic split method. Should only need refinement
-#'		for languages that don't separate words by space.
+#'    for languages that don't separate words by space.
 #' @param ign.comp A character vector defining punctuation which might be used in composita that should 
-#'		not be split.
+#'    not be split.
 #' @param heuristics A vector to indicate if the tokenizer should use some heuristics. Can be none, one or several of the following:
-#'		\itemize{
-#'			\item{\code{"abbr"}}{Assume that "letter-dot-letter-dot" combinations are abbreviations and leave them intact.}
-#'			\item{\code{"suf"}}{Try to detect possesive suffixes like "'s", or shorting suffixes like "'ll" and treat them as one token}
-#'			\item{\code{"pre"}}{Try to detect prefixes like "s'" or "l'" and treat them as one token}
-#'		}
-#'		Earlier releases used the names \code{"en"} and \code{"fr"} instead of \code{"suf"} and \code{"pre"}. They are still working, that is
-#'		\code{"en"} is equivalent to \code{"suf"}, whereas \code{"fr"} is now equivalent to both \code{"suf"} and \code{"pre"} (and not only
-#'		\code{"pre"} as in the past, which was missing the use of suffixes in French).
+#'    \itemize{
+#'      \item{\code{"abbr"}}{Assume that "letter-dot-letter-dot" combinations are abbreviations and leave them intact.}
+#'      \item{\code{"suf"}}{Try to detect possesive suffixes like "'s", or shorting suffixes like "'ll" and treat them as one token}
+#'      \item{\code{"pre"}}{Try to detect prefixes like "s'" or "l'" and treat them as one token}
+#'    }
+#'    Earlier releases used the names \code{"en"} and \code{"fr"} instead of \code{"suf"} and \code{"pre"}. They are still working, that is
+#'    \code{"en"} is equivalent to \code{"suf"}, whereas \code{"fr"} is now equivalent to both \code{"suf"} and \code{"pre"} (and not only
+#'    \code{"pre"} as in the past, which was missing the use of suffixes in French).
 #' @param heur.fix A list with the named vectors \code{pre} and \code{suf}. These will be used if \code{heuristics} were
-#'		set to use one of the presets that try to detect pre- and/or suffixes. Change them if you document uses other
-#'		characters than the ones defined by default.
+#'    set to use one of the presets that try to detect pre- and/or suffixes. Change them if you document uses other
+#'    characters than the ones defined by default.
 #' @param abbrev Path to a text file with abbreviations to take care of, one per line. Note that
-#'		this file must have the same encoding as defined by \code{fileEncoding}.
+#'    this file must have the same encoding as defined by \code{fileEncoding}.
 #' @param tag Logical. If \code{TRUE}, the text will be rudimentarily tagged and returned as an object
-#'		of class \code{kRp.tagged}.
+#'    of class \code{kRp.tagged}.
 #' @param lang A character string naming the language of the analyzed text. If set to \code{"kRp.env"} this is got from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}. Only needed if \code{tag=TRUE}.
 #' @param sentc.end A character vector with tokens indicating a sentence ending. Only needed if \code{tag=TRUE}.
 #' @param detect A named logical vector, indicating by the setting of \code{parag} and \code{hline} whether \code{tokenize} should try
-#'		to detect paragraphs and headlines.
+#'    to detect paragraphs and headlines.
 #' @param clean.raw A named list of character values, indicating replacements that should globally be made to the text prior to tokenizing it.
-#'		This is applied after the text was converted into UTF-8 internally. In the list, the name of each element represents a pattern which
-#'		is replaced by its value if met in the text. Since this is done by calling \code{\link[base:gsub]{gsub}}, regular expressions are basically
-#'		supported. See the \code{perl} attribute, too.
+#'    This is applied after the text was converted into UTF-8 internally. In the list, the name of each element represents a pattern which
+#'    is replaced by its value if met in the text. Since this is done by calling \code{\link[base:gsub]{gsub}}, regular expressions are basically
+#'    supported. See the \code{perl} attribute, too.
 #' @param perl Logical, only relevant if \code{clean.raw} is not \code{NULL}. If \code{perl=TRUE}, this is forwarded to \code{\link[base:gsub]{gsub}}
-#'		to allow for perl-like regular expressions in \code{clean.raw}.
+#'    to allow for perl-like regular expressions in \code{clean.raw}.
 #' @param stopwords A character vector to be used for stopword detection. Comparison is done in lower case. You can also simply set 
-#'		\code{stopwords=tm::stopwords("en")} to use the english stopwords provided by the \code{tm} package.
-#' @param stemmer A function or method to perform stemming. For instance, you can set \code{stemmer=Snowball::SnowballStemmer} if you have
-#'		the \code{Snowball} package installed (or \code{SnowballC::wordStem}). As of now, you cannot provide further arguments to this function.
+#'    \code{stopwords=tm::stopwords("en")} to use the english stopwords provided by the \code{tm} package.
+#' @param stemmer A function or method to perform stemming. For instance, you can set \code{SnowballC::wordStem} if you have
+#'    the \code{SnowballC} package installed. As of now, you cannot provide further arguments to this function.
 #' @return If \code{tag=FALSE}, a character vector with the tokenized text. If \code{tag=TRUE}, returns an object of class \code{\link[koRpus]{kRp.tagged-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
@@ -94,10 +94,6 @@
 #' # you can use some of their features with koRpus:
 #' tokenized.obj <- tokenize("~/my.data/speech.txt",
 #'    stopwords=tm::stopwords("en"),
-#'    stemmer=Snowball::SnowballStemmer)
-#' # alternatively, use the SnowballC package:
-#' tokenized.obj <- tokenize("~/my.data/speech.txt",
-#'    stopwords=tm::stopwords("en"),
 #'    stemmer=SnowballC::wordStem)
 #'
 #' # removing all stopwords now is simple:
@@ -105,75 +101,75 @@
 #' }
 
 tokenize <- function(txt, format="file", fileEncoding=NULL, split="[[:space:]]",
-					ign.comp="-", heuristics="abbr", heur.fix=list(pre=c("\u2019","'"), suf=c("\u2019","'")),
-					abbrev=NULL, tag=TRUE, lang="kRp.env", sentc.end=c(".","!","?",";",":"),
-					detect=c(parag=FALSE, hline=FALSE), clean.raw=NULL, perl=FALSE, stopwords=NULL, stemmer=NULL){
+          ign.comp="-", heuristics="abbr", heur.fix=list(pre=c("\u2019","'"), suf=c("\u2019","'")),
+          abbrev=NULL, tag=TRUE, lang="kRp.env", sentc.end=c(".","!","?",";",":"),
+          detect=c(parag=FALSE, hline=FALSE), clean.raw=NULL, perl=FALSE, stopwords=NULL, stemmer=NULL){
 
-	if(is.null(fileEncoding)){
-		fileEncoding <- ""
-	} else {}
+  if(is.null(fileEncoding)){
+    fileEncoding <- ""
+  } else {}
 
-	# basic checks before we even proceed...
-	if(inherits(txt, "connection")){
-		takeAsTxt <- readLines(txt, encoding=fileEncoding)
-		read.txt.files <- FALSE
-	} else if(identical(format, "file")){
-		# valid path? file or directory?
-		if(check.file(txt, mode="exist", stopOnFail=FALSE)){
-			txt.file <- txt
-			read.txt.files <- TRUE
-		} else if(check.file(txt, mode="dir", stopOnFail=FALSE)){
-			txt.file <- file.path(txt, dir(txt))
-			read.txt.files <- TRUE
-		} else {
-			stop(simpleError(paste0("Unable to locate\n ",txt)))
-		}
-	} else if(identical(format, "obj")){
-		takeAsTxt <- txt
-		read.txt.files <- FALSE
-	} else {
-		stop(simpleError(paste0("Invalid value for format: ",format)))
-	}
+  # basic checks before we even proceed...
+  if(inherits(txt, "connection")){
+    takeAsTxt <- readLines(txt, encoding=fileEncoding)
+    read.txt.files <- FALSE
+  } else if(identical(format, "file")){
+    # valid path? file or directory?
+    if(check.file(txt, mode="exist", stopOnFail=FALSE)){
+      txt.file <- txt
+      read.txt.files <- TRUE
+    } else if(check.file(txt, mode="dir", stopOnFail=FALSE)){
+      txt.file <- file.path(txt, dir(txt))
+      read.txt.files <- TRUE
+    } else {
+      stop(simpleError(paste0("Unable to locate\n ",txt)))
+    }
+  } else if(identical(format, "obj")){
+    takeAsTxt <- txt
+    read.txt.files <- FALSE
+  } else {
+    stop(simpleError(paste0("Invalid value for format: ",format)))
+  }
 
-	## read file or text vector?
-	if(isTRUE(read.txt.files)){
-		# read in files
-		# make sure we end up with UTF-8 to avoid nasty character problems
-		txt.vector <- unlist(lapply(txt.file, function(txt){
-				readLines(txt, encoding=fileEncoding)
-			}))
-		# force text into UTF-8 format
-		txt.vector <- enc2utf8(txt.vector)
-	} else {
-		# process object
-		txt.vector <- enc2utf8(as.vector(takeAsTxt))
-	}
-	
-	## see if the text should be cleaned up further
-	if(!is.null(clean.raw)){
-		txt.vector <- clean.text(txt.vector, from.to=clean.raw, perl=perl)
-	} else {}
+  ## read file or text vector?
+  if(isTRUE(read.txt.files)){
+    # read in files
+    # make sure we end up with UTF-8 to avoid nasty character problems
+    txt.vector <- unlist(lapply(txt.file, function(txt){
+        readLines(txt, encoding=fileEncoding)
+      }))
+    # force text into UTF-8 format
+    txt.vector <- enc2utf8(txt.vector)
+  } else {
+    # process object
+    txt.vector <- enc2utf8(as.vector(takeAsTxt))
+  }
+  
+  ## see if the text should be cleaned up further
+  if(!is.null(clean.raw)){
+    txt.vector <- clean.text(txt.vector, from.to=clean.raw, perl=perl)
+  } else {}
 
-	## run the tokenizer
-	# tokenz() is an internal function
-	tokens <- tokenz(txt.vector, split=split, ign.comp=ign.comp, encoding=fileEncoding,
-					heuristics=heuristics, heur.fix=heur.fix, abbrev=abbrev, tag=tag, sntc=sentc.end, detect=detect)
+  ## run the tokenizer
+  # tokenz() is an internal function
+  tokens <- tokenz(txt.vector, split=split, ign.comp=ign.comp, encoding=fileEncoding,
+          heuristics=heuristics, heur.fix=heur.fix, abbrev=abbrev, tag=tag, sntc=sentc.end, detect=detect)
 
-	if(isTRUE(tag)){
-		if(identical(lang, "kRp.env")){
-			lang <- get.kRp.env(lang=TRUE)
-		} else {}
-		# prepare commenting by adding empty lemma column
-		tagged.mtrx <- cbind(tokens, lemma="")
-		# add word classes, comments and numer of letters ("wclass", "desc", "lttr")
-		tagged.mtrx <- treetag.com(tagged.mtrx, lang=lang)
-		# probably apply stopword detection and stemming
-		tagged.mtrx <- stopAndStem(tagged.mtrx, stopwords=stopwords, stemmer=stemmer, lowercase=TRUE)
-		# create object, combine descriptives afterwards
-		tokens <- new("kRp.tagged", lang=lang, TT.res=tagged.mtrx)
-		## descriptive statistics
-		tokens@desc <- basic.tagged.descriptives(tokens, lang=lang, txt.vector=txt.vector)
-	} else {}
+  if(isTRUE(tag)){
+    if(identical(lang, "kRp.env")){
+      lang <- get.kRp.env(lang=TRUE)
+    } else {}
+    # prepare commenting by adding empty lemma column
+    tagged.mtrx <- cbind(tokens, lemma="")
+    # add word classes, comments and numer of letters ("wclass", "desc", "lttr")
+    tagged.mtrx <- treetag.com(tagged.mtrx, lang=lang)
+    # probably apply stopword detection and stemming
+    tagged.mtrx <- stopAndStem(tagged.mtrx, stopwords=stopwords, stemmer=stemmer, lowercase=TRUE)
+    # create object, combine descriptives afterwards
+    tokens <- new("kRp.tagged", lang=lang, TT.res=tagged.mtrx)
+    ## descriptive statistics
+    tokens@desc <- basic.tagged.descriptives(tokens, lang=lang, txt.vector=txt.vector)
+  } else {}
 
-	return(tokens)
+  return(tokens)
 }

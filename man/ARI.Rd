@@ -2,9 +2,7 @@
 \alias{ARI}
 \title{Readability: Automated Readability Index (ARI)}
 \usage{
-  ARI(txt.file,
-    parameters = c(asl = 0.5, awl = 4.71, const = 21.43),
-    ...)
+ARI(txt.file, parameters = c(asl = 0.5, awl = 4.71, const = 21.43), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -22,26 +20,24 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Automated Readability Index (ARI). In
-  contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Automated Readability Index (ARI). In
+contrast to \code{\link[koRpus:readability]{readability}},
+which by default calculates all possible indices, this
+function will only calculate the index value.
 
-  If \code{parameters="NRI"}, the simplified parameters
-  from the Navy Readability Indexes are used, if set to
-  \code{ARI="simple"}, the simplified formula is
-  calculated.
+If \code{parameters="NRI"}, the simplified parameters from
+the Navy Readability Indexes are used, if set to
+\code{ARI="simple"}, the simplified formula is calculated.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
@@ -49,14 +45,14 @@ ARI(tagged.text)
 }
 }
 \references{
-  DuBay, W.H. (2004). \emph{The Principles of Readability}.
-  Costa Mesa: Impact Information.  WWW:
-  \url{http://www.impact-information.com/impactinfo/readability02.pdf};
-  22.03.2011.
+DuBay, W.H. (2004). \emph{The Principles of Readability}.
+Costa Mesa: Impact Information.  WWW:
+\url{http://www.impact-information.com/impactinfo/readability02.pdf};
+22.03.2011.
 
-  Smith, E.A. & Senter, R.J. (1967). \emph{Automated
-  readability index}. AMRL-TR-66-22. Wright-Paterson AFB,
-  Ohio: Aerospace Medical Division.
+Smith, E.A. & Senter, R.J. (1967). \emph{Automated
+readability index}. AMRL-TR-66-22. Wright-Paterson AFB,
+Ohio: Aerospace Medical Division.
 }
 \keyword{readability}
 

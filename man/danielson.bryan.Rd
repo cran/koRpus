@@ -2,10 +2,8 @@
 \alias{danielson.bryan}
 \title{Readability: Danielson-Bryan}
 \usage{
-  danielson.bryan(txt.file,
-    db1 = c(cpb = 1.0364, cps = 0.0194, const = 0.6059),
-    db2 = c(const = 131.059, cpb = 10.364, cps = 0.194),
-    ...)
+danielson.bryan(txt.file, db1 = c(cpb = 1.0364, cps = 0.0194, const = 0.6059),
+  db2 = c(const = 131.059, cpb = 10.364, cps = 0.194), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -28,24 +26,24 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the two Danielson-Bryan formulas. In contrast
-  to \code{\link[koRpus:readability]{readability}}, which
-  by default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the two Danielson-Bryan formulas. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
-	danielson.bryan(tagged.text)
+  danielson.bryan(tagged.text)
 }
 }
 \keyword{readability}

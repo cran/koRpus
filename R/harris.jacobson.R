@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,10 +27,10 @@
 #' This formula doesn't need syllable count.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param word.list A vector or matrix (with exactly one column) which defines familiar words. For valid results
-#'		the short Harris-Jacobson word list for grades 1 and 2 (english) should be used.
+#'    the short Harris-Jacobson word list for grades 1 and 2 (english) should be used.
 #' @param parameters A numeric vector with named magic numbers, defining the relevant parameters for all formulas of the index.
 #' @param hj1 A numeric vector with named magic numbers for the first of the formulas.
 #' @param hj2 A numeric vector with named magic numbers for the second of the formulas.
@@ -41,7 +41,7 @@
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
-#'		Harris, A.J. & Jacobson, M.D. (1974). Revised Harris-Jacobson readability formulas. In \emph{18th Annual Meeting of the College Reading Association}, Bethesda.
+#'    Harris, A.J. & Jacobson, M.D. (1974). Revised Harris-Jacobson readability formulas. In \emph{18th Annual Meeting of the College Reading Association}, Bethesda.
 #' @keywords readability
 #' @export
 #' @examples
@@ -50,17 +50,17 @@
 #' }
 
 harris.jacobson <- function(txt.file, word.list,
-	parameters=c(char=6),
-	hj1=c(dword=0.094, asl=0.168, const=0.502),
-	hj2=c(dword=0.140, asl=0.153, const=0.560),
-	hj3=c(asl=0.158, lword=0.055, const=0.355),
-	hj4=c(dword=0.070, asl=0.125, lword=0.037, const=0.497),
-	hj5=c(dword=0.118, asl=0.134, lword=0.032, const=0.424), ...){
-	all.parameters <- list(char=parameters[["char"]], hj1=hj1, hj2=hj2,  hj3=hj3,  hj4=hj4,  hj5=hj5)
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, hyphen=hyphen, index="Harris.Jacobson", parameters=list(Harris.Jacobson=all.parameters), ...)
-	} else {
-		results <- readability(txt.file=txt.file, hyphen=hyphen, index="Harris.Jacobson", parameters=list(Harris.Jacobson=all.parameters), word.lists=list(Harris.Jacobson=word.list), ...)
-	}
-	return(results)
+  parameters=c(char=6),
+  hj1=c(dword=0.094, asl=0.168, const=0.502),
+  hj2=c(dword=0.140, asl=0.153, const=0.560),
+  hj3=c(asl=0.158, lword=0.055, const=0.355),
+  hj4=c(dword=0.070, asl=0.125, lword=0.037, const=0.497),
+  hj5=c(dword=0.118, asl=0.134, lword=0.032, const=0.424), ...){
+  all.parameters <- list(char=parameters[["char"]], hj1=hj1, hj2=hj2,  hj3=hj3,  hj4=hj4,  hj5=hj5)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, hyphen=hyphen, index="Harris.Jacobson", parameters=list(Harris.Jacobson=all.parameters), ...)
+  } else {
+    results <- readability(txt.file=txt.file, hyphen=hyphen, index="Harris.Jacobson", parameters=list(Harris.Jacobson=all.parameters), word.lists=list(Harris.Jacobson=word.list), ...)
+  }
+  return(results)
 }

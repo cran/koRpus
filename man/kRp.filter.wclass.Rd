@@ -2,8 +2,8 @@
 \alias{kRp.filter.wclass}
 \title{Remove word classes}
 \usage{
-  kRp.filter.wclass(txt, corp.rm.class = "nonpunct",
-    corp.rm.tag = c(), as.vector = FALSE)
+kRp.filter.wclass(txt, corp.rm.class = "nonpunct", corp.rm.tag = c(),
+  as.vector = FALSE)
 }
 \arguments{
   \item{txt}{An object of class
@@ -24,21 +24,20 @@
   parts which survived the filtering.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.tagged-class}}. If
-  \code{as.vector=TRUE}, returns only a character vector.
+An object of class \code{\link[koRpus]{kRp.tagged-class}}.
+If \code{as.vector=TRUE}, returns only a character vector.
 }
 \description{
-  This function strips off defined word classes of tagged
-  text objects.
+This function strips off defined word classes of tagged
+text objects.
 }
 \examples{
 \dontrun{
-		kRp.filter.wclass(tagged.text)
+   kRp.filter.wclass(tagged.text)
 }
 }
 \seealso{
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}
 }
 \keyword{misc}
 

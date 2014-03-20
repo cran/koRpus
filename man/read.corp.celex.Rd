@@ -2,8 +2,8 @@
 \alias{read.corp.celex}
 \title{Import Celex data}
 \usage{
-  read.corp.celex(celex.path, running.words,
-    fileEncoding = "ISO_8859-1", n = -1)
+read.corp.celex(celex.path, running.words, fileEncoding = "ISO_8859-1",
+  n = -1)
 }
 \arguments{
   \item{celex.path}{A character string, path to a frequency
@@ -20,11 +20,11 @@
   -1.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.corp.freq-class}}.
+An object of class
+\code{\link[koRpus]{kRp.corp.freq-class}}.
 }
 \description{
-  Read data from Celex[1] formatted corpora.
+Read data from Celex[1] formatted corpora.
 }
 \examples{
 \dontrun{
@@ -34,10 +34,10 @@ freq.analysis("/some/text.txt", corp.freq=my.Celex.data)
 }
 }
 \references{
-  [1] \url{http://celex.mpi.nl}
+[1] \url{http://celex.mpi.nl}
 }
 \seealso{
-  \code{\link[koRpus]{kRp.corp.freq-class}}
+\code{\link[koRpus]{kRp.corp.freq-class}}
 }
 \keyword{corpora}
 

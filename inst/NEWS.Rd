@@ -1,12 +1,31 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.05-5 (2014-03-19)}{
+  \subsection{changed}{
+    \itemize{
+      \item removed Snowball from the list of suggested packages, as it is deprecated
+        and fully replaced by SnowballC
+      \item re-generated all docs with roxygen2 3.1.0, which can now handle S4 class
+        definitions properly
+      \item replaced all tabs in the source code by two space characters
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item new tf-idf feature: \code{read.corp.custom()} now calculates idf, then
+        \code{freq.analysis()} can use that to calculate tf-idf, kindly suggested by sandro tsang
+      \item new columns \code{"inDocs"} and \code{"idf"} in slot \code{"words"} of class kRp.corp.freq
+      \item new columns \code{"tf"}, \code{"idf"} and \code{"tfidf"} in slot \code{"words"} of class kRp.txt.freq 
+    }
+  }
+}
 \section{Changes in koRpus version 0.05-4 (2014-01-22)}{
   \subsection{fixed}{
     \itemize{
-      \item PCRE 8.34 caused the tests to fail because of problems with regular expressions
-        in internal tokenizing function \code{tokenz()}; fixed by ensuring that "-" is being escaped
-        as "\\\\-"
+      \item PCRE 8.34 caused the tests to fail because of problems with regular
+        expressions in internal tokenizing function \code{tokenz()}; fixed by ensuring that
+        "-" is being escaped as "\\\\-"
     }
   }
 }
@@ -27,10 +46,10 @@
         found)
       \item parameters of Flesch formulae were slightly changed to be more accurate
         (from rounded values of 206.84 to 206.835) where applicable
-      \item Flesch-Szigriszt and Fernandez-Huerta have been validated against INFLESZ v1.0,
-        so the warning was removed
-      \item \code{readability.num()} now gracefully accepts a single number of syllables
-        for formulae who don't need to know more
+      \item Flesch-Szigriszt and Fernandez-Huerta have been validated against INFLESZ
+        v1.0, so the warning was removed
+      \item \code{readability.num()} now gracefully accepts a single number of syllables for
+        formulae who don't need to know more
       \item added a proper GPL notice at the beginning of each R file
       \item adjustet tests according to the changes made
     }
@@ -43,10 +62,10 @@
   }
   \subsection{removed}{
     \itemize{
-      \item this is the first version of the package with slightly reduced sources
-        on CRAN -- the debian directory, GPL license file and hyphenation pattern ChangeLog
-        had to be removed. if you want the full sources to this package, please
-        use the packages provided at http://reaktanz.de/?c=hacking&s=koRpus
+      \item this is the first version of the package with slightly reduced sources on
+        CRAN -- the debian directory, GPL license file and hyphenation pattern
+        ChangeLog had to be removed. if you want the full sources to this package,
+        please use the packages provided at http://reaktanz.de/?c=hacking&s=koRpus
     }
   }
 }

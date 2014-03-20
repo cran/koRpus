@@ -5,6 +5,17 @@
 \alias{correct.tag}
 \alias{correct.tag,kRp.tagged-method}
 \title{Methods to correct koRpus objects}
+\usage{
+correct.tag(obj, row, tag = NULL, lemma = NULL, check.token = NULL)
+
+\S4method{correct.tag}{kRp.tagged}(obj, row, tag = NULL, lemma = NULL,
+  check.token = NULL)
+
+correct.hyph(obj, word = NULL, hyphen = NULL, cache = TRUE)
+
+\S4method{correct.hyph}{kRp.hyphen}(obj, word = NULL, hyphen = NULL,
+  cache = TRUE)
+}
 \arguments{
   \item{obj}{An object of class
   \code{\link[koRpus]{kRp.tagged-class}} or
@@ -42,44 +53,44 @@
   replaced.}
 }
 \value{
-  An object of the same class as \code{obj}.
+An object of the same class as \code{obj}.
 }
 \description{
-  The methods \code{correct.tag} and \code{correct.hyph}
-  can be used to alter objects of class
-  \code{\link[koRpus]{kRp.tagged-class}}, or of class
-  \code{\link[koRpus]{kRp.hyphen-class}} respectively.
+The methods \code{correct.tag} and \code{correct.hyph} can
+be used to alter objects of class
+\code{\link[koRpus]{kRp.tagged-class}}, or of class
+\code{\link[koRpus]{kRp.hyphen-class}} respectively.
 }
 \details{
-  Although automatic POS tagging, lemmatization and
-  hyphenation are remarkably accurate, the algorithms do
-  ususally produce some errors. If you want to correct for
-  these flaws, these methods can be of help, because they
-  might prevent you from introducing new errors. That is,
-  the will do some sanitiy checks before the object is
-  actually manipulated and returned:
+Although automatic POS tagging, lemmatization and
+hyphenation are remarkably accurate, the algorithms do
+ususally produce some errors. If you want to correct for
+these flaws, these methods can be of help, because they
+might prevent you from introducing new errors. That is, the
+will do some sanitiy checks before the object is actually
+manipulated and returned:
 
-  \describe{ \item{\code{correct.tag}}{will read the
-  \code{lang} slot from the given object and check whether
-  the \code{tag} provided is actually valid. If so, it will
-  not only change the \code{tag} field in the object, but
-  also update \code{wclass} and \code{desc} accordingly.
+\describe{ \item{\code{correct.tag}}{will read the
+\code{lang} slot from the given object and check whether
+the \code{tag} provided is actually valid. If so, it will
+not only change the \code{tag} field in the object, but
+also update \code{wclass} and \code{desc} accordingly.
 
-  If \code{check.token} is set it must also match
-  \code{token} in the given row(s). Note that no check is
-  done on the lemmata.} \item{\code{correct.hyph}}{will
-  check whether \code{word} and \code{hyphen} are actually
-  hyphenations of the same token before proceeding. If so,
-  it will also recalculate the number of syllables and
-  update the \code{syll} field.
+If \code{check.token} is set it must also match
+\code{token} in the given row(s). Note that no check is
+done on the lemmata.} \item{\code{correct.hyph}}{will check
+whether \code{word} and \code{hyphen} are actually
+hyphenations of the same token before proceeding. If so, it
+will also recalculate the number of syllables and update
+the \code{syll} field.
 
-  If both \code{word} and \code{hyphen} are \code{NULL},
-  \code{correct.hyph} will try to simply recalculate the
-  syllable count for each word, by counting the hyphenation
-  marks (and adding 1 to the number). This can be usefull
-  if you changed hyphenation some other way, e.g. in a
-  spreadsheet GUI, but don't want to have to correct the
-  syllable count yourself as well.} }
+If both \code{word} and \code{hyphen} are \code{NULL},
+\code{correct.hyph} will try to simply recalculate the
+syllable count for each word, by counting the hyphenation
+marks (and adding 1 to the number). This can be usefull if
+you changed hyphenation some other way, e.g. in a
+spreadsheet GUI, but don't want to have to correct the
+syllable count yourself as well.} }
 }
 \examples{
 \dontrun{
@@ -89,9 +100,9 @@ hyphenated.txt <- correct.hyph(hyphenated.txt, "Hilfe", "Hil-fe")
 }
 }
 \seealso{
-  \code{\link[koRpus]{kRp.tagged-class}},
-  \code{\link[koRpus:treetag]{treetag}},
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}.
+\code{\link[koRpus]{kRp.tagged-class}},
+\code{\link[koRpus:treetag]{treetag}},
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}.
 }
 \keyword{methods}
 

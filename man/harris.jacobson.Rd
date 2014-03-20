@@ -2,14 +2,11 @@
 \alias{harris.jacobson}
 \title{Readability: Harris-Jacobson indices}
 \usage{
-  harris.jacobson(txt.file, word.list,
-    parameters = c(char = 6),
-    hj1 = c(dword = 0.094, asl = 0.168, const = 0.502),
-    hj2 = c(dword = 0.14, asl = 0.153, const = 0.56),
-    hj3 = c(asl = 0.158, lword = 0.055, const = 0.355),
-    hj4 = c(dword = 0.07, asl = 0.125, lword = 0.037, const = 0.497),
-    hj5 = c(dword = 0.118, asl = 0.134, lword = 0.032, const = 0.424),
-    ...)
+harris.jacobson(txt.file, word.list, parameters = c(char = 6), hj1 = c(dword
+  = 0.094, asl = 0.168, const = 0.502), hj2 = c(dword = 0.14, asl = 0.153,
+  const = 0.56), hj3 = c(asl = 0.158, lword = 0.055, const = 0.355),
+  hj4 = c(dword = 0.07, asl = 0.125, lword = 0.037, const = 0.497),
+  hj5 = c(dword = 0.118, asl = 0.134, lword = 0.032, const = 0.424), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -48,23 +45,23 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the revised Harris-Jacobson
-  readability formulas (1 to 5), as described in their
-  paper for the 18th Annual Meeting of the College Reading
-  Association (Harris & Jacobson, 1974). In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index values.
+This function calculates the revised Harris-Jacobson
+readability formulas (1 to 5), as described in their paper
+for the 18th Annual Meeting of the College Reading
+Association (Harris & Jacobson, 1974). In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index values.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
@@ -72,10 +69,9 @@ harris.jacobson(tagged.text, word.list=harris.jacobson.wl)
 }
 }
 \references{
-  Harris, A.J. & Jacobson, M.D. (1974). Revised
-  Harris-Jacobson readability formulas. In \emph{18th
-  Annual Meeting of the College Reading Association},
-  Bethesda.
+Harris, A.J. & Jacobson, M.D. (1974). Revised
+Harris-Jacobson readability formulas. In \emph{18th Annual
+Meeting of the College Reading Association}, Bethesda.
 }
 \keyword{readability}
 

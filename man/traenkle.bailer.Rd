@@ -2,10 +2,9 @@
 \alias{traenkle.bailer}
 \title{Readability: Traenkle-Bailer Formeln}
 \usage{
-  traenkle.bailer(txt.file,
-    TB1 = c(const = 224.6814, awl = 79.8304, asl = 12.24032, prep = 1.292857),
-    TB2 = c(const = 234.1063, awl = 96.11069, prep = 2.05444, conj = 1.02805),
-    ...)
+traenkle.bailer(txt.file, TB1 = c(const = 224.6814, awl = 79.8304, asl =
+  12.24032, prep = 1.292857), TB2 = c(const = 234.1063, awl = 96.11069, prep =
+  2.05444, conj = 1.02805), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -26,26 +25,26 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the two formulae by
-  Tr\"ankle-Bailer, which are based on the Dickes-Steiwer
-  formulae. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index values.
+This function calculates the two formulae by
+Tr\"ankle-Bailer, which are based on the Dickes-Steiwer
+formulae. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index values.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
-	traenkle.bailer(tagged.text)
+  traenkle.bailer(tagged.text)
 }
 }
 \keyword{readability}

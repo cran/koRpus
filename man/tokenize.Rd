@@ -2,15 +2,12 @@
 \alias{tokenize}
 \title{A simple tokenizer}
 \usage{
-  tokenize(txt, format = "file", fileEncoding = NULL,
-    split = "[[:space:]]", ign.comp = "-",
-    heuristics = "abbr",
-    heur.fix = list(pre = c("’", "'"), suf = c("’", "'")),
-    abbrev = NULL, tag = TRUE, lang = "kRp.env",
-    sentc.end = c(".", "!", "?", ";", ":"),
-    detect = c(parag = FALSE, hline = FALSE),
-    clean.raw = NULL, perl = FALSE, stopwords = NULL,
-    stemmer = NULL)
+tokenize(txt, format = "file", fileEncoding = NULL, split = "[[:space:]]",
+  ign.comp = "-", heuristics = "abbr", heur.fix = list(pre = c("’",
+  "'"), suf = c("’", "'")), abbrev = NULL, tag = TRUE, lang = "kRp.env",
+  sentc.end = c(".", "!", "?", ";", ":"), detect = c(parag = FALSE, hline =
+  FALSE), clean.raw = NULL, perl = FALSE, stopwords = NULL,
+  stemmer = NULL)
 }
 \arguments{
   \item{txt}{Either an open connection, the path to
@@ -99,38 +96,36 @@
   package.}
 
   \item{stemmer}{A function or method to perform stemming.
-  For instance, you can set
-  \code{stemmer=Snowball::SnowballStemmer} if you have the
-  \code{Snowball} package installed (or
-  \code{SnowballC::wordStem}). As of now, you cannot
-  provide further arguments to this function.}
+  For instance, you can set \code{SnowballC::wordStem} if
+  you have the \code{SnowballC} package installed. As of
+  now, you cannot provide further arguments to this
+  function.}
 }
 \value{
-  If \code{tag=FALSE}, a character vector with the
-  tokenized text. If \code{tag=TRUE}, returns an object of
-  class \code{\link[koRpus]{kRp.tagged-class}}.
+If \code{tag=FALSE}, a character vector with the tokenized
+text. If \code{tag=TRUE}, returns an object of class
+\code{\link[koRpus]{kRp.tagged-class}}.
 }
 \description{
-  This tokenizer can be used to try replace TreeTagger. Its
-  results are not as detailed when it comes to word
-  classes, and no lemmatization is done. However, for most
-  cases this should suffice.
+This tokenizer can be used to try replace TreeTagger. Its
+results are not as detailed when it comes to word classes,
+and no lemmatization is done. However, for most cases this
+should suffice.
 }
 \details{
-  \code{tokenize} can try to guess what's a headline and
-  where a paragraph was inserted (via the \code{detect}
-  parameter). A headline is assumed if a line of text
-  without sentence ending punctuation is found, a paragraph
-  if two blocks of text are separated by space. This will
-  add extra tags into the text: "<kRp.h>" (headline
-  starts), "</kRp.h>" (headline ends) and "<kRp.p/>"
-  (paragraph), respectively. This can be useful in two
-  cases: "</kRp.h>" will be treated like a sentence ending,
-  which gives you more control for automatic analyses. And
-  adding to that,
-  \code{\link[koRpus:kRp.text.paste]{kRp.text.paste}} can
-  replace these tags, which probably preserves more of the
-  original layout.
+\code{tokenize} can try to guess what's a headline and
+where a paragraph was inserted (via the \code{detect}
+parameter). A headline is assumed if a line of text without
+sentence ending punctuation is found, a paragraph if two
+blocks of text are separated by space. This will add extra
+tags into the text: "<kRp.h>" (headline starts), "</kRp.h>"
+(headline ends) and "<kRp.p/>" (paragraph), respectively.
+This can be useful in two cases: "</kRp.h>" will be treated
+like a sentence ending, which gives you more control for
+automatic analyses. And adding to that,
+\code{\link[koRpus:kRp.text.paste]{kRp.text.paste}} can
+replace these tags, which probably preserves more of the
+original layout.
 }
 \examples{
 \dontrun{
@@ -154,10 +149,6 @@ tokenized.obj <- tokenize("~/my.data/speech.txt",
 ## enabling stopword detection and stemming
 # if you also installed the packages tm and Snowball,
 # you can use some of their features with koRpus:
-tokenized.obj <- tokenize("~/my.data/speech.txt",
-   stopwords=tm::stopwords("en"),
-   stemmer=Snowball::SnowballStemmer)
-# alternatively, use the SnowballC package:
 tokenized.obj <- tokenize("~/my.data/speech.txt",
    stopwords=tm::stopwords("en"),
    stemmer=SnowballC::wordStem)

@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -32,10 +32,10 @@
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords LD
 #' @seealso \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-#'	\code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
+#'  \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
 #' @references
-#'		Covington, M.A. & McFall, J.D. (2010). Cutting the Gordian Knot: The Moving-Average Type-Token Ratio (MATTR).
-#'			\emph{Journal of Quantitative Linguistics}, 17(2), 94--100.
+#'    Covington, M.A. & McFall, J.D. (2010). Cutting the Gordian Knot: The Moving-Average Type-Token Ratio (MATTR).
+#'      \emph{Journal of Quantitative Linguistics}, 17(2), 94--100.
 #' @export
 #' @examples
 #' \dontrun{
@@ -43,12 +43,12 @@
 #' }
 
 MATTR <- function(txt, window=100, char=FALSE, ...){
-	if(isTRUE(char)){
-		char.value <- "MATTR"
-	} else {
-		char.value <- c()
-	}
+  if(isTRUE(char)){
+    char.value <- "MATTR"
+  } else {
+    char.value <- c()
+  }
 
-	results <- lex.div(txt=txt, window=window, measure="MATTR", char=char.value, ...)
-	return(results)
+  results <- lex.div(txt=txt, window=window, measure="MATTR", char=char.value, ...)
+  return(results)
 }

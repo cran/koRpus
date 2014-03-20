@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -23,11 +23,11 @@
 #' These data objects are not really intended to be used directly, but rather to be consulted by the hyphen() function without further user interaction.
 #'
 #' @format The \code{pattern} slot of each hyphenation pattern object has three colums:
-#'		\describe{
-#'			\item{\code{orig}}{The original pattern in patgen style format.}
-#'			\item{\code{char}}{Only the character elements of the pattern which can be matched to parts of an actual word.}
-#'			\item{\code{nums}}{A code of digits defining the possibility to split syllables at respective places in this pattern.}
-#'		}
+#'    \describe{
+#'      \item{\code{orig}}{The original pattern in patgen style format.}
+#'      \item{\code{char}}{Only the character elements of the pattern which can be matched to parts of an actual word.}
+#'      \item{\code{nums}}{A code of digits defining the possibility to split syllables at respective places in this pattern.}
+#'    }
 #'
 #' @source The patterns (as they are present in the \code{"orig"} column described above) were originally provided by the LaTeX developers[1],
 #' under the terms of the LaTeX Project Public License[2]. Refer to Liang (1983) for a detailed explaination -- it's fascinating.
@@ -49,11 +49,11 @@
 #' @name hyph.XX
 #' @usage hyph.XX
 #' @seealso
-#'		\code{\link[koRpus:read.hyph.pat]{read.hyph.pat}},
-#'		\code{\link[koRpus:manage.hyph.pat]{manage.hyph.pat}}
+#'    \code{\link[koRpus:read.hyph.pat]{read.hyph.pat}},
+#'    \code{\link[koRpus:manage.hyph.pat]{manage.hyph.pat}}
 #' @references
 #' Liang, F.M. (1983). \emph{Word Hy-phen-a-tion by Com-put-er}.
-#' 	Dissertation, Stanford University, Dept. of Computer Science.
+#'   Dissertation, Stanford University, Dept. of Computer Science.
 #'
 #' [1] \url{http://tug.ctan.org/tex-archive/language/hyph-utf8/tex/generic/hyph-utf8/patterns/}
 #'

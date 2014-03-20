@@ -4,6 +4,15 @@
 \alias{query,kRp.corp.freq-method}
 \alias{query,kRp.tagged-method}
 \title{A method to get information out of koRpus objects}
+\usage{
+query(obj, ...)
+
+\S4method{query}{kRp.corp.freq}(obj, var = NULL, query, rel = "eq",
+  as.df = TRUE, ignore.case = TRUE, perl = FALSE)
+
+\S4method{query}{kRp.tagged}(obj, var, query, rel = "eq", as.df = TRUE,
+  ignore.case = TRUE, perl = FALSE)
+}
 \arguments{
   \item{obj}{An object of class
   \code{\link[koRpus]{kRp.corp.freq-class}}.}
@@ -35,35 +44,36 @@
 
   \item{perl}{Logical, passed through to \code{grepl} if
   \code{var="regexp"}.}
+
+  \item{...}{Optional arguments, see above.}
 }
 \value{
-  Depending on the arguments, might include whole objects,
-  lists, single values etc.
+Depending on the arguments, might include whole objects,
+lists, single values etc.
 }
 \description{
-  The method \code{query} returns query information from
-  objects of classes
-  \code{\link[koRpus]{kRp.corp.freq-class}} and
-  \code{\link[koRpus]{kRp.tagged-class}}.
+The method \code{query} returns query information from
+objects of classes
+\code{\link[koRpus]{kRp.corp.freq-class}} and
+\code{\link[koRpus]{kRp.tagged-class}}.
 }
 \details{
-  \emph{kRp.corp.freq:} Depending on the setting of the
-  \code{var} parameter, will return entries with a matching
-  character (\code{var="word"}), or all entries of the
-  desired frequency (see the examples). A special case is
-  the need for a range of frequencies, which can be
-  achieved by providing a nomerical vector of two values as
-  the \code{query} value, for start and end of the range,
-  respectively. In these cases, if \code{rel} is set to
-  \code{"gt"} or \code{"lt"}, the given range borders are
-  excluded, otherwise they will be included as true
-  matches.
+\emph{kRp.corp.freq:} Depending on the setting of the
+\code{var} parameter, will return entries with a matching
+character (\code{var="word"}), or all entries of the
+desired frequency (see the examples). A special case is the
+need for a range of frequencies, which can be achieved by
+providing a nomerical vector of two values as the
+\code{query} value, for start and end of the range,
+respectively. In these cases, if \code{rel} is set to
+\code{"gt"} or \code{"lt"}, the given range borders are
+excluded, otherwise they will be included as true matches.
 
-  \emph{kRp.tagged:} \code{var} can be any of the variables
-  in slot \code{TT.res}. For \code{rel} currently only "eq"
-  and "num" are implemented. The latter isn't a relation,
-  but will return a vector with the row numbers in which
-  the query was found.
+\emph{kRp.tagged:} \code{var} can be any of the variables
+in slot \code{TT.res}. For \code{rel} currently only "eq"
+and "num" are implemented. The latter isn't a relation, but
+will return a vector with the row numbers in which the
+query was found.
 }
 \section{Query lists}{
   You can combine an arbitrary number of queries in a
@@ -111,8 +121,8 @@ query(tagged.txt, "lemma", "he")
 }
 }
 \seealso{
-  \code{\link[koRpus]{kRp.corp.freq-class}},
-  \code{\link[base]{subset}}
+\code{\link[koRpus]{kRp.corp.freq-class}},
+\code{\link[base]{subset}}
 }
 \keyword{methods}
 

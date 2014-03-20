@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,25 +27,25 @@
 #' This formula doesn't need syllable count.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
-#'		Fucks, W. (1955). Der Unterschied des Prosastils von Dichtern und anderen Schriftstellern. \emph{Sprachforum}, 1, 233--244.
+#'    Fucks, W. (1955). Der Unterschied des Prosastils von Dichtern und anderen Schriftstellern. \emph{Sprachforum}, 1, 233--244.
 #' @keywords readability
 #' @export
 #' @examples
 #' \dontrun{
-#' 	fucks(tagged.text)
+#'   fucks(tagged.text)
 #' }
 
 fucks <- function(txt.file, ...){
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, index="Fucks", ...)
-	} else {
-		results <- readability(txt.file=txt.file, index="Fucks", ...)
-	}
-	return(results)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, index="Fucks", ...)
+  } else {
+    results <- readability(txt.file=txt.file, index="Fucks", ...)
+  }
+  return(results)
 }

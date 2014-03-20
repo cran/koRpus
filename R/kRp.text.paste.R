@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -24,7 +24,7 @@
 #' the actual text as is.
 #'
 #' @param txt An object of class \code{\link[koRpus]{kRp.txt.trans-class}}, \code{\link[koRpus]{kRp.tagged-class}},
-#'		\code{\link[koRpus]{kRp.txt.freq-class}} or \code{\link[koRpus]{kRp.analysis-class}}.
+#'    \code{\link[koRpus]{kRp.txt.freq-class}} or \code{\link[koRpus]{kRp.analysis-class}}.
 #' @param replace A named character vector to define replacements for \code{koRpus}' internal headline and paragraph tags.
 #' @return An atomic character vector.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
@@ -37,31 +37,31 @@
 #' }
 
 kRp.text.paste <- function(txt, replace=c(hon.kRp="", hoff.kRp="\n\n", p.kRp="\n\n")){
-	# deal with the txt object
-	if(inherits(txt, "kRp.tagged")){
-		# get class kRp.tagged from txt object
-		# the internal function tag.kRp.txt() will return the object unchanged if it
-		# is already tagged
-		TT.res <- tag.kRp.txt(txt, objects.only=TRUE)@TT.res
-	} else {
-		stop(simpleError("Wrong object class (txt)!"))
-	}
+  # deal with the txt object
+  if(inherits(txt, "kRp.tagged")){
+    # get class kRp.tagged from txt object
+    # the internal function tag.kRp.txt() will return the object unchanged if it
+    # is already tagged
+    TT.res <- tag.kRp.txt(txt, objects.only=TRUE)@TT.res
+  } else {
+    stop(simpleError("Wrong object class (txt)!"))
+  }
 
-	# we probably need to replace tags
-	if("hon.kRp" %in% names(replace)){
-		TT.res[TT.res[["tag"]] == "hon.kRp", "token"] <- replace["hon.kRp"]
-	} else {}
-	if("hoff.kRp" %in% names(replace)){
-		TT.res[TT.res[["tag"]] == "hoff.kRp", "token"] <- replace["hoff.kRp"]
-	} else {}
-	if("p.kRp" %in% names(replace)){
-		TT.res[TT.res[["tag"]] == "p.kRp", "token"] <- replace["p.kRp"]
-	} else {}
+  # we probably need to replace tags
+  if("hon.kRp" %in% names(replace)){
+    TT.res[TT.res[["tag"]] == "hon.kRp", "token"] <- replace["hon.kRp"]
+  } else {}
+  if("hoff.kRp" %in% names(replace)){
+    TT.res[TT.res[["tag"]] == "hoff.kRp", "token"] <- replace["hoff.kRp"]
+  } else {}
+  if("p.kRp" %in% names(replace)){
+    TT.res[TT.res[["tag"]] == "p.kRp", "token"] <- replace["p.kRp"]
+  } else {}
 
-	txt <- TT.res$token
+  txt <- TT.res$token
 
-	# put all text together
-	results <- paste.tokenized.text(txt=txt)
+  # put all text together
+  results <- paste.tokenized.text(txt=txt)
 
-	return(results)
+  return(results)
 }

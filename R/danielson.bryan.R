@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,8 +27,8 @@
 #' This formula doesn't need syllable count.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param db1 A numeric vector with named magic numbers, defining the relevant parameters for the first formula (regression).
 #' @param db2 A numeric vector with named magic numbers, defining the relevant parameters for the second formula (cloze equivalent).
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
@@ -38,16 +38,16 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' 	danielson.bryan(tagged.text)
+#'   danielson.bryan(tagged.text)
 #' }
 
 danielson.bryan <- function(txt.file, db1=c(cpb=1.0364, cps=0.0194, const=0.6059),
-			db2=c(const=131.059, cpb=10.364, cps=0.194), ...){
-	param.list <- list(db1=db1, db2=db2)
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, index="Danielson.Bryan", parameters=list(Danielson.Bryan=param.list), ...)
-	} else {
-		results <- readability(txt.file=txt.file, index="Danielson.Bryan", parameters=list(Danielson.Bryan=param.list), ...)
-	}
-	return(results)
+      db2=c(const=131.059, cpb=10.364, cps=0.194), ...){
+  param.list <- list(db1=db1, db2=db2)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, index="Danielson.Bryan", parameters=list(Danielson.Bryan=param.list), ...)
+  } else {
+    results <- readability(txt.file=txt.file, index="Danielson.Bryan", parameters=list(Danielson.Bryan=param.list), ...)
+  }
+  return(results)
 }

@@ -2,9 +2,8 @@
 \alias{TRI}
 \title{Readability: Kuntzsch's Text-Redundanz-Index}
 \usage{
-  TRI(txt.file, hyphen = NULL,
-    parameters = c(syll = 1, word = 0.449, pnct = 2.467, frgn = 0.937, const = 14.417),
-    ...)
+TRI(txt.file, hyphen = NULL, parameters = c(syll = 1, word = 0.449, pnct =
+  2.467, frgn = 0.937, const = 14.417), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -25,23 +24,23 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates Kuntzsch's Text-Redundanz-Index
-  (text redundancy index). In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates Kuntzsch's Text-Redundanz-Index
+(text redundancy index). In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 }
 \examples{
 \dontrun{
-	TRI(tagged.text)
+  TRI(tagged.text)
 }
 }
 \keyword{readability}

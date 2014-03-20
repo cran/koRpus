@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -38,40 +38,40 @@
 
 read.corp.celex <- function(celex.path, running.words, fileEncoding="ISO_8859-1", n=-1){
 
-	# basic checks before we even proceed...
-	# valid file?
-	check.file(celex.path, mode="exist")
+  # basic checks before we even proceed...
+  # valid file?
+  check.file(celex.path, mode="exist")
 
-	## here we go!
+  ## here we go!
 
-	# celex files can be veeeery large. if so, reading them will most likely freeze R
-	# as a precaution we'll therefore use a file connection and readLines()
-	celex.file.con <- file(celex.path, open="r", encoding=fileEncoding)
-	rL.words <- readLines(celex.file.con, n=n)
-	close(celex.file.con)
+  # celex files can be veeeery large. if so, reading them will most likely freeze R
+  # as a precaution we'll therefore use a file connection and readLines()
+  celex.file.con <- file(celex.path, open="r", encoding=fileEncoding)
+  rL.words <- readLines(celex.file.con, n=n)
+  close(celex.file.con)
 
-	table.words <- matrix(unlist(strsplit(rL.words, "\\", fixed=TRUE)), ncol=13, byrow=TRUE, dimnames=list(c(),c("num","word",3,"freq",5:13)))[,-c(3,5:13)]
+  table.words <- matrix(unlist(strsplit(rL.words, "\\", fixed=TRUE)), ncol=13, byrow=TRUE, dimnames=list(c(),c("num","word",3,"freq",5:13)))[,-c(3,5:13)]
 
-	num.distinct.words  <- dim(table.words)[1]
-	num.running.words   <- running.words
-	avg.sntclgth.words  <- NA
-	avg.sntclgth.chars  <- NA
-	avg.wrdlgth.form    <- NA
-	avg.wrdlgth.running <- NA
+  num.distinct.words  <- dim(table.words)[1]
+  num.running.words   <- running.words
+  avg.sntclgth.words  <- NA
+  avg.sntclgth.chars  <- NA
+  avg.wrdlgth.form    <- NA
+  avg.wrdlgth.running <- NA
 
-	dscrpt.meta <- data.frame(
-		tokens=num.running.words,
-		types=num.distinct.words,
-		words.p.sntc=avg.sntclgth.words,
-		chars.p.sntc=avg.sntclgth.chars,
-		chars.p.wform=avg.wrdlgth.form,
-		chars.p.word=avg.wrdlgth.running)
+  dscrpt.meta <- data.frame(
+    tokens=num.running.words,
+    types=num.distinct.words,
+    words.p.sntc=avg.sntclgth.words,
+    chars.p.sntc=avg.sntclgth.chars,
+    chars.p.wform=avg.wrdlgth.form,
+    chars.p.word=avg.wrdlgth.running)
 
-	# call internal function create.corp.freq.object()
-	results <- create.corp.freq.object(matrix.freq=table.words,
-						num.running.words=num.running.words,
-						df.meta=data.frame(meta=NA,value=NA),
-						df.dscrpt.meta=dscrpt.meta)
+  # call internal function create.corp.freq.object()
+  results <- create.corp.freq.object(matrix.freq=table.words,
+            num.running.words=num.running.words,
+            df.meta=data.frame(meta=NA,value=NA),
+            df.dscrpt.meta=dscrpt.meta)
 
-	return(results)
+  return(results)
 }

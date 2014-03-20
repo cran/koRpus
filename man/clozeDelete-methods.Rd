@@ -3,7 +3,16 @@
 \alias{clozeDelete}
 \alias{clozeDelete,kRp.taggedText-method}
 \title{Transform text into cloze test format}
+\usage{
+clozeDelete(obj, ...)
+
+\S4method{clozeDelete}{kRp.taggedText}(obj, every = 5, offset = 0,
+  replace.by = "_", fixed = 10)
+}
 \arguments{
+  \item{...}{Additional arguments to the method (as
+  described in this document).}
+
   \item{obj}{An object of class "kRp.tagged"}
 
   \item{every}{Integer numeric, setting the frequency of
@@ -26,21 +35,20 @@
   the replaced word.}
 }
 \value{
-  And object of class kRp.tagged, with an additional list
-  \code{cloze} in its \code{desc} slot, listing the words
-  which were changed.
+And object of class kRp.tagged, with an additional list
+\code{cloze} in its \code{desc} slot, listing the words
+which were changed.
 }
 \description{
-  If you feed a tagged text object to this function, its
-  text will be transformed into a format used for cloze
-  deletion tests. That is, by default every fifth word (or
-  as specified by \code{every}) will be replaced by a line.
-  You can also set an offset value to specify where to
-  begin.
+If you feed a tagged text object to this function, its text
+will be transformed into a format used for cloze deletion
+tests. That is, by default every fifth word (or as
+specified by \code{every}) will be replaced by a line. You
+can also set an offset value to specify where to begin.
 }
 \details{
-  The option \code{offset="all"} will not return one single
-  object, but print the results after iterating through all
-  possible offset values.
+The option \code{offset="all"} will not return one single
+object, but print the results after iterating through all
+possible offset values.
 }
 

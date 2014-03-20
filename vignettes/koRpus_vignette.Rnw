@@ -249,7 +249,7 @@ All wrapper functions have characteristics turned off by default. The following 
 The plot then shows the typical degredation of TTR values with increasing text length:
 
 \begin{center}
- \includegraphics[width=\textwidth]{./ttr.pdf}
+ \includegraphics[width=\textwidth]{ttr.pdf}
 \end{center}
 
 Since this package is intended for research, it should be possible to directly influence all relevant values of each measure and examine the effects. For example, as mentioned before \texttt{segment.optimizer()} recommended a change of segment size for MSTTR to drop less words, which is easily done:
@@ -275,7 +275,8 @@ Please see to the documentation for more detailed information on the available m
 
 \subsection{Frequency analysis}
 \subsubsection{Importing language corpora data}
-This package has rudimentary support to import corpus databases.\footnote{The package also has a function called \texttt{read.corp.custom()} which can be used to process language corpora yourself, and store the results in an object of class \texttt{kRp.corp.freq}, which is the class returned by \texttt{read.corp.LCC()} and \texttt{read.corp.celex()} as well. That is, if you can't get any already analyzed corpus database but have a huge language corpus at hand, you can create your own frequency database. But be warned that depending on corpus size and your hardware, this might take ages.} That is, it can read frequency data for words into an R object and use this object for further analysis. Next to the Celex\footnote{\url{http://celex.mpi.nl}} database format (\texttt{read.corp.celex()}), it can read the LCC flatfile format\footnote{Actually, it unterstands two different LCC formats, both the older .zip and the newer .tar archive format.} (\texttt{read.corp.LCC()}). The latter might be of special interest, 
+This package has rudimentary support to import corpus databases.\footnote{The package also has a function called \texttt{read.corp.custom()} which can be used to process language corpora yourself, and store the results in an object of class \texttt{kRp.corp.freq}, which is the class returned by \texttt{read.corp.LCC()} and \texttt{read.corp.celex()} as well. That is, if you can't get any already analyzed corpus database but have a huge language corpus at hand, you can create your own frequency database. But be warned that depending on corpus size and your hardware, this might take ages. On the other hand, \texttt{read.corp.custom()} will provide inverse document frequency (idf) values for all types, which is necessary to compute tf-idf with \texttt{freq.analysis()}} That is, it can read frequency data for words into an R object and use this object for further analysis. Next to the Celex\footnote{\url{http://celex.mpi.nl}} database format (\texttt{read.corp.celex()}), it can read the LCC flatfile format\
+footnote{Actually, it unterstands two different LCC formats, both the older .zip and the newer .tar archive format.} (\texttt{read.corp.LCC()}). The latter might be of special interest, 
 because the needed database archives can be freely downloaded.\footnote{\url{http://corpora.informatik.uni-leipzig.de/download.html}} Once you've downloaded one of these archives, it can be comfortably imported:
 
 \begin{Schunk}
@@ -320,7 +321,7 @@ We can now conduct a full frequency analysis of our text:
 
 \begin{Schunk}
 	\begin{Sinput}
-> freq.analysis.res <- kRp.freq.analysis(tagged.text, corp.freq=LCC.en)
+> freq.analysis.res <- freq.analysis(tagged.text, corp.freq=LCC.en)
 	\end{Sinput}
 % 	\begin{Soutput}
 % 	\end{Soutput}
@@ -349,6 +350,8 @@ The resulting object holds a lot of information, even if no corpus data was used
 \end{Schunk}
 
 Perhaps most informatively, \texttt{pmio} shows how often the respective token appears in a million tokens, according to the corpus data. Adding to this, the previously introduced slot \texttt{desc} now contains some more descriptive statistics on our text, and if we provided a corpus database, the slot \texttt{freq.analysis} lists summaries of various frequency information that was calculated.
+
+If the corpus object also provided inverse document frequency (i.\,e., values in column \texttt{idf}) data, \texttt{freq.analysis()} will automatically compute tf-idf statistics and put them in a column called \texttt{tfidf}.
 
 \subsubsection{New to the \texttt{desc} slot}
 

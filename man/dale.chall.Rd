@@ -2,9 +2,8 @@
 \alias{dale.chall}
 \title{Readability: Dale-Chall Readability Formula}
 \usage{
-  dale.chall(txt.file, word.list,
-    parameters = c(const = 64, dword = 0.95, asl = 0.69),
-    ...)
+dale.chall(txt.file, word.list, parameters = c(const = 64, dword = 0.95, asl =
+  0.69), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -27,26 +26,25 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the New Dale-Chall Readability Formula. In
-  contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the New Dale-Chall Readability Formula. In
+contrast to \code{\link[koRpus:readability]{readability}},
+which by default calculates all possible indices, this
+function will only calculate the index value.
 
-  If \code{parameters="PSK"}, the parameters by
-  Powers-Sumner-Kearl (1958) are used, and if
-  \code{parameters="old"}, the original parameters by
-  Dale-Chall (1948), respectively.
+If \code{parameters="PSK"}, the parameters by
+Powers-Sumner-Kearl (1958) are used, and if
+\code{parameters="old"}, the original parameters by
+Dale-Chall (1948), respectively.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{

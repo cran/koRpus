@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -31,7 +31,7 @@
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords LD
 #' @seealso \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-#'	\code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
+#'  \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
 #' @export
 #' @examples
 #' \dontrun{
@@ -39,6 +39,6 @@
 #' }
 
 MSTTR <- function(txt, segment=100, ...){
-	results <- lex.div(txt=txt, segment=segment, measure="MSTTR", char=c(), ...)
-	return(results)
+  results <- lex.div(txt=txt, segment=segment, measure="MSTTR", char=c(), ...)
+  return(results)
 }

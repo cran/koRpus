@@ -2,8 +2,7 @@
 \alias{ELF}
 \title{Readability: Farr's Easy Listening Formula (ELF)}
 \usage{
-  ELF(txt.file, hyphen = NULL, parameters = c(syll = 1),
-    ...)
+ELF(txt.file, hyphen = NULL, parameters = c(syll = 1), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -24,30 +23,30 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates Farr's Easy Listening Formula
-  (ELF). In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates Farr's Easy Listening Formula
+(ELF). In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 }
 \examples{
 \dontrun{
-	ELF(tagged.text)
+  ELF(tagged.text)
 }
 }
 \references{
-  DuBay, W.H. (2004). \emph{The Principles of Readability}.
-  Costa Mesa: Impact Information.  WWW:
-  \url{http://www.impact-information.com/impactinfo/readability02.pdf};
-  22.03.2011.
+DuBay, W.H. (2004). \emph{The Principles of Readability}.
+Costa Mesa: Impact Information.  WWW:
+\url{http://www.impact-information.com/impactinfo/readability02.pdf};
+22.03.2011.
 }
 \keyword{readability}
 

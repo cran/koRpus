@@ -2,9 +2,8 @@
 \alias{SMOG}
 \title{Readability: Simple Measure of Gobbledygook (SMOG)}
 \usage{
-  SMOG(txt.file, hyphen = NULL,
-    parameters = c(syll = 3, sqrt = 1.043, fact = 30, const = 3.1291, sqrt.const = 0),
-    ...)
+SMOG(txt.file, hyphen = NULL, parameters = c(syll = 3, sqrt = 1.043, fact =
+  30, const = 3.1291, sqrt.const = 0), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -25,26 +24,26 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the Simple Measure of
-  Gobbledygook (SMOG). In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the Simple Measure of Gobbledygook
+(SMOG). In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  By default calculates formula D by McLaughlin (1969). If
-  \code{parameters} is set to \code{SMOG="C"}, formula C
-  will be calculated. If \code{parameters} is set to
-  \code{SMOG="simple"}, the simplified formula is used, and
-  if \code{parameters="de"}, the formula adapted to German
-  texts ("Qu", Bamberger & Vanecek, 1984, p. 78).
+By default calculates formula D by McLaughlin (1969). If
+\code{parameters} is set to \code{SMOG="C"}, formula C will
+be calculated. If \code{parameters} is set to
+\code{SMOG="simple"}, the simplified formula is used, and
+if \code{parameters="de"}, the formula adapted to German
+texts ("Qu", Bamberger & Vanecek, 1984, p. 78).
 }
 \examples{
 \dontrun{
@@ -52,13 +51,12 @@ SMOG(tagged.text)
 }
 }
 \references{
-  Bamberger, R. & Vanecek, E. (1984).
-  \emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend
-  und Volk.
+Bamberger, R. & Vanecek, E. (1984).
+\emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend
+und Volk.
 
-  McLaughlin, G.H. (1969). SMOG grading -- A new
-  readability formula. \emph{Journal of Reading}, 12(8),
-  639--646.
+McLaughlin, G.H. (1969). SMOG grading -- A new readability
+formula. \emph{Journal of Reading}, 12(8), 639--646.
 }
 \keyword{readability}
 

@@ -2,9 +2,8 @@
 \alias{farr.jenkins.paterson}
 \title{Readability: Farr-Jenkins-Paterson Index}
 \usage{
-  farr.jenkins.paterson(txt.file, hyphen = NULL,
-    parameters = c(const = -31.517, asl = 1.015, monsy = 1.599),
-    ...)
+farr.jenkins.paterson(txt.file, hyphen = NULL, parameters = c(const =
+  -31.517, asl = 1.015, monsy = 1.599), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -26,22 +25,22 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Farr-Jenkins-Paterson index, a simplified
-  version of Flesch Reading Ease. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Farr-Jenkins-Paterson index, a simplified
+version of Flesch Reading Ease. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  If \code{parameters="PSK"}, the revised parameters by
-  Powers-Sumner-Kearl (1958) are used.
+If \code{parameters="PSK"}, the revised parameters by
+Powers-Sumner-Kearl (1958) are used.
 }
 \examples{
 \dontrun{
@@ -49,16 +48,16 @@ farr.jenkins.paterson(tagged.text)
 }
 }
 \references{
-  Farr, J.N., Jenkins, J.J. & Paterson, D.G. (1951).
-  Simplification of Flesch Reading Ease formula.
-  \emph{Journal of Applied Psychology}, 35(5), 333--337.
+Farr, J.N., Jenkins, J.J. & Paterson, D.G. (1951).
+Simplification of Flesch Reading Ease formula.
+\emph{Journal of Applied Psychology}, 35(5), 333--337.
 
-  Powers, R.D, Sumner, W.A, & Kearl, B.E. (1958). A
-  recalculation of four adult readability formulas,
-  \emph{Journal of Educational Psychology}, 49(2), 99--105.
+Powers, R.D, Sumner, W.A, & Kearl, B.E. (1958). A
+recalculation of four adult readability formulas,
+\emph{Journal of Educational Psychology}, 49(2), 99--105.
 }
 \seealso{
-  \code{\link[koRpus:flesch]{flesch}}
+\code{\link[koRpus:flesch]{flesch}}
 }
 \keyword{readability}
 

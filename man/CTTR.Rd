@@ -2,7 +2,7 @@
 \alias{CTTR}
 \title{Lexical diversity: Carroll's corrected TTR (CTTR)}
 \usage{
-  CTTR(txt, char = FALSE, ...)
+CTTR(txt, char = FALSE, ...)
 }
 \arguments{
   \item{txt}{An object of either class
@@ -17,18 +17,18 @@
   see \code{\link[koRpus:lex.div]{lex.div}} for details.}
 }
 \value{
-  An object of class \code{\link[koRpus]{kRp.TTR-class}}.
+An object of class \code{\link[koRpus]{kRp.TTR-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:lex.div]{lex.div}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:lex.div]{lex.div}}.
 }
 \details{
-  Calculates Carroll's corrected TTR (CTTR). In contrast to
-  \code{\link[koRpus:lex.div]{lex.div}}, which by default
-  calculates all possible measures and their progressing
-  characteristics, this function will only calculate the
-  CTTR value, and characteristics are off by default.
+Calculates Carroll's corrected TTR (CTTR). In contrast to
+\code{\link[koRpus:lex.div]{lex.div}}, which by default
+calculates all possible measures and their progressing
+characteristics, this function will only calculate the CTTR
+value, and characteristics are off by default.
 }
 \examples{
 \dontrun{
@@ -36,9 +36,9 @@ CTTR(tagged.text)
 }
 }
 \seealso{
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-  \code{\link[koRpus]{kRp.tagged-class}},
-  \code{\link[koRpus]{kRp.TTR-class}}
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
+\code{\link[koRpus]{kRp.tagged-class}},
+\code{\link[koRpus]{kRp.TTR-class}}
 }
 \keyword{LD}
 

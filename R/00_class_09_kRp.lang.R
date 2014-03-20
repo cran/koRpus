@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -16,39 +16,36 @@
 # along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
 
 
-## temporarily turned off most of the roxygen comments
-## class docs will remain static until roxygen2 supports "@slot"
-
-# S4 Class kRp.lang
-#
-# This class is used for objects that are returned by \code{\link[koRpus:guess.lang]{guess.lang}}.
-#
-# @slot lang A character string, naming the language (by a short identifier) that was estimated for the analized text in this object.
-# @slot lang.name A character string, full name of the estimated language.
-# @slot txt A character string containing the analized part of the text.
-# @slot txt.full A character string containing the full text.
-# @slot udhr A data.frame with full analysis results for each language tried.
-# @name kRp.lang,-class
-# @aliases kRp.lang,-class kRp.lang-class
+#' S4 Class kRp.lang
+#'
+#' This class is used for objects that are returned by \code{\link[koRpus:guess.lang]{guess.lang}}.
+#'
+#' @slot lang A character string, naming the language (by a short identifier) that was estimated for the analized text in this object.
+#' @slot lang.name A character string, full name of the estimated language.
+#' @slot txt A character string containing the analized part of the text.
+#' @slot txt.full A character string containing the full text.
+#' @slot udhr A data.frame with full analysis results for each language tried.
+#' @name kRp.lang,-class
+#' @aliases kRp.lang,-class kRp.lang-class
 #' @import methods
-# @keywords classes
+#' @keywords classes
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @exportClass kRp.lang
-# @rdname kRp.lang-class
+#' @export
+#' @rdname kRp.lang-class
 
 setClass("kRp.lang",
-		representation=representation(
-		lang="character",
-		lang.name="character",
-		txt="character",
-		txt.full="character",
-		udhr="data.frame"),
-	prototype(
-		lang=character(),
-		lang.name=character(),
-		txt=character(),
-		txt.full=character(),
-		udhr=data.frame())
+    representation=representation(
+    lang="character",
+    lang.name="character",
+    txt="character",
+    txt.full="character",
+    udhr="data.frame"),
+  prototype(
+    lang=character(),
+    lang.name=character(),
+    txt=character(),
+    txt.full=character(),
+    udhr=data.frame())
 )
 
 # setValidity("kRp.analysis", function(object){

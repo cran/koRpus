@@ -1,14 +1,13 @@
 \name{nWS}
-\alias{nWS}
 \alias{WSTF}
+\alias{nWS}
 \title{Readability: Neue Wiener Sachtextformeln}
 \usage{
-  nWS(txt.file, hyphen = NULL,
-    parameters = c(ms.syll = 3, iw.char = 6, es.syll = 1),
-    nws1 = c(ms = 19.35, sl = 0.1672, iw = 12.97, es = 3.27, const = 0.875),
-    nws2 = c(ms = 20.07, sl = 0.1682, iw = 13.73, const = 2.779),
-    nws3 = c(ms = 29.63, sl = 0.1905, const = 1.1144),
-    nws4 = c(ms = 27.44, sl = 0.2656, const = 1.693), ...)
+nWS(txt.file, hyphen = NULL, parameters = c(ms.syll = 3, iw.char = 6,
+  es.syll = 1), nws1 = c(ms = 19.35, sl = 0.1672, iw = 12.97, es = 3.27, const
+  = 0.875), nws2 = c(ms = 20.07, sl = 0.1682, iw = 13.73, const = 2.779),
+  nws3 = c(ms = 29.63, sl = 0.1905, const = 1.1144), nws4 = c(ms = 27.44, sl
+  = 0.2656, const = 1.693), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -42,19 +41,19 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the new Wiener Sachtextformeln
-  (formulas 1 to 4). In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index values.
+This function calculates the new Wiener Sachtextformeln
+(formulas 1 to 4). In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index values.
 }
 \examples{
 \dontrun{
@@ -62,9 +61,9 @@ nWS(tagged.text)
 }
 }
 \references{
-  Bamberger, R. & Vanecek, E. (1984).
-  \emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend
-  und Volk.
+Bamberger, R. & Vanecek, E. (1984).
+\emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend
+und Volk.
 }
 \keyword{readability}
 

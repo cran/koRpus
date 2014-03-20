@@ -2,7 +2,7 @@
 \alias{DRP}
 \title{Readability: Degrees of Reading Power (DRP)}
 \usage{
-  DRP(txt.file, word.list, ...)
+DRP(txt.file, word.list, ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -21,25 +21,25 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Degrees of Reading Power, using the
-  Bormuth Mean Cloze Score. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Degrees of Reading Power, using the Bormuth
+Mean Cloze Score. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
-	DRP(tagged.text, word.list=new.dale.chall.wl)
+  DRP(tagged.text, word.list=new.dale.chall.wl)
 }
 }
 \keyword{readability}

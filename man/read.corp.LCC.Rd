@@ -2,9 +2,8 @@
 \alias{read.corp.LCC}
 \title{Import LCC data}
 \usage{
-  read.corp.LCC(LCC.path, format = "flatfile",
-    fileEncoding = "UTF-8", n = -1, keep.temp = FALSE,
-    prefix = NULL)
+read.corp.LCC(LCC.path, format = "flatfile", fileEncoding = "UTF-8",
+  n = -1, keep.temp = FALSE, prefix = NULL)
 }
 \arguments{
   \item{LCC.path}{A character string, either path to a
@@ -36,22 +35,22 @@
   if \code{LCC.path} points to the tar archive directly).}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.corp.freq-class}}.
+An object of class
+\code{\link[koRpus]{kRp.corp.freq-class}}.
 }
 \description{
-  Read data from LCC[1] formatted corpora (Quasthoff,
-  Richter & Biemann, 2006).
+Read data from LCC[1] formatted corpora (Quasthoff, Richter
+& Biemann, 2006).
 }
 \details{
-  The LCC database can either be unpacked or still a
-  .tar/.tar.gz/.zip archive. If the latter is the case,
-  then all necessary files will be extracted to a temporal
-  location automatically, and by default removed again when
-  the function has finished reading from it.
+The LCC database can either be unpacked or still a
+.tar/.tar.gz/.zip archive. If the latter is the case, then
+all necessary files will be extracted to a temporal
+location automatically, and by default removed again when
+the function has finished reading from it.
 }
 \note{
-  Please note that MySQL support is not implemented yet.
+Please note that MySQL support is not implemented yet.
 }
 \examples{
 \dontrun{
@@ -68,16 +67,16 @@ freq.analysis(tagged.results, corp.freq=my.LCC.data)
 }
 }
 \references{
-  Quasthoff, U., Richter, M. & Biemann, C. (2006). Corpus
-  Portal for Search in Monolingual Corpora, In
-  \emph{Proceedings of the Fifth International Conference
-  on Language Resources and Evaluation}, Genoa, 1799--1802.
+Quasthoff, U., Richter, M. & Biemann, C. (2006). Corpus
+Portal for Search in Monolingual Corpora, In
+\emph{Proceedings of the Fifth International Conference on
+Language Resources and Evaluation}, Genoa, 1799--1802.
 
-  [1]
-  \url{http://corpora.informatik.uni-leipzig.de/download.html}
+[1]
+\url{http://corpora.informatik.uni-leipzig.de/download.html}
 }
 \seealso{
-  \code{\link[koRpus]{kRp.corp.freq-class}}
+\code{\link[koRpus]{kRp.corp.freq-class}}
 }
 \keyword{corpora}
 

@@ -2,7 +2,7 @@
 \alias{kRp.text.transform}
 \title{Letter case transformation}
 \usage{
-  kRp.text.transform(txt, scheme, p = 0.5, paste = FALSE)
+kRp.text.transform(txt, scheme, p = 0.5, paste = FALSE)
 }
 \arguments{
   \item{txt}{An object of class
@@ -35,18 +35,17 @@
   \item{paste}{Logical, see value section.}
 }
 \value{
-  By default an object of class
-  \code{\link[koRpus]{kRp.txt.trans-class}} is returned. If
-  \code{paste=TRUE}, returns an atomic character vector
-  (via
-  \code{\link[koRpus:kRp.text.paste]{kRp.text.paste}}).
+By default an object of class
+\code{\link[koRpus]{kRp.txt.trans-class}} is returned. If
+\code{paste=TRUE}, returns an atomic character vector (via
+\code{\link[koRpus:kRp.text.paste]{kRp.text.paste}}).
 }
 \description{
-  Transforms text in koRpus objects token by token.
+Transforms text in koRpus objects token by token.
 }
 \details{
-  This function is mainly intended to produce text material
-  for experiments.
+This function is mainly intended to produce text material
+for experiments.
 }
 \examples{
 \dontrun{

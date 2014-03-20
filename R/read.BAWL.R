@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -30,7 +30,7 @@
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords corpora
 #' @seealso \code{\link[koRpus]{kRp.corp.freq-class}}, \code{\link[koRpus:query]{query}},
-#'		\code{\link[koRpus:kRp.text.analysis]{kRp.text.analysis}}
+#'    \code{\link[koRpus:kRp.text.analysis]{kRp.text.analysis}}
 #' @references
 #' V\"o, M. L.-H., Conrad, M., Kuchinke, L., Hartfeld, K., Hofmann, M.F. & Jacobs, A.M. (2009).
 #'   The Berlin Affective Word List Reloaded (BAWL-R). \emph{Behavior Research Methods}, 41(2), 534--538.
@@ -52,60 +52,60 @@
 #' }
 #' @export
 read.BAWL <- function(csv, fileEncoding=NULL){
-	# sanity check...
-	if(is.character(csv) && grepl("*.xls", csv, ignore.case=TRUE)){
-		stop(simpleError("You must export the BAWL-R list into CSV format first! Use comma for decimal values and semicolon as value separator (CSV2)."))
-	} else {}
+  # sanity check...
+  if(is.character(csv) && grepl("*.xls", csv, ignore.case=TRUE)){
+    stop(simpleError("You must export the BAWL-R list into CSV format first! Use comma for decimal values and semicolon as value separator (CSV2)."))
+  } else {}
 
-	if(is.null(fileEncoding)){
-		fileEncoding <- ""
-	} else {}
+  if(is.null(fileEncoding)){
+    fileEncoding <- ""
+  } else {}
 
-	# probe file for format
-	fileProbe <- enc2utf8(readLines(csv, n=2, encoding=fileEncoding))[-1]
-	if(any(grepl("\"", fileProbe))){
-		message("Oh, well... someone had trouble following our instructions. Trying to work around the wrong data format...")
-		BAWL.raw <- read.csv(file=csv,  na.strings="NA", nrows=-1, skip=0, check.names=TRUE, strip.white=TRUE,
-			blank.lines.skip=TRUE, stringsAsFactors=FALSE)
-		# try to turn character factors into numeric values
-		for (thisVar in colnames(BAWL.raw)[4:19]){
-			BAWL.raw[[thisVar]] <- as.numeric(gsub(",", ".", as.character(BAWL.raw[[thisVar]])))
-			rm(thisVar)
-		}
-	} else {
-		BAWL.raw <- read.csv2(file=csv,  na.strings="NA", nrows=-1, skip=0, check.names=TRUE, strip.white=TRUE,
-			blank.lines.skip=TRUE, stringsAsFactors=FALSE)
-	}
+  # probe file for format
+  fileProbe <- enc2utf8(readLines(csv, n=2, encoding=fileEncoding))[-1]
+  if(any(grepl("\"", fileProbe))){
+    message("Oh, well... someone had trouble following our instructions. Trying to work around the wrong data format...")
+    BAWL.raw <- read.csv(file=csv,  na.strings="NA", nrows=-1, skip=0, check.names=TRUE, strip.white=TRUE,
+      blank.lines.skip=TRUE, stringsAsFactors=FALSE)
+    # try to turn character factors into numeric values
+    for (thisVar in colnames(BAWL.raw)[4:19]){
+      BAWL.raw[[thisVar]] <- as.numeric(gsub(",", ".", as.character(BAWL.raw[[thisVar]])))
+      rm(thisVar)
+    }
+  } else {
+    BAWL.raw <- read.csv2(file=csv,  na.strings="NA", nrows=-1, skip=0, check.names=TRUE, strip.white=TRUE,
+      blank.lines.skip=TRUE, stringsAsFactors=FALSE)
+  }
 
-	# add koRpus POS tags
-	BAWL.tags <- BAWL.wclass <- BAWL.raw[["WORD_CLASS"]]
-	BAWL.tags[BAWL.tags %in% "A"] <- "ADJ"
-	BAWL.wclass[BAWL.wclass %in% "A"] <- "adjective"
-	BAWL.tags[BAWL.tags %in% "N"] <- "NN"
-	BAWL.wclass[BAWL.wclass %in% "N"] <- "noun"
-	BAWL.wclass[BAWL.wclass %in% "V"] <- "verb"
+  # add koRpus POS tags
+  BAWL.tags <- BAWL.wclass <- BAWL.raw[["WORD_CLASS"]]
+  BAWL.tags[BAWL.tags %in% "A"] <- "ADJ"
+  BAWL.wclass[BAWL.wclass %in% "A"] <- "adjective"
+  BAWL.tags[BAWL.tags %in% "N"] <- "NN"
+  BAWL.wclass[BAWL.wclass %in% "N"] <- "noun"
+  BAWL.wclass[BAWL.wclass %in% "V"] <- "verb"
 
-	# call internal function create.corp.freq.object()
-	corp.freq.mtx <- matrix(
-			c(1:nrow(BAWL.raw), BAWL.raw[["WORD_LOWER"]], BAWL.raw[["Ftot.1MIL"]], BAWL.tags, BAWL.wclass),
-			ncol=5, dimnames=list(c(),c("num", "word", "freq", "tag", "wclass"))
-		)
+  # call internal function create.corp.freq.object()
+  corp.freq.mtx <- matrix(
+      c(1:nrow(BAWL.raw), BAWL.raw[["WORD_LOWER"]], BAWL.raw[["Ftot.1MIL"]], BAWL.tags, BAWL.wclass),
+      ncol=5, dimnames=list(c(),c("num", "word", "freq", "tag", "wclass"))
+    )
 
-	# descriptive statistics
-	dscrpt.meta <- data.frame(
-		tokens=NA,
-		types=NA,
-		words.p.sntc=NA,
-		chars.p.sntc=NA,
-		chars.p.wform=NA,
-		chars.p.word=NA)
+  # descriptive statistics
+  dscrpt.meta <- data.frame(
+    tokens=NA,
+    types=NA,
+    words.p.sntc=NA,
+    chars.p.sntc=NA,
+    chars.p.wform=NA,
+    chars.p.word=NA)
 
-	results <- create.corp.freq.object(matrix.freq=corp.freq.mtx,
-						num.running.words=1000000,
-						# "df.meta" must be a data.frame with two columns: "meta" (name of meta information) and its "value".
-						df.meta=as.data.frame(matrix(ncol=2, dimnames=list(c(),c("meta", "value")))),
-						df.dscrpt.meta=dscrpt.meta,
-						extra.cols=BAWL.raw)
+  results <- create.corp.freq.object(matrix.freq=corp.freq.mtx,
+            num.running.words=1000000,
+            # "df.meta" must be a data.frame with two columns: "meta" (name of meta information) and its "value".
+            df.meta=as.data.frame(matrix(ncol=2, dimnames=list(c(),c("meta", "value")))),
+            df.dscrpt.meta=dscrpt.meta,
+            extra.cols=BAWL.raw)
 
-	return(results)
+  return(results)
 }

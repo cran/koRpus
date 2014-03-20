@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -49,40 +49,40 @@
 #' segment.optimizer(2014, favour.min=FALSE)
 
 segment.optimizer <- function(txtlgth, segment=100, range=20, favour.min=TRUE){
-	drops <- c()
-	for (x in 0:(range %/% 2)) {
-			new.segs <- c((segment - x), c(segment + x))
-			# check whether smaller segments should be favoured to get the order of tests right
-			if(!isTRUE(favour.min)){
-				new.segs <- rev(new.segs)
-			} else {}
-			# modulo, to find optimal segment size
-			dropped  <- txtlgth %% new.segs
-				if(dropped[1] == 0){
-					return(c(seg=new.segs[1], drop=dropped[1]))
-				} else {}
-				if(dropped[2] == 0){
-					return(c(seg=new.segs[2], drop=dropped[2]))
-				} else {}
-			drops <- rbind(drops, c(seg=new.segs[1], drop=dropped[1]), c(seg=new.segs[2], drop=dropped[2]))
-		}
+  drops <- c()
+  for (x in 0:(range %/% 2)) {
+      new.segs <- c((segment - x), c(segment + x))
+      # check whether smaller segments should be favoured to get the order of tests right
+      if(!isTRUE(favour.min)){
+        new.segs <- rev(new.segs)
+      } else {}
+      # modulo, to find optimal segment size
+      dropped  <- txtlgth %% new.segs
+        if(dropped[1] == 0){
+          return(c(seg=new.segs[1], drop=dropped[1]))
+        } else {}
+        if(dropped[2] == 0){
+          return(c(seg=new.segs[2], drop=dropped[2]))
+        } else {}
+      drops <- rbind(drops, c(seg=new.segs[1], drop=dropped[1]), c(seg=new.segs[2], drop=dropped[2]))
+    }
 
-	smallest.drops <- drops[which(drops[,"drop"] == min(drops[,"drop"])), ]
+  smallest.drops <- drops[which(drops[,"drop"] == min(drops[,"drop"])), ]
 
-	# is there only one smallest value?
-	if(!is.null(dim(smallest.drops))){
-		# look for the segment size which is nearest to the start value
-		segs.less.segment <- abs(smallest.drops[,"drop"] - segment)
-		smallest.drops <- smallest.drops[which(segs.less.segment == min(segs.less.segment)), ]
-		# in case there's still two values, take the favoured oneway.test
-		if(!is.null(dim(smallest.drops))){
-			if(isTRUE(favour.min)){
-				smallest.drops <- smallest.drops[which.min(smallest.drops[,"seg"]), ]
-			} else {
-				smallest.drops <- smallest.drops[which.max(smallest.drops[,"seg"]), ]
-			}
-		} else {}
-	} else {}
+  # is there only one smallest value?
+  if(!is.null(dim(smallest.drops))){
+    # look for the segment size which is nearest to the start value
+    segs.less.segment <- abs(smallest.drops[,"drop"] - segment)
+    smallest.drops <- smallest.drops[which(segs.less.segment == min(segs.less.segment)), ]
+    # in case there's still two values, take the favoured oneway.test
+    if(!is.null(dim(smallest.drops))){
+      if(isTRUE(favour.min)){
+        smallest.drops <- smallest.drops[which.min(smallest.drops[,"seg"]), ]
+      } else {
+        smallest.drops <- smallest.drops[which.max(smallest.drops[,"seg"]), ]
+      }
+    } else {}
+  } else {}
 
-	return(smallest.drops)
+  return(smallest.drops)
 }

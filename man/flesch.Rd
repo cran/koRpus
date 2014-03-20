@@ -2,9 +2,8 @@
 \alias{flesch}
 \title{Readability: Flesch Readability Ease}
 \usage{
-  flesch(txt.file, hyphen = NULL,
-    parameters = c(const = 206.835, asl = 1.015, asw = 84.6),
-    ...)
+flesch(txt.file, hyphen = NULL, parameters = c(const = 206.835, asl = 1.015,
+  asw = 84.6), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -28,27 +27,26 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Flesch Readability Ease index. In contrast
-  to \code{\link[koRpus:readability]{readability}}, which
-  by default calculates all possible indices, this function
-  will only calculate the Flesch RE value.
+Calculates the Flesch Readability Ease index. In contrast
+to \code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the Flesch RE value.
 
-  Certain internationalisations of the parameters are also
-  implemented. They can be used by setting
-  \code{parameters} to \code{"es"} (Fernandez-Huerta),
-  \code{"es-s"} (Szigriszt), \code{"nl"} (Douma),
-  \code{"de"} or \code{"fr"} (Kandel-Moles). If
-  \code{parameters="PSK"}, the revised parameters by
-  Powers-Sumner-Kearl (1958) are used to calculate a grade
-  level.
+Certain internationalisations of the parameters are also
+implemented. They can be used by setting \code{parameters}
+to \code{"es"} (Fernandez-Huerta), \code{"es-s"}
+(Szigriszt), \code{"nl"} (Douma), \code{"de"} or
+\code{"fr"} (Kandel-Moles). If \code{parameters="PSK"}, the
+revised parameters by Powers-Sumner-Kearl (1958) are used
+to calculate a grade level.
 }
 \examples{
 \dontrun{
@@ -56,10 +54,10 @@ flesch(german.tagged.text, parameters="de")
 }
 }
 \seealso{
-  \code{\link[koRpus:flesch.kincaid]{flesch.kincaid}} for
-  grade levels,
-  \code{\link[koRpus:farr.jenkins.paterson]{farr.jenkins.paterson}}
-  for a simplified Flesch formula.
+\code{\link[koRpus:flesch.kincaid]{flesch.kincaid}} for
+grade levels,
+\code{\link[koRpus:farr.jenkins.paterson]{farr.jenkins.paterson}}
+for a simplified Flesch formula.
 }
 \keyword{readability}
 

@@ -2,12 +2,10 @@
 \alias{treetag}
 \title{A function to call TreeTagger}
 \usage{
-  treetag(file, treetagger = "kRp.env", rm.sgml = TRUE,
-    lang = "kRp.env", apply.sentc.end = TRUE,
-    sentc.end = c(".", "!", "?", ";", ":"),
-    encoding = NULL, TT.options = NULL, debug = FALSE,
-    TT.tknz = TRUE, format = "file", stopwords = NULL,
-    stemmer = NULL)
+treetag(file, treetagger = "kRp.env", rm.sgml = TRUE, lang = "kRp.env",
+  apply.sentc.end = TRUE, sentc.end = c(".", "!", "?", ";", ":"),
+  encoding = NULL, TT.options = NULL, debug = FALSE, TT.tknz = TRUE,
+  format = "file", stopwords = NULL, stemmer = NULL)
 }
 \arguments{
   \item{file}{Either a connection or a character vector,
@@ -127,36 +125,34 @@
   package.}
 
   \item{stemmer}{A function or method to perform stemming.
-  For instance, you can set
-  \code{stemmer=Snowball::SnowballStemmer} if you have the
-  \code{Snowball} package installed (or
-  \code{SnowballC::wordStem}). As of now, you cannot
-  provide further arguments to this function.}
+  For instance, you can set \code{SnowballC::wordStem} if
+  you have the \code{SnowballC} package installed. As of
+  now, you cannot provide further arguments to this
+  function.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.tagged-class}}. If
-  \code{debug=TRUE}, prints internal variable settings and
-  attempts to return the original output if the TreeTagger
-  system call in a matrix.
+An object of class \code{\link[koRpus]{kRp.tagged-class}}.
+If \code{debug=TRUE}, prints internal variable settings and
+attempts to return the original output if the TreeTagger
+system call in a matrix.
 }
 \description{
-  This function calls a local installation of TreeTagger[1]
-  to tokenize and POS tag the given text.
+This function calls a local installation of TreeTagger[1]
+to tokenize and POS tag the given text.
 }
 \details{
-  Note that the value of \code{lang} must match a valid
-  language supported by
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}. It will
-  also get stored in the resulting object and might be used
-  by other functions at a later point. E.g., \code{treetag}
-  is being called by
-  \code{\link[koRpus:freq.analysis]{freq.analysis}}, which
-  will by default query this language definition, unless
-  explicitly told otherwise. The rationale behind this is
-  to comfortably make it possible to have tokenized and POS
-  tagged objects of various languages around in your
-  workspace, and not worry about that too much.
+Note that the value of \code{lang} must match a valid
+language supported by
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}. It will
+also get stored in the resulting object and might be used
+by other functions at a later point. E.g., \code{treetag}
+is being called by
+\code{\link[koRpus:freq.analysis]{freq.analysis}}, which
+will by default query this language definition, unless
+explicitly told otherwise. The rationale behind this is to
+comfortably make it possible to have tokenized and POS
+tagged objects of various languages around in your
+workspace, and not worry about that too much.
 }
 \examples{
 \dontrun{
@@ -175,14 +171,10 @@ readability(tagged.results)
 lex.div(tagged.results)
 
 ## enabling stopword detection and stemming
-# if you also installed the packages tm and Snowball,
+# if you also installed the packages tm and SnowballC,
 # you can use some of their features with koRpus:
 set.kRp.env(TT.cmd="manual", lang="en", TT.options=list(path="~/bin/treetagger",
    preset="en"))
-tagged.results <- treetag("~/my.data/speech.txt",
-   stopwords=tm::stopwords("en"),
-   stemmer=Snowball::SnowballStemmer)
-# alternatively, use the SnowballC package:
 tagged.results <- treetag("~/my.data/speech.txt",
    stopwords=tm::stopwords("en"),
    stemmer=SnowballC::wordStem)
@@ -192,23 +184,23 @@ tagged.noStopWords <- kRp.filter.wclass(tagged.results, "stopword")
 }
 }
 \author{
-  m.eik michalke \email{meik.michalke@hhu.de}, support for
-  various laguages was contributed by Earl Brown (Spanish),
-  Alberto Mirisola (Italian) and Alexandre Brulet (French).
+m.eik michalke \email{meik.michalke@hhu.de}, support for
+various laguages was contributed by Earl Brown (Spanish),
+Alberto Mirisola (Italian) and Alexandre Brulet (French).
 }
 \references{
-  Schmid, H. (1994). Probabilistic part-of-speec tagging
-  using decision trees. In \emph{International Conference
-  on New Methods in Language Processing}, Manchester, UK,
-  44--49.
+Schmid, H. (1994). Probabilistic part-of-speec tagging
+using decision trees. In \emph{International Conference on
+New Methods in Language Processing}, Manchester, UK,
+44--49.
 
-  [1]
-  \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
+[1]
+\url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
 }
 \seealso{
-  \code{\link[koRpus:freq.analysis]{freq.analysis}},
-  \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
-  \code{\link[koRpus]{kRp.tagged-class}}
+\code{\link[koRpus:freq.analysis]{freq.analysis}},
+\code{\link[koRpus:get.kRp.env]{get.kRp.env}},
+\code{\link[koRpus]{kRp.tagged-class}}
 }
 \keyword{misc}
 

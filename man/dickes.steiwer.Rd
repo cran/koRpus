@@ -2,9 +2,8 @@
 \alias{dickes.steiwer}
 \title{Readability: Dickes-Steiwer Handformel}
 \usage{
-  dickes.steiwer(txt.file,
-    parameters = c(const = 235.95993, awl = 73.021, asl = 12.56438, ttr = 50.03293),
-    case.sens = FALSE, ...)
+dickes.steiwer(txt.file, parameters = c(const = 235.95993, awl = 73.021, asl =
+  12.56438, ttr = 50.03293), case.sens = FALSE, ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -25,25 +24,25 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the shortcut formula by
-  Dickes-Steiwer. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the shortcut formula by
+Dickes-Steiwer. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
-	dickes.steiwer(tagged.text)
+  dickes.steiwer(tagged.text)
 }
 }
 \keyword{readability}

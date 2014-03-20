@@ -2,10 +2,9 @@
 \alias{read.tagged}
 \title{Import already tagged texts}
 \usage{
-  read.tagged(file, lang = "kRp.env", encoding = NULL,
-    tagger = "TreeTagger", apply.sentc.end = TRUE,
-    sentc.end = c(".", "!", "?", ";", ":"),
-    stopwords = NULL, stemmer = NULL, rm.sgml = TRUE)
+read.tagged(file, lang = "kRp.env", encoding = NULL,
+  tagger = "TreeTagger", apply.sentc.end = TRUE, sentc.end = c(".", "!",
+  "?", ";", ":"), stopwords = NULL, stemmer = NULL, rm.sgml = TRUE)
 }
 \arguments{
   \item{file}{Either a connection or a character vector,
@@ -59,23 +58,21 @@
   ignored and removed from output}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.tagged-class}}. If
-  \code{debug=TRUE}, prints internal variable settings and
-  attempts to return the original output if the TreeTagger
-  system call in a matrix.
+An object of class \code{\link[koRpus]{kRp.tagged-class}}.
+If \code{debug=TRUE}, prints internal variable settings and
+attempts to return the original output if the TreeTagger
+system call in a matrix.
 }
 \description{
-  This function can be used on text files containing
-  already tagged text material, e.g. the results of
-  TreeTagger[1].
+This function can be used on text files containing already
+tagged text material, e.g. the results of TreeTagger[1].
 }
 \details{
-  Note that the value of \code{lang} must match a valid
-  language supported by
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}. It will
-  also get stored in the resulting object and might be used
-  by other functions at a later point.
+Note that the value of \code{lang} must match a valid
+language supported by
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}}. It will
+also get stored in the resulting object and might be used
+by other functions at a later point.
 }
 \examples{
 \dontrun{
@@ -83,19 +80,19 @@ tagged.results <- read.tagged("~/my.data/tagged_speech.txt", lang="en")
 }
 }
 \references{
-  Schmid, H. (1994). Probabilistic part-of-speec tagging
-  using decision trees. In \emph{International Conference
-  on New Methods in Language Processing}, Manchester, UK,
-  44--49.
+Schmid, H. (1994). Probabilistic part-of-speec tagging
+using decision trees. In \emph{International Conference on
+New Methods in Language Processing}, Manchester, UK,
+44--49.
 
-  [1]
-  \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
+[1]
+\url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
 }
 \seealso{
-  \code{\link[koRpus:treetag]{treetag}},
-  \code{\link[koRpus:freq.analysis]{freq.analysis}},
-  \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
-  \code{\link[koRpus]{kRp.tagged-class}}
+\code{\link[koRpus:treetag]{treetag}},
+\code{\link[koRpus:freq.analysis]{freq.analysis}},
+\code{\link[koRpus:get.kRp.env]{get.kRp.env}},
+\code{\link[koRpus]{kRp.tagged-class}}
 }
 \keyword{misc}
 

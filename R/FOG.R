@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,20 +27,20 @@
 #' if \code{parameters="NRI"}, the simplified parameters from the Navy Readability Indexes, respectively.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param hyphen An object of class kRp.hyphen. If \code{NULL}, the text will be hyphenated automatically.
 #' @param parameters A list with named magic numbers and a vector with verb suffixes, defining the relevant parameters for the index,
-#'		or one of \code{"PSK"} or \code{"NRI"}.
+#'    or one of \code{"PSK"} or \code{"NRI"}.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
-#'		DuBay, W.H. (2004). \emph{The Principles of Readability}. Costa Mesa: Impact Information.
-#'			WWW: \url{http://www.impact-information.com/impactinfo/readability02.pdf}; 22.03.2011.
+#'    DuBay, W.H. (2004). \emph{The Principles of Readability}. Costa Mesa: Impact Information.
+#'      WWW: \url{http://www.impact-information.com/impactinfo/readability02.pdf}; 22.03.2011.
 #'
-#'		Powers, R.D, Sumner, W.A, & Kearl, B.E. (1958). A recalculation of four adult readability formulas,
-#'			\emph{Journal of Educational Psychology}, 49(2), 99--105.
+#'    Powers, R.D, Sumner, W.A, & Kearl, B.E. (1958). A recalculation of four adult readability formulas,
+#'      \emph{Journal of Educational Psychology}, 49(2), 99--105.
 #' @keywords readability
 #' @export
 #' @examples
@@ -49,10 +49,10 @@
 #' }
 
 FOG <- function(txt.file, hyphen=NULL, parameters=list(syll=3, const=0.4, suffix=c("es", "ed", "ing")), ...){
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, hyphen=hyphen, index="FOG", parameters=list(FOG=parameters), ...)
-	} else {
-		results <- readability(txt.file=txt.file, hyphen=hyphen, index="FOG", parameters=list(FOG=parameters), ...)
-	}
-	return(results)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, hyphen=hyphen, index="FOG", parameters=list(FOG=parameters), ...)
+  } else {
+    results <- readability(txt.file=txt.file, hyphen=hyphen, index="FOG", parameters=list(FOG=parameters), ...)
+  }
+  return(results)
 }

@@ -2,9 +2,8 @@
 \alias{FOG}
 \title{Readability: Gunning FOG Index}
 \usage{
-  FOG(txt.file, hyphen = NULL,
-    parameters = list(syll = 3, const = 0.4, suffix = c("es", "ed", "ing")),
-    ...)
+FOG(txt.file, hyphen = NULL, parameters = list(syll = 3, const = 0.4, suffix
+  = c("es", "ed", "ing")), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -27,23 +26,23 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Gunning FOG index. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Gunning FOG index. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  If \code{parameters="PSK"}, the revised parameters by
-  Powers-Sumner-Kearl (1958) are used, and if
-  \code{parameters="NRI"}, the simplified parameters from
-  the Navy Readability Indexes, respectively.
+If \code{parameters="PSK"}, the revised parameters by
+Powers-Sumner-Kearl (1958) are used, and if
+\code{parameters="NRI"}, the simplified parameters from the
+Navy Readability Indexes, respectively.
 }
 \examples{
 \dontrun{
@@ -51,14 +50,14 @@ FOG(tagged.text)
 }
 }
 \references{
-  DuBay, W.H. (2004). \emph{The Principles of Readability}.
-  Costa Mesa: Impact Information.  WWW:
-  \url{http://www.impact-information.com/impactinfo/readability02.pdf};
-  22.03.2011.
+DuBay, W.H. (2004). \emph{The Principles of Readability}.
+Costa Mesa: Impact Information.  WWW:
+\url{http://www.impact-information.com/impactinfo/readability02.pdf};
+22.03.2011.
 
-  Powers, R.D, Sumner, W.A, & Kearl, B.E. (1958). A
-  recalculation of four adult readability formulas,
-  \emph{Journal of Educational Psychology}, 49(2), 99--105.
+Powers, R.D, Sumner, W.A, & Kearl, B.E. (1958). A
+recalculation of four adult readability formulas,
+\emph{Journal of Educational Psychology}, 49(2), 99--105.
 }
 \keyword{readability}
 

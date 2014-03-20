@@ -2,8 +2,7 @@
 \alias{jumbleWords}
 \title{Produce jumbled words}
 \usage{
-  jumbleWords(words, min.length = 3,
-    intact = c(start = 1, end = 1))
+jumbleWords(words, min.length = 3, intact = c(start = 1, end = 1))
 }
 \arguments{
   \item{words}{Either a character vector or an object
@@ -19,15 +18,14 @@
   unchanged at its start and its end, respectively.}
 }
 \value{
-  Depending on the class of \code{words}, either a
-  character vector or tagged text object.
+Depending on the class of \code{words}, either a character
+vector or tagged text object.
 }
 \description{
-  This function takes either a character vector or objects
-  inheriting class \code{kRp.tagged} (i.e., text tokenized
-  by \code{koRpus}), and jumbles the words. This usually
-  means that the first and last letter of each word is left
-  intact, while all characters inbetween are being
-  randomized.
+This function takes either a character vector or objects
+inheriting class \code{kRp.tagged} (i.e., text tokenized by
+\code{koRpus}), and jumbles the words. This usually means
+that the first and last letter of each word is left intact,
+while all characters inbetween are being randomized.
 }
 

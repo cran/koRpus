@@ -2,9 +2,8 @@
 \alias{spache}
 \title{Readability: Spache Formula}
 \usage{
-  spache(txt.file, word.list,
-    parameters = c(asl = 0.121, dword = 0.082, const = 0.659),
-    ...)
+spache(txt.file, word.list, parameters = c(asl = 0.121, dword = 0.082, const =
+  0.659), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -27,24 +26,23 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Spache Formula. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Spache Formula. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  By default the revised Spache formula is calculated. If
-  \code{parameters="old"}, the original parameters are
-  used.
+By default the revised Spache formula is calculated. If
+\code{parameters="old"}, the original parameters are used.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{

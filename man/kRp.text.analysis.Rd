@@ -2,10 +2,9 @@
 \alias{kRp.text.analysis}
 \title{Analyze texts using TreeTagger and word frequencies}
 \usage{
-  kRp.text.analysis(txt.file, tagger = "kRp.env",
-    force.lang = NULL, desc.stat = TRUE, lex.div = TRUE,
-    corp.freq = NULL, corp.rm.class = "nonpunct",
-    corp.rm.tag = c(), ...)
+kRp.text.analysis(txt.file, tagger = "kRp.env", force.lang = NULL,
+  desc.stat = TRUE, lex.div = TRUE, corp.freq = NULL,
+  corp.rm.class = "nonpunct", corp.rm.tag = c(), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -53,28 +52,28 @@
   function defined with \code{tagger}.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.analysis-class}}.
+An object of class
+\code{\link[koRpus]{kRp.analysis-class}}.
 }
 \description{
-  The function \code{kRp.text.analysis} analyzes texts in
-  various ways.
+The function \code{kRp.text.analysis} analyzes texts in
+various ways.
 }
 \details{
-  The function is basically a wrapper for
-  \code{treetag()},\code{freq.analysis()} and
-  \code{lex.div()}.
+The function is basically a wrapper for
+\code{treetag()},\code{freq.analysis()} and
+\code{lex.div()}.
 
-  By default, if the text has to be tagged yet, the
-  language definition is queried by calling
-  \code{get.kRp.env(lang=TRUE)} internally. Or, if
-  \code{txt.file} has already been tagged, by default the
-  language definition of that tagged object is read and
-  used. Set \code{force.lang=get.kRp.env(lang=TRUE)} or to
-  any other valid value, if you want to forcibly overwrite
-  this default behaviour, and only then. See
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all
-  supported languages.
+By default, if the text has to be tagged yet, the language
+definition is queried by calling
+\code{get.kRp.env(lang=TRUE)} internally. Or, if
+\code{txt.file} has already been tagged, by default the
+language definition of that tagged object is read and used.
+Set \code{force.lang=get.kRp.env(lang=TRUE)} or to any
+other valid value, if you want to forcibly overwrite this
+default behaviour, and only then. See
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all
+supported languages.
 }
 \examples{
 \dontrun{
@@ -82,14 +81,14 @@ kRp.text.analysis("/some/text.txt")
 }
 }
 \references{
-  [1]
-  \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
+[1]
+\url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html}
 }
 \seealso{
-  \code{\link[koRpus:set.kRp.env]{set.kRp.env}},
-  \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
-  \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-  \code{\link[koRpus:lex.div]{lex.div}}
+\code{\link[koRpus:set.kRp.env]{set.kRp.env}},
+\code{\link[koRpus:get.kRp.env]{get.kRp.env}},
+\code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
+\code{\link[koRpus:lex.div]{lex.div}}
 }
 \keyword{misc}
 

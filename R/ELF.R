@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -25,28 +25,28 @@
 #' this function will only calculate the index value.
 #'
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param hyphen An object of class kRp.hyphen. If \code{NULL}, the text will be hyphenated automatically.
 #' @param parameters A numeric vector with named magic numbers, defining the relevant parameters for the index.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
-#'		DuBay, W.H. (2004). \emph{The Principles of Readability}. Costa Mesa: Impact Information.
-#'			WWW: \url{http://www.impact-information.com/impactinfo/readability02.pdf}; 22.03.2011.
+#'    DuBay, W.H. (2004). \emph{The Principles of Readability}. Costa Mesa: Impact Information.
+#'      WWW: \url{http://www.impact-information.com/impactinfo/readability02.pdf}; 22.03.2011.
 #' @keywords readability
 #' @export
 #' @examples
 #' \dontrun{
-#' 	ELF(tagged.text)
+#'   ELF(tagged.text)
 #' }
 
 ELF <- function(txt.file, hyphen=NULL, parameters=c(syll=1), ...){
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, hyphen=hyphen, index="ELF", parameters=list(ELF=parameters), ...)
-	} else {
-		results <- readability(txt.file=txt.file, hyphen=hyphen, index="ELF", parameters=list(ELF=parameters), ...)
-	}
-	return(results)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, hyphen=hyphen, index="ELF", parameters=list(ELF=parameters), ...)
+  } else {
+    results <- readability(txt.file=txt.file, hyphen=hyphen, index="ELF", parameters=list(ELF=parameters), ...)
+  }
+  return(results)
 }

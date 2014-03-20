@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -26,13 +26,13 @@
 #' can be used.
 #'
 #' @param ... Named parameters to set in the koRpus environment. Valid arguments are:
-#' 	\describe{
-#' 		\item{TT.cmd}{ A character string pointing to the tagger command you want to use for basic text analysis, or \code{"manual"} if you want to set \code{TT.options} as well. Set to \code{"tokenize"} to use \code{\link[koRpus:tokenize]{tokenize}}.}
-#' 		\item{lang}{ A character string specifying a valid language.}
-#' 		\item{TT.options}{ A list with arguments to be used as \code{TT.options} by \code{treetag}.}
-#' 		\item{hyph.cache.file}{ A character string specifying a path to a file to use for storing already hyphenated data, used by \code{hyphen}.}
-#' 	}
-#' 	To explicitly unset a value again, set it to an empty character string (e.g., \code{lang=""}).
+#'   \describe{
+#'     \item{TT.cmd}{ A character string pointing to the tagger command you want to use for basic text analysis, or \code{"manual"} if you want to set \code{TT.options} as well. Set to \code{"tokenize"} to use \code{\link[koRpus:tokenize]{tokenize}}.}
+#'     \item{lang}{ A character string specifying a valid language.}
+#'     \item{TT.options}{ A list with arguments to be used as \code{TT.options} by \code{treetag}.}
+#'     \item{hyph.cache.file}{ A character string specifying a path to a file to use for storing already hyphenated data, used by \code{hyphen}.}
+#'   }
+#'   To explicitly unset a value again, set it to an empty character string (e.g., \code{lang=""}).
 #' @return Returns an invisible \code{NULL}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords misc
@@ -45,59 +45,59 @@
 #' }
 
 set.kRp.env <- function(...){
-	kRp.vars <- list(...)
-	# set all desired variables
-	TT.cmd <- kRp.vars[["TT.cmd"]]
-	lang <- kRp.vars[["lang"]]
-	TT.options <- kRp.vars[["TT.options"]]
-	hyph.cache.file <- kRp.vars[["hyph.cache.file"]]
-	if (all(c(is.null(TT.cmd), is.null(lang), is.null(TT.options), is.null(hyph.cache.file)))){
-		stop(simpleError("You must at least set one (valid) parameter!"))
-	} else {}
+  kRp.vars <- list(...)
+  # set all desired variables
+  TT.cmd <- kRp.vars[["TT.cmd"]]
+  lang <- kRp.vars[["lang"]]
+  TT.options <- kRp.vars[["TT.options"]]
+  hyph.cache.file <- kRp.vars[["hyph.cache.file"]]
+  if (all(c(is.null(TT.cmd), is.null(lang), is.null(TT.options), is.null(hyph.cache.file)))){
+    stop(simpleError("You must at least set one (valid) parameter!"))
+  } else {}
 
-	if(!is.null(TT.cmd)){
-		if(identical(TT.cmd, "")){
-			rm("TT.cmd", envir=.koRpus.env)
-		} else if(!identical(TT.cmd, "manual") & !identical(TT.cmd, "tokenize")){
-			stopifnot(check.file(TT.cmd, mode="exec"))
-			assign("TT.cmd", file.path(TT.cmd), envir=.koRpus.env)
-		} else {
-			assign("TT.cmd", TT.cmd, envir=.koRpus.env)
-		}
-	} else {}
+  if(!is.null(TT.cmd)){
+    if(identical(TT.cmd, "")){
+      rm("TT.cmd", envir=.koRpus.env)
+    } else if(!identical(TT.cmd, "manual") & !identical(TT.cmd, "tokenize")){
+      stopifnot(check.file(TT.cmd, mode="exec"))
+      assign("TT.cmd", file.path(TT.cmd), envir=.koRpus.env)
+    } else {
+      assign("TT.cmd", TT.cmd, envir=.koRpus.env)
+    }
+  } else {}
 
-	if(!is.null(lang)){
-		if(identical(lang, "")){
-			rm("lang", envir=.koRpus.env)
-		} else {
-			stopifnot(is.character(lang))
-			assign("lang", lang, envir=.koRpus.env)
-		}
-	} else {}
+  if(!is.null(lang)){
+    if(identical(lang, "")){
+      rm("lang", envir=.koRpus.env)
+    } else {
+      stopifnot(is.character(lang))
+      assign("lang", lang, envir=.koRpus.env)
+    }
+  } else {}
 
-	if(!is.null(TT.options)){
-		if(identical(TT.options, "")){
-			rm("TT.options", envir=.koRpus.env)
-		} else {
-			stopifnot(is.list(TT.options))
-			# do some sanitiy checks
-			if(!"path" %in% names(TT.options)){
-				stop(simpleError("Manual TreeTagger configuration demanded, but not even a path was defined!"))
-			} else {}
-			stopifnot(check.file(TT.options$path, mode="dir"))
-			# TODO: move TT.options checks to internal function to call it here
-			assign("TT.options", TT.options, envir=.koRpus.env)
-		}
-	} else {}
+  if(!is.null(TT.options)){
+    if(identical(TT.options, "")){
+      rm("TT.options", envir=.koRpus.env)
+    } else {
+      stopifnot(is.list(TT.options))
+      # do some sanitiy checks
+      if(!"path" %in% names(TT.options)){
+        stop(simpleError("Manual TreeTagger configuration demanded, but not even a path was defined!"))
+      } else {}
+      stopifnot(check.file(TT.options$path, mode="dir"))
+      # TODO: move TT.options checks to internal function to call it here
+      assign("TT.options", TT.options, envir=.koRpus.env)
+    }
+  } else {}
 
-	if(!is.null(hyph.cache.file)){
-		if(identical(hyph.cache.file, "")){
-			rm("hyph.cache.file", envir=.koRpus.env)
-		} else {
-			stopifnot(is.character(hyph.cache.file))
-			assign("hyph.cache.file", hyph.cache.file, envir=.koRpus.env)
-		}
-	} else {}
+  if(!is.null(hyph.cache.file)){
+    if(identical(hyph.cache.file, "")){
+      rm("hyph.cache.file", envir=.koRpus.env)
+    } else {
+      stopifnot(is.character(hyph.cache.file))
+      assign("hyph.cache.file", hyph.cache.file, envir=.koRpus.env)
+    }
+  } else {}
 
-	return(invisible(NULL))
+  return(invisible(NULL))
 }

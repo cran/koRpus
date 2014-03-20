@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -32,10 +32,10 @@
 #' @return An object of class \code{\link[koRpus]{kRp.TTR-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
-#' 	McCarthy, P.M. & Jarvis, S. (2007). vocd: A theoretical and empirical evaluation. \emph{Language Testing}, 24(4), 459--488.
+#'   McCarthy, P.M. & Jarvis, S. (2007). vocd: A theoretical and empirical evaluation. \emph{Language Testing}, 24(4), 459--488.
 #' @keywords LD
 #' @seealso \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-#'	\code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
+#'  \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
 #' @export
 #' @examples
 #' \dontrun{
@@ -43,11 +43,11 @@
 #' }
 
 HDD <- function(txt, rand.sample=42, char=FALSE, ...){
-	if(isTRUE(char)){
-		char.value <- "HD-D"
-	} else {
-		char.value <- c()
-	}
-	results <- lex.div(txt=txt, rand.sample=rand.sample, measure="HD-D", char=char.value, ...)
-	return(results)
+  if(isTRUE(char)){
+    char.value <- "HD-D"
+  } else {
+    char.value <- c()
+  }
+  results <- lex.div(txt=txt, rand.sample=rand.sample, measure="HD-D", char=char.value, ...)
+  return(results)
 }

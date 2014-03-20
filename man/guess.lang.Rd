@@ -2,9 +2,8 @@
 \alias{guess.lang}
 \title{Guess language a text is written in}
 \usage{
-  guess.lang(txt.file, udhr.path, comp.length = 300,
-    keep.udhr = FALSE, quiet = TRUE, in.mem = TRUE,
-    format = "file")
+guess.lang(txt.file, udhr.path, comp.length = 300, keep.udhr = FALSE,
+  quiet = TRUE, in.mem = TRUE, format = "file")
 }
 \arguments{
   \item{txt.file}{A character vector pointing to the file
@@ -36,27 +35,27 @@
   text to analyze itself.}
 }
 \value{
-  An object of class \code{\link[koRpus]{kRp.lang-class}}.
+An object of class \code{\link[koRpus]{kRp.lang-class}}.
 }
 \description{
-  This function tries to guess the language a text is
-  written in.
+This function tries to guess the language a text is written
+in.
 }
 \details{
-  To accomplish the task, the method described by
-  Benedetto, Caglioti & Loreto (2002) is used, utilizing
-  both gzip compression and tranlations of the Universal
-  Declaration of Human Rights[1]. The latter holds the
-  world record for being translated into the most different
-  languages, and is publicly available.
+To accomplish the task, the method described by Benedetto,
+Caglioti & Loreto (2002) is used, utilizing both gzip
+compression and tranlations of the Universal Declaration of
+Human Rights[1]. The latter holds the world record for
+being translated into the most different languages, and is
+publicly available.
 }
 \note{
-  For this implementation the documents provided by the
-  "UDHR in Unicode" project[2] have been used. Their
-  translations are \emph{not part of this package} and must
-  be downloaded seperately to use \code{guess.lang}! You
-  need the ZIP archive containing \emph{all the plain text
-  files} from \url{http://unicode.org/udhr/downloads.html}.
+For this implementation the documents provided by the "UDHR
+in Unicode" project[2] have been used. Their translations
+are \emph{not part of this package} and must be downloaded
+seperately to use \code{guess.lang}! You need the ZIP
+archive containing \emph{all the plain text files} from
+\url{http://unicode.org/udhr/downloads.html}.
 }
 \examples{
 \dontrun{
@@ -67,14 +66,14 @@
 }
 }
 \references{
-  Benedetto, D., Caglioti, E. & Loreto, V. (2002). Language
-  trees and zipping. \emph{Physical Review Letters}, 88(4),
-  048702.
+Benedetto, D., Caglioti, E. & Loreto, V. (2002). Language
+trees and zipping. \emph{Physical Review Letters}, 88(4),
+048702.
 
-  [1]
-  \url{http://www.ohchr.org/EN/Issues/Pages/UDHRIndex.aspx}
+[1]
+\url{http://www.ohchr.org/EN/Issues/Pages/UDHRIndex.aspx}
 
-  [2] \url{http://unicode.org/udhr}
+[2] \url{http://unicode.org/udhr}
 }
 \keyword{misc}
 

@@ -2,13 +2,11 @@
 \alias{coleman}
 \title{Readability: Coleman's Formulas}
 \usage{
-  coleman(txt.file, hyphen = NULL,
-    parameters = c(syll = 1),
-    clz1 = c(word = 1.29, const = 38.45),
-    clz2 = c(word = 1.16, sntc = 1.48, const = 37.95),
-    clz3 = c(word = 1.07, sntc = 1.18, pron = 0.76, const = 34.02),
-    clz4 = c(word = 1.04, sntc = 1.06, pron = 0.56, prep = 0.36, const = 26.01),
-    ...)
+coleman(txt.file, hyphen = NULL, parameters = c(syll = 1), clz1 = c(word =
+  1.29, const = 38.45), clz2 = c(word = 1.16, sntc = 1.48, const = 37.95),
+  clz3 = c(word = 1.07, sntc = 1.18, pron = 0.76, const = 34.02),
+  clz4 = c(word = 1.04, sntc = 1.06, pron = 0.56, prep = 0.36, const = 26.01),
+  ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -42,19 +40,19 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the four readability formulas by
-  Coleman. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the four readability formulas by
+Coleman. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 }
 \examples{
 \dontrun{

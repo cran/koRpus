@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -31,7 +31,7 @@
 #' @param factor.size A real number between 0 and 1, defining the MTLD factor size.
 #' @param min.tokens An integer value, how many tokens a full factor must at least have to be considered for the MTLD-MA result.
 #' @param detailed Logical, whether full details of the analysis should be calculated. It defines
-#'		if all factors should be kept in the object. This slows down calculations considerably.
+#'    if all factors should be kept in the object. This slows down calculations considerably.
 #' @param char Logical, defining whether data for plotting characteristic curves should be calculated.
 #' @param MA Logical, defining whether the newer moving-average algorithm (MTLD-MA) should be calculated.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:lex.div]{lex.div}} for details.
@@ -39,9 +39,9 @@
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords LD
 #' @seealso \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-#'	\code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
+#'  \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
 #' @references McCarthy, P. M. & Jarvis, S. (2010). MTLD, vocd-D, and HD-D: A validation study of sophisticated approaces to lexical diversity assessment.
-#'		\emph{Behaviour Research Methods}, 42(2), 381--392.
+#'    \emph{Behaviour Research Methods}, 42(2), 381--392.
 #' @export
 #' @examples
 #' \dontrun{
@@ -49,18 +49,18 @@
 #' }
 
 MTLD <- function(txt, factor.size=0.72, min.tokens=9, detailed=FALSE, char=FALSE, MA=FALSE, ...){
-	if(isTRUE(MA)){
-		measure <- "MTLD-MA"
-	} else {
-		measure <- "MTLD"
-	}
+  if(isTRUE(MA)){
+    measure <- "MTLD-MA"
+  } else {
+    measure <- "MTLD"
+  }
 
-	if(isTRUE(char)){
-		char.value <- measure
-	} else {
-		char.value <- c()
-	}
+  if(isTRUE(char)){
+    char.value <- measure
+  } else {
+    char.value <- c()
+  }
 
-	results <- lex.div(txt=txt, factor.size=factor.size, min.tokens=min.tokens, detailed=detailed, measure=measure, char=char.value, ...)
-	return(results)
+  results <- lex.div(txt=txt, factor.size=factor.size, min.tokens=min.tokens, detailed=detailed, measure=measure, char=char.value, ...)
+  return(results)
 }

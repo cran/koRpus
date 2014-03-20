@@ -2,7 +2,7 @@
 \alias{LIX}
 \title{Readability: Bj\"ornsson's L\"asbarhetsindex (LIX)}
 \usage{
-  LIX(txt.file, parameters = c(char = 6, const = 100), ...)
+LIX(txt.file, parameters = c(char = 6, const = 100), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -20,36 +20,36 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the readability index
-  ("l\"asbarhetsindex") by Bj\"ornsson. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the readability index
+("l\"asbarhetsindex") by Bj\"ornsson. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  This formula doesn't need syllable count.
+This formula doesn't need syllable count.
 }
 \examples{
 \dontrun{
-	LIX(tagged.text)
+  LIX(tagged.text)
 }
 }
 \references{
-  Anderson, J. (1981). Analysing the readability of english
-  and non-english texts in the classroom with Lix. In
-  \emph{Annual Meeting of the Australian Reading
-  Association}, Darwin, Australia.
+Anderson, J. (1981). Analysing the readability of english
+and non-english texts in the classroom with Lix. In
+\emph{Annual Meeting of the Australian Reading
+Association}, Darwin, Australia.
 
-  Anderson, J. (1983). Lix and Rix: Variations on a
-  little-known readability index. \emph{Journal of
-  Reading}, 26(6), 490--496.
+Anderson, J. (1983). Lix and Rix: Variations on a
+little-known readability index. \emph{Journal of Reading},
+26(6), 490--496.
 }
 \keyword{readability}
 

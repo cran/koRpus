@@ -2,7 +2,7 @@
 \alias{textFeatures}
 \title{Extract text features for authorship analysis}
 \usage{
-  textFeatures(text, hyphen = NULL)
+textFeatures(text, hyphen = NULL)
 }
 \arguments{
   \item{text}{An object of class
@@ -19,20 +19,20 @@
   with one object for each text, in the same order.}
 }
 \value{
-  A data.frame: \describe{ \item{uniqWd}{Number of unique
-  words (tokens)} \item{cmplx}{Complexity (TTR)}
-  \item{sntCt}{Sentence count} \item{sntLen}{Average
-  sentence length} \item{syllCt}{Average syllable count}
-  \item{charCt}{Character count (all characters, including
-  spaces)} \item{lttrCt}{Letter count (without spaces,
-  punctuation and digits)} \item{FOG}{Gunning FOG index}
-  \item{flesch}{Flesch Reading Ease index} }
+A data.frame: \describe{ \item{uniqWd}{Number of unique
+words (tokens)} \item{cmplx}{Complexity (TTR)}
+\item{sntCt}{Sentence count} \item{sntLen}{Average sentence
+length} \item{syllCt}{Average syllable count}
+\item{charCt}{Character count (all characters, including
+spaces)} \item{lttrCt}{Letter count (without spaces,
+punctuation and digits)} \item{FOG}{Gunning FOG index}
+\item{flesch}{Flesch Reading Ease index} }
 }
 \description{
-  This function combines several of \code{koRpus}' methods
-  to extract the 9-Feature Set for authorship detection
-  (Brannon, Afroz & Greenstadt, 2011; Brannon & Greenstadt,
-  2009).
+This function combines several of \code{koRpus}' methods to
+extract the 9-Feature Set for authorship detection
+(Brannon, Afroz & Greenstadt, 2011; Brannon & Greenstadt,
+2009).
 }
 \examples{
 \dontrun{
@@ -43,16 +43,15 @@ tagged.txt.features <- textFeatures(tagged.txt)
 }
 }
 \references{
-  Brennan, M., Afroz, S., & Greenstadt, R. (2011).
-  Deceiving authorship detection. Presentation at
-  \emph{28th Chaos Communication Congress (28C3)}, Berlin,
-  Germany.  Brennan, M. & Greenstadt,R. (2009). Practical
-  Attacks Against Authorship Recognition Techniques. In
-  \emph{Proceedings of the Twenty-First Conference on
-  Innovative Applications of Artificial Intelligence
-  (IAAI)}, Pasadena, CA.  Tweedie, F.J., Singh, S., &
-  Holmes, D.I. (1996). Neural Network Applications in
-  Stylometry: The Federalist Papers.  \emph{Computers and
-  the Humanities}, 30, 1--10.
+Brennan, M., Afroz, S., & Greenstadt, R. (2011). Deceiving
+authorship detection. Presentation at \emph{28th Chaos
+Communication Congress (28C3)}, Berlin, Germany.  Brennan,
+M. & Greenstadt,R. (2009). Practical Attacks Against
+Authorship Recognition Techniques. In \emph{Proceedings of
+the Twenty-First Conference on Innovative Applications of
+Artificial Intelligence (IAAI)}, Pasadena, CA.  Tweedie,
+F.J., Singh, S., & Holmes, D.I. (1996). Neural Network
+Applications in Stylometry: The Federalist Papers.
+\emph{Computers and the Humanities}, 30, 1--10.
 }
 

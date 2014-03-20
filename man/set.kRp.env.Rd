@@ -2,7 +2,7 @@
 \alias{set.kRp.env}
 \title{A function to set information on your koRpus environmenton}
 \usage{
-  set.kRp.env(...)
+set.kRp.env(...)
 }
 \arguments{
   \item{...}{Named parameters to set in the koRpus
@@ -22,19 +22,18 @@
   \code{lang=""}).}
 }
 \value{
-  Returns an invisible \code{NULL}.
+Returns an invisible \code{NULL}.
 }
 \description{
-  The function \code{set.kRp.env} can be called once before
-  any of the analysing functions. It writes information on
-  your session environment regarding the koRpus package,
-  e.g. path to a local TreeTagger installation, to a hidden
-  environment.
+The function \code{set.kRp.env} can be called once before
+any of the analysing functions. It writes information on
+your session environment regarding the koRpus package, e.g.
+path to a local TreeTagger installation, to a hidden
+environment.
 }
 \details{
-  To get the contents of the hitten environment, the
-  function \code{\link[koRpus:get.kRp.env]{get.kRp.env}}
-  can be used.
+To get the contents of the hitten environment, the function
+\code{\link[koRpus:get.kRp.env]{get.kRp.env}} can be used.
 }
 \examples{
 \dontrun{
@@ -43,7 +42,7 @@ get.kRp.env(TT.cmd=TRUE)
 }
 }
 \seealso{
-  \code{\link[koRpus:get.kRp.env]{get.kRp.env}}
+\code{\link[koRpus:get.kRp.env]{get.kRp.env}}
 }
 \keyword{misc}
 

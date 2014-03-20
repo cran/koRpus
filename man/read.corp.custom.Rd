@@ -2,9 +2,8 @@
 \alias{read.corp.custom}
 \title{Import custom corpus data}
 \usage{
-  read.corp.custom(corpus, format = "file",
-    fileEncoding = "UTF-8", quiet = TRUE, caseSens = TRUE,
-    ...)
+read.corp.custom(corpus, format = "file", fileEncoding = "UTF-8",
+  quiet = TRUE, caseSens = TRUE, log.base = 10, ...)
 }
 \arguments{
   \item{corpus}{Either the path to directory with txt files
@@ -27,25 +26,29 @@
   \item{caseSens}{Logical. If \code{FALSE}, all tokens will
   be matched in their lower case form.}
 
+  \item{log.base}{A numeric value defining the base of the
+  logarithm used for inverse document frequency (idf). See
+  \code{\link[base:log]{log}} for details.}
+
   \item{...}{Additional options to be passed through to the
   \code{tokenize} function.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.corp.freq-class}}.
+An object of class
+\code{\link[koRpus]{kRp.corp.freq-class}}.
 }
 \description{
-  Read data from a custom corpus into a valid object of
-  class \code{\link[koRpus]{kRp.corp.freq-class}}.
+Read data from a custom corpus into a valid object of class
+\code{\link[koRpus]{kRp.corp.freq-class}}.
 }
 \details{
-  The function should enable you to perform a basic text
-  corpus frequency analysis. That is, not just to import
-  analysis results like LCC files, but to import the corpus
-  material itself. The resulting object is of class
-  \code{\link[koRpus]{kRp.corp.freq-class}}, so it can be
-  used for frequency analysis by other functions of this
-  package.
+The function should enable you to perform a basic text
+corpus frequency analysis. That is, not just to import
+analysis results like LCC files, but to import the corpus
+material itself. The resulting object is of class
+\code{\link[koRpus]{kRp.corp.freq-class}}, so it can be
+used for frequency analysis by other functions of this
+package.
 }
 \examples{
 \dontrun{
@@ -53,7 +56,7 @@ ru.corp <- read.corp.custom("~/mydata/corpora/russian_corpus/")
 }
 }
 \seealso{
-  \code{\link[koRpus]{kRp.corp.freq-class}}
+\code{\link[koRpus]{kRp.corp.freq-class}}
 }
 \keyword{corpora}
 

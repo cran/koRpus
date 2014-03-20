@@ -2,7 +2,7 @@
 \alias{get.kRp.env}
 \title{Get koRpus session environment}
 \usage{
-  get.kRp.env(..., errorIfUnset = TRUE)
+get.kRp.env(..., errorIfUnset = TRUE)
 }
 \arguments{
   \item{...}{Named parameters to get from the koRpus
@@ -20,19 +20,19 @@
   fail with an error message.}
 }
 \value{
-  A character string or list, possibly including:
-  \item{TT.cmd}{Path information for the TreeTagger
-  command} \item{lang}{The specified language}
-  \item{TT.options}{A list with options for \code{treetag}}
-  \item{hyph.cache.file}{The specified hyphenation cache
-  file for \code{hyphen}}
+A character string or list, possibly including:
+\item{TT.cmd}{Path information for the TreeTagger command}
+\item{lang}{The specified language} \item{TT.options}{A
+list with options for \code{treetag}}
+\item{hyph.cache.file}{The specified hyphenation cache file
+for \code{hyphen}}
 }
 \description{
-  The function \code{get.kRp.env} returns information on
-  your session environment regarding the koRpus package,
-  e.g. where your local TreeTagger installation resides, if
-  it was set before using
-  \code{\link[koRpus:set.kRp.env]{set.kRp.env}}.
+The function \code{get.kRp.env} returns information on your
+session environment regarding the koRpus package, e.g.
+where your local TreeTagger installation resides, if it was
+set before using
+\code{\link[koRpus:set.kRp.env]{set.kRp.env}}.
 }
 \examples{
 \dontrun{
@@ -41,7 +41,7 @@ get.kRp.env(TT.cmd=TRUE)
 }
 }
 \seealso{
-  \code{\link[koRpus:set.kRp.env]{set.kRp.env}}
+\code{\link[koRpus:set.kRp.env]{set.kRp.env}}
 }
 \keyword{misc}
 

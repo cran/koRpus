@@ -2,7 +2,7 @@
 \alias{read.BAWL}
 \title{Import BAWL-R data}
 \usage{
-  read.BAWL(csv, fileEncoding = NULL)
+read.BAWL(csv, fileEncoding = NULL)
 }
 \arguments{
   \item{csv}{A character string, path to the BAWL-R in CSV2
@@ -12,21 +12,21 @@
   encoding of the file, if neccessary.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.corp.freq-class}}.
+An object of class
+\code{\link[koRpus]{kRp.corp.freq-class}}.
 }
 \description{
-  Read the Berlin Affective Word List -- Reloaded (V\"o,
-  Conrad, Kuchinke, Hartfeld, Hofmann & Jacobs, 2009; [1])
-  into a valid object of class
-  \code{\link[koRpus]{kRp.corp.freq-class}}.
+Read the Berlin Affective Word List -- Reloaded (V\"o,
+Conrad, Kuchinke, Hartfeld, Hofmann & Jacobs, 2009; [1])
+into a valid object of class
+\code{\link[koRpus]{kRp.corp.freq-class}}.
 }
 \details{
-  To use this function, you must first export the BAWL-R
-  list into CSV format: Use comma for decimal values and
-  semicolon as value separator (often referred to as CSV2).
-  Once you have successfully imported the word list, you
-  can use the object to perform frequency analysis.
+To use this function, you must first export the BAWL-R list
+into CSV format: Use comma for decimal values and semicolon
+as value separator (often referred to as CSV2). Once you
+have successfully imported the word list, you can use the
+object to perform frequency analysis.
 }
 \examples{
 \dontrun{
@@ -44,18 +44,18 @@ bawl.stimulus <- query(bawl.corp,
 }
 }
 \references{
-  V\"o, M. L.-H., Conrad, M., Kuchinke, L., Hartfeld, K.,
-  Hofmann, M.F. & Jacobs, A.M. (2009).  The Berlin
-  Affective Word List Reloaded (BAWL-R). \emph{Behavior
-  Research Methods}, 41(2), 534--538.
+V\"o, M. L.-H., Conrad, M., Kuchinke, L., Hartfeld, K.,
+Hofmann, M.F. & Jacobs, A.M. (2009).  The Berlin Affective
+Word List Reloaded (BAWL-R). \emph{Behavior Research
+Methods}, 41(2), 534--538.
 
-  [1]
-  \url{http://www.ewi-psy.fu-berlin.de/einrichtungen/arbeitsbereiche/allgpsy/BAWL-R/index.html}
+[1]
+\url{http://www.ewi-psy.fu-berlin.de/einrichtungen/arbeitsbereiche/allgpsy/BAWL-R/index.html}
 }
 \seealso{
-  \code{\link[koRpus]{kRp.corp.freq-class}},
-  \code{\link[koRpus:query]{query}},
-  \code{\link[koRpus:kRp.text.analysis]{kRp.text.analysis}}
+\code{\link[koRpus]{kRp.corp.freq-class}},
+\code{\link[koRpus:query]{query}},
+\code{\link[koRpus:kRp.text.analysis]{kRp.text.analysis}}
 }
 \keyword{corpora}
 

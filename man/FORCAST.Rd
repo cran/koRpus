@@ -2,8 +2,8 @@
 \alias{FORCAST}
 \title{Readability: FORCAST Index}
 \usage{
-  FORCAST(txt.file, hyphen = NULL,
-    parameters = c(syll = 1, mult = 0.1, const = 20), ...)
+FORCAST(txt.file, hyphen = NULL, parameters = c(syll = 1, mult = 0.1, const
+  = 20), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -25,22 +25,22 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the FORCAST index (both grade level and
-  reading age). In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the FORCAST index (both grade level and reading
+age). In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 
-  If \code{parameters="RGL"}, the parameters for the
-  precise Reading Grade Level are used.
+If \code{parameters="RGL"}, the parameters for the precise
+Reading Grade Level are used.
 }
 \examples{
 \dontrun{
@@ -48,8 +48,8 @@ FORCAST(tagged.text)
 }
 }
 \references{
-  Klare, G.R. (1975). Assessing readability. \emph{Reading
-  Research Quarterly}, 10(1), 62--102.
+Klare, G.R. (1975). Assessing readability. \emph{Reading
+Research Quarterly}, 10(1), 62--102.
 }
 \keyword{readability}
 

@@ -2,8 +2,7 @@
 \alias{strain}
 \title{Readability: Strain Index}
 \usage{
-  strain(txt.file, hyphen = NULL,
-    parameters = c(sent = 3, const = 10), ...)
+strain(txt.file, hyphen = NULL, parameters = c(sent = 3, const = 10), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -24,18 +23,18 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the Strain index. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the Strain index. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 }
 \examples{
 \dontrun{

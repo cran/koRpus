@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -16,6 +16,8 @@
 # along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#' @export
+#' @docType methods
 #' @rdname summary-methods
 #' @examples
 #' \dontrun{
@@ -26,21 +28,21 @@
 #' @include 01_method_summary.kRp.lang.R
 setMethod("summary", signature(object="kRp.txt.freq"), function(object){
 
-	summary.table <- t(data.frame(
-		sentences=object@desc[["sentences"]],
-		avg.sentence.length=object@desc[["avg.sentc.length"]],
-		words=object@desc[["words"]],
-		avg.word.length=object@desc[["avg.word.length"]],
-		all.characters=object@desc[["all.chars"]],
-		letters=object@desc[["letters"]][["all"]],
-		lemmata=object@desc[["lemmata"]],
-		questions=object@desc[["questions"]],
-		exclamations=object@desc[["exclam"]],
-		semicolon=object@desc[["semicolon"]],
-		colon=object@desc[["colon"]],
-		stringsAsFactors=FALSE))
+  summary.table <- t(data.frame(
+    sentences=object@desc[["sentences"]],
+    avg.sentence.length=object@desc[["avg.sentc.length"]],
+    words=object@desc[["words"]],
+    avg.word.length=object@desc[["avg.word.length"]],
+    all.characters=object@desc[["all.chars"]],
+    letters=object@desc[["letters"]][["all"]],
+    lemmata=object@desc[["lemmata"]],
+    questions=object@desc[["questions"]],
+    exclamations=object@desc[["exclam"]],
+    semicolon=object@desc[["semicolon"]],
+    colon=object@desc[["colon"]],
+    stringsAsFactors=FALSE))
 
-	dimnames(summary.table)[[2]] <- "freq"
+  dimnames(summary.table)[[2]] <- "freq"
 
-	return(summary.table)
+  return(summary.table)
 })

@@ -2,8 +2,7 @@
 \alias{wheeler.smith}
 \title{Readability: Wheeler-Smith Score}
 \usage{
-  wheeler.smith(txt.file, hyphen = NULL,
-    parameters = c(syll = 2), ...)
+wheeler.smith(txt.file, hyphen = NULL, parameters = c(syll = 2), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -24,37 +23,36 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  This function calculates the Wheeler-Smith Score. In
-  contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+This function calculates the Wheeler-Smith Score. In
+contrast to \code{\link[koRpus:readability]{readability}},
+which by default calculates all possible indices, this
+function will only calculate the index value.
 
-  If \code{parameters="de"}, the calculation stays the
-  same, but grade placement is done according to Bamberger
-  & Vanecek (1984), that is for german texts.
+If \code{parameters="de"}, the calculation stays the same,
+but grade placement is done according to Bamberger &
+Vanecek (1984), that is for german texts.
 }
 \examples{
 \dontrun{
-	wheeler.smith(tagged.text)
+  wheeler.smith(tagged.text)
 }
 }
 \references{
-  Bamberger, R. & Vanecek, E. (1984).
-  \emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend
-  und Volk.
+Bamberger, R. & Vanecek, E. (1984).
+\emph{Lesen--Verstehen--Lernen--Schreiben}. Wien: Jugend
+und Volk.
 
-  Wheeler, L.R. & Smith, E.H. (1954). A practical
-  readability formula for the classroom teacher in the
-  primary grades. \emph{Elementary English}, 31, 397--399.
+Wheeler, L.R. & Smith, E.H. (1954). A practical readability
+formula for the classroom teacher in the primary grades.
+\emph{Elementary English}, 31, 397--399.
 }
 \keyword{readability}
 

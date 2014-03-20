@@ -2,9 +2,8 @@
 \alias{flesch.kincaid}
 \title{Readability: Flesch-Kincaid Grade Level}
 \usage{
-  flesch.kincaid(txt.file, hyphen = NULL,
-    parameters = c(asl = 0.39, asw = 11.8, const = 15.59),
-    ...)
+flesch.kincaid(txt.file, hyphen = NULL, parameters = c(asl = 0.39, asw =
+  11.8, const = 15.59), ...)
 }
 \arguments{
   \item{txt.file}{Either an object of class
@@ -25,18 +24,18 @@
   details.}
 }
 \value{
-  An object of class
-  \code{\link[koRpus]{kRp.readability-class}}.
+An object of class
+\code{\link[koRpus]{kRp.readability-class}}.
 }
 \description{
-  This is just a convenient wrapper function for
-  \code{\link[koRpus:readability]{readability}}.
+This is just a convenient wrapper function for
+\code{\link[koRpus:readability]{readability}}.
 }
 \details{
-  Calculates the Flesch-Kincaid grade level. In contrast to
-  \code{\link[koRpus:readability]{readability}}, which by
-  default calculates all possible indices, this function
-  will only calculate the index value.
+Calculates the Flesch-Kincaid grade level. In contrast to
+\code{\link[koRpus:readability]{readability}}, which by
+default calculates all possible indices, this function will
+only calculate the index value.
 }
 \examples{
 \dontrun{

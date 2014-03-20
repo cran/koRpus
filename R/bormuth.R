@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,20 +27,20 @@
 #' This formula doesn't need syllable count.
 #'
 #' @usage bormuth(txt.file, word.list, clz=35,
-#'		meanc=c(const=0.886593, awl=0.08364, afw=0.161911,
-#'			asl1=0.021401, asl2=0.000577, asl3=0.000005),
-#'		grade=c(const=4.275, m1=12.881, m2=34.934, m3=20.388,
-#'			c1=26.194, c2=2.046, c3=11.767, mc1=44.285, mc2=97.62,
-#'			mc3=59.538), ...)
+#'    meanc=c(const=0.886593, awl=0.08364, afw=0.161911,
+#'      asl1=0.021401, asl2=0.000577, asl3=0.000005),
+#'    grade=c(const=4.275, m1=12.881, m2=34.934, m3=20.388,
+#'      c1=26.194, c2=2.046, c3=11.767, mc1=44.285, mc2=97.62,
+#'      mc3=59.538), ...)
 #' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, a character vector which must be be
-#'		a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
-#'		is done by \code{\link[koRpus:readability.num]{readability.num}}. 
+#'    a valid path to a file containing the text to be analyzed, or a list of text features. If the latter, calculation
+#'    is done by \code{\link[koRpus:readability.num]{readability.num}}. 
 #' @param clz Integer, the cloze criterion score in percent.
 #' @param meanc A numeric vector with named magic numbers, defining the relevant parameters for Mean Cloze calculation.
 #' @param grade A numeric vector with named magic numbers, defining the relevant parameters for Grade Placement calculation.
-#'		If omitted, Grade Placement will not be calculated.
+#'    If omitted, Grade Placement will not be calculated.
 #' @param word.list A vector or matrix (with exactly one column) which defines familiar words. For valid results
-#'		the long Dale-Chall list with 3000 words should be used.
+#'    the long Dale-Chall list with 3000 words should be used.
 #' @param ... Further valid options for the main function, see \code{\link[koRpus:readability]{readability}} for details.
 #' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
@@ -48,17 +48,17 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' 	bormuth(tagged.text, word.list=new.dale.chall.wl)
+#'   bormuth(tagged.text, word.list=new.dale.chall.wl)
 #' }
 
 bormuth <- function(txt.file, word.list, clz=35,
-			meanc=c(const=0.886593, awl=0.08364, afw=0.161911, asl1=0.021401, asl2=0.000577, asl3=0.000005),
-			grade=c(const=4.275, m1=12.881, m2=34.934, m3=20.388, c1=26.194, c2=2.046, c3=11.767, mc1=44.285, mc2=97.62, mc3=59.538), ...){
-	param.list <- list(clz=clz, meanc=meanc, grade=grade)
-	if(is.list(txt.file)){
-		results <- readability.num(txt.features=txt.file, index="Bormuth", parameters=list(Bormuth=param.list), ...)
-	} else {
-		results <- readability(txt.file=txt.file, index="Bormuth", parameters=list(Bormuth=param.list), word.lists=list(Bormuth=word.list), ...)
-	}
-	return(results)
+      meanc=c(const=0.886593, awl=0.08364, afw=0.161911, asl1=0.021401, asl2=0.000577, asl3=0.000005),
+      grade=c(const=4.275, m1=12.881, m2=34.934, m3=20.388, c1=26.194, c2=2.046, c3=11.767, mc1=44.285, mc2=97.62, mc3=59.538), ...){
+  param.list <- list(clz=clz, meanc=meanc, grade=grade)
+  if(is.list(txt.file)){
+    results <- readability.num(txt.features=txt.file, index="Bormuth", parameters=list(Bormuth=param.list), ...)
+  } else {
+    results <- readability(txt.file=txt.file, index="Bormuth", parameters=list(Bormuth=param.list), word.lists=list(Bormuth=word.list), ...)
+  }
+  return(results)
 }

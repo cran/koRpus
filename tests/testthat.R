@@ -2,4 +2,4 @@
 # and can be found in ../inst/tests
 
 require(testthat)
-test_package("koRpus")
+test_check("koRpus")

@@ -18,6 +18,7 @@
 
 #' @param flat Logical, if TRUE only a named vector of main results is returned
 #' @rdname summary-methods
+#' @aliases summary,kRp.readability-method
 #' @export
 #' @docType methods
 #' @examples
@@ -681,6 +682,18 @@ setMethod("summary", signature(object="kRp.readability"), function(object, flat=
           index="TRI",
           flavour=object@TRI$flavour,
           raw=object@TRI$TRI
+        ))
+    }
+  } else {}
+
+  if(sum(is.na(object@Tuldava)) == 0){
+    if(isTRUE(flat)){
+      summary.flat <- c(summary.flat, Tuldava=object@Tuldava$Tuldava)
+    } else {
+      summary.table <- add.to.sumtab(summary.table, adds=list(
+          index="Tuldava",
+          flavour=object@Tuldava$flavour,
+          raw=object@Tuldava$Tuldava
         ))
     }
   } else {}

@@ -25,9 +25,9 @@
 #' \itemize{
 #'  \item \code{"de"} --- German, according to the STTS guidelines (Schiller, Teufel, Stockert, & Thielen, 1995)
 #'  \item \code{"en"} --- English, according to the Penn Treebank guidelines (Santorini, 1991)
-#'  \item \code{"es"} --- Spanish, according to \url{http://www.ims.uni-stuttgart.de/ftp/pub/corpora/spanish-tagset.txt}
-#'  \item \code{"fr"} --- French, according to \url{http://www.ims.uni-stuttgart.de/~schmid/french-tagset.html}
-#'  \item \code{"it"} --- Italian, according to \url{ftp://ftp.ims.uni-stuttgart.de/pub/corpora/italian-tagset.txt}
+#'  \item \code{"es"} --- Spanish, according to \url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/spanish-tagset.txt}
+#'  \item \code{"fr"} --- French, according to \url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/french-tagset.html}
+#'  \item \code{"it"} --- Italian, according to \url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/italian-tagset.txt}
 #'    and \url{http://sslmit.unibo.it/~baroni/collocazioni/itwac.tagset.txt}, respectively
 #'  \item \code{"ru"} --- Russian, according to the MSD tagset by Sharoff, Kopotev, Erjavec, Feldman & Divjak (2008)
 #' }
@@ -61,7 +61,7 @@
 #'    URL: \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/Penn-Treebank-Tagset.pdf}
 #'
 #'  Schiller, A., Teufel, S., Stockert, C. & Thielen, C. (1995). \emph{Vorl\"aufge Guidelines f\"ur das Tagging deutscher Textcorpora mit STTS}.
-#'    URL: \url{http://www.ims.uni-stuttgart.de/ftp/pub/corpora/stts_guide.pdf}
+#'    URL: \url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/stts_guide.pdf}
 #'
 #' Sharoff, S., Kopotev, M., Erjavec, T., Feldman, A. & Divjak, D. (2008). \emph{Designing and evaluating Russian tagsets}. In: Proc. LREC 2008, Marrakech.
 #'    URL: \url{http://corpus.leeds.ac.uk/mocky/}

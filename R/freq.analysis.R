@@ -100,9 +100,9 @@ freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.lang=N
   }
 
   if(isTRUE(desc.stat)){
-    desc.stat.res <- text.analysis(commented, lang=lang, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, desc=tagged.text@desc)
+    desc.stat.res <- text.analysis(commented, lang=lang, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, desc=slot(tagged.text, "desc"))
   } else {
-    desc.stat.res <- tagged.text@desc
+    desc.stat.res <- slot(tagged.text, "desc")
   }
 
   results <- new("kRp.txt.freq", lang=lang, TT.res=commented, desc=desc.stat.res, freq.analysis=frequency.res)

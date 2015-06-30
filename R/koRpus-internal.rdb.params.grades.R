@@ -68,6 +68,7 @@ default.params <- function(){
       TB1=c(const=224.6814, awl=79.8304, asl=12.24032, prep=1.292857),
       TB2=c(const=234.1063, awl=96.11069, prep=2.05444, conj=1.02805)),
     TRI=c(syll=1, word=0.449, pnct=2.467, frgn=0.937, const=14.417),
+    Tuldava=c(syll=1, word1=1, word2=1, sent=1),
     Wheeler.Smith=c(syll=2)
   )
 }

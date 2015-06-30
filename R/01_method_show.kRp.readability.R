@@ -407,6 +407,14 @@ setMethod("show", signature(object="kRp.readability"), function(object){
     show.TRI <- TRUE
   }
 
+  if(sum(!is.na(object@Tuldava)) == 0){
+    show.Tuldava <- FALSE
+  } else {
+    prt.Tuldava.flavour <- object@Tuldava$flavour
+    prt.Tuldava.index <- round(object@Tuldava$Tuldava, digits=2)
+    show.Tuldava <- TRUE
+  }
+
   if(sum(!is.na(object@Wheeler.Smith)) == 0){
     show.Wheeler.Smith <- FALSE
   } else {
@@ -836,7 +844,7 @@ setMethod("show", signature(object="kRp.readability"), function(object){
     cat("         TB 1:", prt.Traenkle.Bailer.TB1, "\n")
     cat("         TB 2:", prt.Traenkle.Bailer.TB2, "\n\n")
   } else {}
-  
+
   if(show.TRI){
     cat("\nKuntzsch's Text-Redundanz-Index\n")
     cat("  Parameters:", prt.TRI.flavour, "\n")
@@ -844,6 +852,13 @@ setMethod("show", signature(object="kRp.readability"), function(object){
     cat(" Punctuation:", prt.TRI.punct, "\n")
     cat("     Foreign:", prt.TRI.foreign, "\n")
     cat("       Score:", prt.TRI.score, "\n\n")
+  } else {}
+
+
+  if(show.Tuldava){
+    cat("\nTuldava's Text Difficulty Formula\n")
+    cat("  Parameters:", prt.Tuldava.flavour, "\n")
+    cat("       Index:", prt.Tuldava.index, "\n\n")
   } else {}
 
   if(show.Wheeler.Smith){

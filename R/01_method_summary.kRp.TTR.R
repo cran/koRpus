@@ -19,6 +19,7 @@
 #' @export
 #' @docType methods
 #' @rdname summary-methods
+#' @aliases summary,kRp.TTR-method
 #' @examples
 #' \dontrun{
 #' summary(lex.div(tagged.txt))

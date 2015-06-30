@@ -55,7 +55,7 @@
 kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
 
   # deal with the txt object
-  if(inherits(txt, "kRp.tagged")){
+  if(inherits(txt, "kRp.taggedText")){
     # get class kRp.tagged from txt object
     # the internal function tag.kRp.txt() will return the object unchanged if it
     # is already tagged
@@ -69,35 +69,35 @@ kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
 
   if(identical(scheme, "minor")){
     # change first letter to lower case
-    txt@TT.res$token <- text.1st.letter(txt@TT.res$token, "lower")
+    taggedText(txt)$token <- text.1st.letter(taggedText(txt)$token, "lower")
   } else if(identical(scheme, "all.minor")){
     # change all to lower case
-    txt@TT.res$token <- tolower(txt@TT.res$token)
+    taggedText(txt)$token <- tolower(taggedText(txt)$token)
   } else if(identical(scheme, "major")){
     # change first letter to upper case
-    txt@TT.res$token <- text.1st.letter(txt@TT.res$token, "upper")
+    taggedText(txt)$token <- text.1st.letter(taggedText(txt)$token, "upper")
   } else if(identical(scheme, "all.major")){
     # change all to upper case
-    txt@TT.res$token <- toupper(txt@TT.res$token)
+    taggedText(txt)$token <- toupper(taggedText(txt)$token)
   } else if(identical(scheme, "random")){
     # randomly begin with upper or lower case letters
     # p defines the probability of upper case
-    num.words <- dim(txt@TT.res)[1]
+    num.words <- nrow(taggedText(txt))
     num.upper <- round(num.words * p)
     upper.select <- 1:num.words %in% sample(1:num.words, num.upper)
-    txt@TT.res$token[upper.select] <- text.1st.letter(txt@TT.res$token[upper.select], "upper")
-    txt@TT.res$token[!upper.select] <- text.1st.letter(txt@TT.res$token[!upper.select], "lower")
+    taggedText(txt)$token[upper.select] <- text.1st.letter(taggedText(txt)$token[upper.select], "upper")
+    taggedText(txt)$token[!upper.select] <- text.1st.letter(taggedText(txt)$token[!upper.select], "lower")
   } else if(scheme %in% c("de.norm", "de.inv", "eu.norm", "eu.inv")){
     # beginning of sentences must begin in upper case
     # we'll define "beginning" as anything after a fullstop
-    fullstop.classes <- kRp.POS.tags(txt@lang, list.classes=TRUE, tags="sentc")
-    sentc.ends <- txt@TT.res[,"wclass"] %in% fullstop.classes
+    fullstop.classes <- kRp.POS.tags(language(txt), list.classes=TRUE, tags="sentc")
+    sentc.ends <- taggedText(txt)[,"wclass"] %in% fullstop.classes
       # usually the semicolon indicates a new sentence, but you don't begin in uppercase afterwards
-      sentc.ends[which(txt@TT.res[,"token"] %in% ";")] <- FALSE
+      sentc.ends[which(taggedText(txt)[,"token"] %in% ";")] <- FALSE
     sentc.begins <- c(TRUE, sentc.ends[-length(sentc.ends)])
       # we must correct for cases where the sentence starts with punctuation, like double quotes
-      punctuation.classes <- kRp.POS.tags(txt@lang, list.classes=TRUE, tags="punct")
-      sntc.punct <- txt@TT.res[,"wclass"] %in% punctuation.classes
+      punctuation.classes <- kRp.POS.tags(language(txt), list.classes=TRUE, tags="punct")
+      sntc.punct <- taggedText(txt)[,"wclass"] %in% punctuation.classes
       # which cases need to be taken care of?
       start.with.punct <- which(sntc.punct & sentc.begins)
       for (txt.index in start.with.punct){
@@ -109,20 +109,20 @@ kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
       }
     if(scheme %in% c("de.norm", "de.inv")){
       # find nouns an names
-      nouns <- txt@TT.res[,"wclass"] %in% c("noun", "name")
+      nouns <- taggedText(txt)[,"wclass"] %in% c("noun", "name")
     } else {
       # find proper nouns
-      nouns <- txt@TT.res[,"wclass"] %in% "name"
+      nouns <- taggedText(txt)[,"wclass"] %in% "name"
     }
     all.to.upper <- nouns | sentc.begins
     if(scheme %in% c("de.norm", "eu.norm")){
       # write all nouns, names and sentence beginnings starting with upper case
-      txt@TT.res$token[all.to.upper] <- text.1st.letter(txt@TT.res$token[all.to.upper], "upper")
-      txt@TT.res$token[!all.to.upper] <- text.1st.letter(txt@TT.res$token[!all.to.upper], "lower")
+      taggedText(txt)$token[all.to.upper] <- text.1st.letter(taggedText(txt)$token[all.to.upper], "upper")
+      taggedText(txt)$token[!all.to.upper] <- text.1st.letter(taggedText(txt)$token[!all.to.upper], "lower")
     } else {
       # full inversion of "de.norm"
-      txt@TT.res$token[!all.to.upper] <- text.1st.letter(txt@TT.res$token[!all.to.upper], "upper")
-      txt@TT.res$token[all.to.upper] <- text.1st.letter(txt@TT.res$token[all.to.upper], "lower")
+      taggedText(txt)$token[!all.to.upper] <- text.1st.letter(taggedText(txt)$token[!all.to.upper], "upper")
+      taggedText(txt)$token[all.to.upper] <- text.1st.letter(taggedText(txt)$token[all.to.upper], "lower")
     }
   } else {
     stop(simpleError("Unknown scheme specified!"))
@@ -131,10 +131,10 @@ kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
   if(isTRUE(paste)){
     results <- kRp.text.paste(txt)
   } else {
-      tokens.orig      <- txt.orig@TT.res$token
-      tokens.orig.np   <- tagged.txt.rm.classes(txt.orig@TT.res, lang=txt.orig@lang, corp.rm.class="nonpunct", corp.rm.tag=c())
-      tokens.trans     <- txt@TT.res$token
-      tokens.trans.np  <- tagged.txt.rm.classes(txt@TT.res, lang=txt@lang, corp.rm.class="nonpunct", corp.rm.tag=c())
+      tokens.orig      <- taggedText(txt.orig)$token
+      tokens.orig.np   <- tagged.txt.rm.classes(taggedText(txt.orig), lang=txt.orig@lang, corp.rm.class="nonpunct", corp.rm.tag=c())
+      tokens.trans     <- taggedText(txt)$token
+      tokens.trans.np  <- tagged.txt.rm.classes(taggedText(txt), lang=language(txt), corp.rm.class="nonpunct", corp.rm.tag=c())
 
       letters.orig     <- unlist(strsplit(tokens.orig, ""))
       letters.orig.np  <- unlist(strsplit(tokens.orig.np, ""))
@@ -143,8 +143,8 @@ kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
 
       tokens.equal     <- tokens.orig == tokens.trans
       tokens.equal.np  <- tokens.orig.np == tokens.trans.np
-         letters.equal    <- letters.orig == letters.trans
-         letters.equal.np <- letters.orig.np == letters.trans.np
+      letters.equal    <- letters.orig == letters.trans
+      letters.equal.np <- letters.orig.np == letters.trans.np
 
       diff.pct.words.all <- 100 * sum(!tokens.equal) / length(tokens.equal)
       diff.pct.words     <- 100 * sum(!tokens.equal.np) / length(tokens.equal.np)
@@ -153,16 +153,18 @@ kRp.text.transform <- function(txt, scheme, p=0.5, paste=FALSE){
 
       old.new.comp <- data.frame(
                   token=tokens.trans,
-                  tag=txt@TT.res[,"tag"],
-                  lemma=txt@TT.res[,"lemma"],
-                  lttr=txt@TT.res[,"lttr"],
-                  wclass=txt@TT.res[,"wclass"],
-                  desc=txt@TT.res[,"desc"],
+                  tag=taggedText(txt)[,"tag"],
+                  lemma=taggedText(txt)[,"lemma"],
+                  lttr=taggedText(txt)[,"lttr"],
+                  wclass=taggedText(txt)[,"wclass"],
+                  desc=taggedText(txt)[,"desc"],
+                  stop=taggedText(txt)[,"stop"],
+                  stem=taggedText(txt)[,"stem"],
                   token.orig=tokens.orig,
                   equal=tokens.equal,
                   stringsAsFactors=FALSE)
       results <- new("kRp.txt.trans",
-                lang=txt@lang,
+                lang=language(txt),
                 TT.res=old.new.comp,
                 diff=list(all.tokens=diff.pct.words.all, words=diff.pct.words, all.chars=diff.pct.lett.all, letters=diff.pct.lett))
       message(paste0("Difference between objects\n    Words: ", round(diff.pct.words, digits=2), "%\n  Letters: ", round(diff.pct.lett, digits=2),"%"))

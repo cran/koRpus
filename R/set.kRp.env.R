@@ -85,6 +85,9 @@ set.kRp.env <- function(...){
         stop(simpleError("Manual TreeTagger configuration demanded, but not even a path was defined!"))
       } else {}
       stopifnot(check.file(TT.options$path, mode="dir"))
+      if(!is.null(TT.options[["preset"]])){
+        checkLangPreset(preset=TT.options[["preset"]], returnPresetDefinition=FALSE)
+      } else {}
       # TODO: move TT.options checks to internal function to call it here
       assign("TT.options", TT.options, envir=.koRpus.env)
     }

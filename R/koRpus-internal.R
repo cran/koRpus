@@ -1053,7 +1053,7 @@ text.1st.letter <- function(word, case){
 
     word.new <- paste(word.vector, collapse="")
     return(word.new)
-    })
+    }, USE.NAMES=FALSE)
 
   return(results)
 } ## end function text.1st.letter()
@@ -1510,3 +1510,21 @@ paste.tokenized.text <- function(txt){
   all.text <- gsub("([[:space:]]{1})([,;.:])([[:space:]]{1}|$)", "\\2 ", all.text, perl=TRUE)
 }
 ## end function paste.tokenized.text()
+
+
+## function checkLangPreset()
+# checks if a given language preset is defined at all, and either returns TRUE/error or the full preset definition
+# TODO: turn this into tests for all TT.options
+checkLangPreset <- function(preset, returnPresetDefinition=TRUE){
+  preset.definition <- as.list(as.environment(.koRpus.env))[["langSup"]][["treetag"]][["presets"]][[preset]]
+  if(isTRUE(returnPresetDefinition)){
+    if(is.null(preset.definition)){
+      stop(simpleError(paste0("Manual TreeTagger configuration: \"", preset, "\" is not a valid preset!")))
+    } else {
+      return(preset.definition)
+    }
+  } else {
+    return(ifelse(is.null(preset.definition), stop(simpleError(paste0("Manual TreeTagger configuration: \"", preset, "\" is not a valid preset!"))), TRUE))
+  }
+}
+## end function checkLangPreset()

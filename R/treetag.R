@@ -209,14 +209,11 @@ treetag <- function(file, treetagger="kRp.env", rm.sgml=TRUE, lang="kRp.env",
       #  TT.tknz.opts    <- c()
       #  TT.lookup.command  <- c()
       #  TT.filter.command  <- c()
-      preset.definition <- as.list(as.environment(.koRpus.env))[["langSup"]][["treetag"]][["presets"]][[TT.options[["preset"]]]]
-      if(is.null(preset.definition)){
-        stop(simpleError(paste0("Manual TreeTagger configuration: \"",TT.options[["preset"]],"\" is not a valid preset!")))
-      } else {
-        # check for matching language definitions
-        matching.lang(lang=lang, lang.preset=preset.definition[["lang"]])
-        preset.list <- preset.definition[["preset"]](TT.cmd=TT.cmd, TT.bin=TT.bin, TT.lib=TT.lib, unix.OS=unix.OS)
-      }
+      preset.definition <- checkLangPreset(preset=TT.options[["preset"]], returnPresetDefinition=TRUE)
+      # check for matching language definitions
+      matching.lang(lang=lang, lang.preset=preset.definition[["lang"]])
+      preset.list <- preset.definition[["preset"]](TT.cmd=TT.cmd, TT.bin=TT.bin, TT.lib=TT.lib, unix.OS=unix.OS)
+
       TT.tokenizer    <- preset.list[["TT.tokenizer"]]
       TT.tagger      <- preset.list[["TT.tagger"]]
       TT.abbrev      <- preset.list[["TT.abbrev"]]

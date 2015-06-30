@@ -1,4 +1,4 @@
-# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2015 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -22,13 +22,14 @@
 #' plots the frequencies of tagged word classes.
 #'
 #' @param x An object of class \code{kRp.tagged}
+#' @param y From the generic \code{plot} function, ignored for koRpus class objects.
 #' @param what Character string, valid options are:
 #'    \describe{
 #'      \item{\code{"wclass"}:}{Barplot of distribution of word classes}
 #'      \item{\code{"letters"}:}{Line plot of distribution of word length in letters}
 #'    }
+#' @param ... Any other argument suitable for plot()
 #' @seealso \code{\link[koRpus]{kRp.tagged-class}}
-#' @keywords methods
 #' @examples
 #' \dontrun{
 #' tagged.results <- treetag("~/my.data/sample_text.txt", treetagger="manual", lang="en",

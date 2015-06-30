@@ -101,6 +101,7 @@
 #' @slot Strain The "flavour" of the parameter settings and the calculated value of the Strain index. NA if not calculated.
 #' @slot Traenkle.Bailer The "flavour" of the parameter settings, percentages of prepositions and conjunctions, and the calculated values of both Tr\"ankle-Bailer formulae. NA if not calculated.
 #' @slot TRI The calculated value of Kuntzsch' Text-Redundanz-Index. NA if not calculated.
+#' @slot Tuldava The calculated value of the Tuldava text difficulty formula. NA if not calculated.
 #' @slot Wheeler.Smith The "flavour" of the parameter settings and the calculated value of the Wheeler-Smith index. NA if not calculated.
 #' @slot Wheeler.Smith.de See "Wheeler.Smith"
 #' @slot Wiener.STF The "flavour" of the parameter settings and the calculated value of the Wiener Sachtextformel. NA if not calculated.
@@ -161,6 +162,7 @@ setClass("kRp.readability",
       Strain="list",
       Traenkle.Bailer="list",
       TRI="list",
+      Tuldava="list",
       Wheeler.Smith="list",
       Wheeler.Smith.de="list",
       Wiener.STF="list"),
@@ -212,6 +214,7 @@ setClass("kRp.readability",
       Strain=list(NA),
       Traenkle.Bailer=list(NA),
       TRI=list(NA),
+      Tuldava=list(NA),
       Wheeler.Smith=list(NA),
       Wheeler.Smith.de=list(NA),
       Wiener.STF=list(NA)

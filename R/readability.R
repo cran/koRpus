@@ -244,6 +244,11 @@
 #'
 #'      Wrapper function: \code{\link[koRpus:TRI]{TRI}}
 #'    }
+#'    \item{\code{"Tuldava"}:}{Tuldava's \emph{Text Difficulty Formula}. Supposed to be rather independent of specific languages (Grzybek, 2010).
+#'      \deqn{TD = \frac{Sy}{W} \times ln\left( \frac{W}{St} \right)}
+#'
+#'      Wrapper function: \code{\link[koRpus:tuldava]{tuldava}}
+#'    }
 #'    \item{\code{"Wheeler.Smith"}:}{Intended for english texts in primary grades 1--4 (Wheeler & Smith, 1954):
 #'      \deqn{WS = \frac{W}{St} \times \frac{10 \times{} W_{2Sy}}{W}}
 #'      If \code{parameters} is set to \code{Wheeler.Smith="de"}, the calculation stays the same, but grade placement
@@ -315,6 +320,9 @@
 #'    Flesch, R. (1948). A new readability yardstick. \emph{Journal of Applied Psychology}, 32(3), 221--233.
 #'
 #'    Fucks, W. (1955). Der Unterschied des Prosastils von Dichtern und anderen Schriftstellern. \emph{Sprachforum}, 1, 233--244.
+#'    
+#'    Grzybek, P. (2010). Text difficulty and the Arens-Altmann law. In Peter Grzybek, Emmerich Kelih, \enc{Ján}{Jan} \enc{Mačutek}{Macutek} (Eds.),
+#'      \emph{Text and Language. Structures -- Functions -- Interrelations. Quantitative Perspectives}. Wien: Praesens, 57--70.
 #'
 #'    Harris, A.J. & Jacobson, M.D. (1974). Revised Harris-Jacobson readability formulas. In \emph{18th Annual Meeting of the College Reading Association}, Bethesda.
 #'
@@ -335,16 +343,6 @@
 #'      31, 397--399.
 #'
 #'    [1] \url{http://strainindex.wordpress.com/2007/09/25/hello-world/}
-#' @usage readability(txt.file, hyphen=NULL,
-#'     index=c("ARI", "Bormuth", "Coleman", "Coleman.Liau", "Dale.Chall", "Danielson.Bryan", "Dickes.Steiwer","DRP", "ELF",
-#'       "Farr.Jenkins.Paterson", "Flesch", "Flesch.Kincaid", "FOG", "FORCAST", "Fucks", "Harris.Jacobson", "Linsear.Write", "LIX",
-#'       "nWS", "RIX", "SMOG", "Spache", "Strain", "Traenkle.Bailer", "TRI", "Wheeler.Smith"),
-#'     parameters=list(),
-#'     word.lists=list(Bormuth=NULL, Dale.Chall=NULL, Harris.Jacobson=NULL,
-#'       Spache=NULL),
-#'     fileEncoding="UTF-8", tagger="kRp.env", force.lang=NULL,
-#'     sentc.tag="sentc", nonword.class="nonpunct", nonword.tag=c(),
-#'     quiet=FALSE, ...)
 #' @export
 
 ##################################################################
@@ -356,7 +354,8 @@ readability <- function(txt.file, hyphen=NULL,
         "Dale.Chall", "Danielson.Bryan", "Dickes.Steiwer","DRP",
         "ELF", "Farr.Jenkins.Paterson", "Flesch", "Flesch.Kincaid",
         "FOG", "FORCAST", "Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS",
-        "RIX", "SMOG", "Spache", "Strain", "Traenkle.Bailer", "TRI", "Wheeler.Smith"),
+        "RIX", "SMOG", "Spache", "Strain", "Traenkle.Bailer", "TRI", "Tuldava",
+        "Wheeler.Smith"),
       parameters=list(),
       word.lists=list(Bormuth=NULL, Dale.Chall=NULL, Harris.Jacobson=NULL, Spache=NULL),
       fileEncoding="UTF-8",

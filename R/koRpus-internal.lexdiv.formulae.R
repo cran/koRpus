@@ -19,6 +19,8 @@
 # these internal functions do the calculations of lexical diversity,
 # called by lex.div() and its wrappers
 
+#' @import stats
+#' @import utils
 
 ## function ttr.calc()
 # this helper function will be used for nearly all TTR calculations

@@ -47,6 +47,7 @@ wClassNoPunct <- function(wclass, lang, abs=NULL){
 #' @export
 #' @docType methods
 #' @rdname summary-methods
+#' @aliases summary,kRp.tagged-method
 #' @examples
 #' \dontrun{
 #' tagged.results <- treetag("~/my.data/sample_text.txt", treetagger="manual", lang="en",

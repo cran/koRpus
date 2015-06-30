@@ -42,7 +42,7 @@
 #' @references
 #' Benedetto, D., Caglioti, E. & Loreto, V. (2002). Language trees and zipping. \emph{Physical Review Letters}, 88(4), 048702.
 #'
-#' [1] \url{http://www.ohchr.org/EN/Issues/Pages/UDHRIndex.aspx}
+#' [1] \url{http://www.ohchr.org/EN/UDHR/Pages/UDHRIndex.aspx}
 #'
 #' [2] \url{http://unicode.org/udhr}
 #' @keywords misc
@@ -102,6 +102,10 @@ guess.lang <- function(txt.file, udhr.path, comp.length=300, keep.udhr=FALSE, qu
   if(isTRUE(keep.udhr)){
     udhr.results <- udhr
   } else {
+    # define "text" and never use it, to satisfy the picky R CMD check...
+    # "text" only appears in subset() below, meaning the variable inside the subsetted object.
+    # who cares.
+    text <- NULL
     udhr.results <- subset(udhr, select=-text)
   }
   # add the diff

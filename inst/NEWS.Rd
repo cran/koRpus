@@ -1,6 +1,35 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.05-6 (2015-06-29)}{
+  \subsection{fixed}{
+    \itemize{
+      \item changed \code{"selected"} values of \code{checkboxGroupInput()} in the shiny file ui.R
+        to comply with the changes made in shiny 0.9.0
+      \item function \code{kRp.text.transform()} was missing some columns in TT.res
+      \item fixing this ChangeLog: the parameter for Szigriszt (Flesch ES) is not
+        \code{"es2"}, as reported in the log to koRpus 0.05.3, but "es-s"!
+      \item calling readability for \code{"ARI.NRI"} without hyphenation didn't work,
+        allthough ARI doesn't need syllables
+      \item updated some broken links in the docs (?kRp.POS.tags, ?guess.lang)
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item replaced the RKWard plugin with a modularized rewrite (rkwarddev script)
+      \item some code cleaning in internal function \code{kRp.rdb.formulae()} and
+        \code{freq.analysis()}, mostly replacing @ by \code{slot()}
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item new readability formula \code{tuldava()}, kindly suggested by peter grzybek
+      \item the shiny app has gained support for Tuldava and Szigriszt (Flesch ES)
+        formulae and log.base parameter (lexical diversity)
+      \item \code{set.kRp.env()} does now check whether a language preset is valid
+    }
+  }
+}
 \section{Changes in koRpus version 0.05-5 (2014-03-19)}{
   \subsection{changed}{
     \itemize{
@@ -16,7 +45,7 @@
       \item new tf-idf feature: \code{read.corp.custom()} now calculates idf, then
         \code{freq.analysis()} can use that to calculate tf-idf, kindly suggested by sandro tsang
       \item new columns \code{"inDocs"} and \code{"idf"} in slot \code{"words"} of class kRp.corp.freq
-      \item new columns \code{"tf"}, \code{"idf"} and \code{"tfidf"} in slot \code{"words"} of class kRp.txt.freq 
+      \item new columns \code{"tf"}, \code{"idf"} and \code{"tfidf"} in slot \code{"words"} of class kRp.txt.freq
     }
   }
 }

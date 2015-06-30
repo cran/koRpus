@@ -19,6 +19,7 @@
 #' @export
 #' @docType methods
 #' @rdname summary-methods
+#' @aliases summary,kRp.txt.freq-method
 #' @examples
 #' \dontrun{
 #' summary(freq.analysis(tagged.txt))

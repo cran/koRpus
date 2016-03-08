@@ -859,7 +859,7 @@ noInf.summary <- function(data, add.sd=FALSE){
 # determins if a language is supported, and returns the correct identifier
 is.supported.lang <- function(lang.ident, support="hyphen"){
   if(identical(support, "hyphen")){
-    hyphen.supported <- as.list(.koRpus.env)[["langSup"]][["hyphen"]][["supported"]]
+    hyphen.supported <- as.list(as.environment(.koRpus.env))[["langSup"]][["hyphen"]][["supported"]]
     if(lang.ident %in% names(hyphen.supported)){
       res.ident <- hyphen.supported[[lang.ident]]
     } else {
@@ -868,9 +868,9 @@ is.supported.lang <- function(lang.ident, support="hyphen"){
   } else {}
 
   if(identical(support, "treetag")){
-    treetag.supported <- as.list(.koRpus.env)[["langSup"]][["treetag"]][["presets"]]
+    treetag.supported <- as.list(as.environment(.koRpus.env))[["langSup"]][["kRp.POS.tags"]][["tags"]]
     if(lang.ident %in% names(treetag.supported)){
-      res.ident <- treetag.supported[[lang.ident]][["lang"]]
+      res.ident <- lang.ident
     } else {
       stop(simpleError(paste("Unknown tag definition requested:", lang.ident)))
     }
@@ -878,20 +878,6 @@ is.supported.lang <- function(lang.ident, support="hyphen"){
 
   return(res.ident)
 } ## end function is.supported.lang()
-
-
-## function load.hyph.pattern()
-load.hyph.pattern <- function(lang){
-  # to avoid needless NOTEs from R CMD check
-  hyph.pat <- NULL
-
-  lang <- is.supported.lang(lang, support="hyphen")
-  pat.to.load <- parse(text=paste0("if(!exists(\"hyph.", lang, "\", envir=.koRpus.env, inherits=FALSE)){
-    data(hyph.", lang, ", package=\"koRpus\", envir=.koRpus.env)} else {}
-    hyph.pat <- get(\"hyph.", lang, "\", envir=.koRpus.env)"))
-  eval(pat.to.load)
-  return(hyph.pat)
-} ## end function load.hyph.pattern()
 
 
 ## function txt.compress()
@@ -976,20 +962,24 @@ read.udhr <- function(txt.path, quiet=TRUE){
   #   udhr.xml <- xmlParse(file.path(udhr.path, "index.xml"))
   #   udhr.list <- xmlSApply(xmlRoot(udhr.xml), xmlAttrs)
   ## since there was no windows package XML for R 2.13, this is a primitive parser which does the job:
-  udhr.XML <- readLines(file.path(udhr.path, "index.xml"))
+  udhr.XML <- readLines(file.path(udhr.path, "index.xml"), warn=FALSE)
   # filter out only the interesting parts
   udhr.XML <- gsub("([[:space:]]+<udhr )(.*)/>", "\\2", udhr.XML[grep("<udhr ", udhr.XML)], perl=TRUE)
-  # the minus-sign causes problems in naming the elements later on
-  udhr.XML <- gsub("iso639-3", "iso6393", udhr.XML)
   # split vector into a list with ell elements; then we have basically what xmlParse() and xmlSApply() returned
   udhr.XML <- gsub("([[:alnum:]]+)=('[^']+'|'')[[:space:]]+", "\\1=\\2#", udhr.XML, perl=TRUE)
+  # as a safety measure, put iso639-3 in quotes
+  udhr.XML <- gsub("#iso639-3=", "#\"iso639-3\"=", udhr.XML)
   udhr.XML.list <- strsplit(udhr.XML, split="#")
   udhr.list <- lapply(1:length(udhr.XML.list), function(cur.entry){eval(parse(text=paste0("c(", paste(udhr.XML.list[[cur.entry]], collapse=", "), ")")))})
 
   names(udhr.list) <- 1:length(udhr.list)
   # correct for missing values and variables
   udhr.list.corr <- sapply(udhr.list, function(udhr.entry){
-      if(sum(!c("v","nv") %in% names(udhr.entry))){
+      # older index files split up l+v and n+nv, newer have combined f and n elements
+      if("f" %in% names(udhr.entry)){
+        udhr.entry[["file"]] <- file.path(udhr.path, paste0("udhr_", udhr.entry[["f"]], ".txt"))
+        udhr.entry[["name"]] <- udhr.entry[["n"]]
+      } else if("l" %in% names(udhr.entry)){
         if(!"v" %in% names(udhr.entry)){
           udhr.entry[["v"]] <- NA
           udhr.entry[["file"]] <- file.path(udhr.path, paste0("udhr_", udhr.entry[["l"]], ".txt"))
@@ -1003,15 +993,14 @@ read.udhr <- function(txt.path, quiet=TRUE){
           udhr.entry[["name"]] <- paste0(udhr.entry[["n"]], " (",udhr.entry[["nv"]],")")
         }
       } else {
-        udhr.entry[["file"]] <- file.path(udhr.path, paste0("udhr_", udhr.entry[["l"]], "_", udhr.entry[["v"]], ".txt"))
-        udhr.entry[["name"]] <- paste0(udhr.entry[["n"]], " (",udhr.entry[["nv"]],")")
+        stop(simpleError("Erm, sorry -- looks like the format if the index.xml file has changed, please file a bug report!"))
       }
       # now try to load the translated text from file and add it to the entry
       udhr.file <- udhr.entry[["file"]]
       if(file.exists(udhr.file)){
         # remove the trailing notice also, because it will keep gzip from
         # optimizing for the actual charset
-        udhr.entry[["text"]] <- gsub("^.*udhr. --- ", "", paste(scan(udhr.file, what=character(), quiet=quiet), collapse=" "))
+        udhr.entry[["text"]] <- gsub("^.*udhr. --- ", "", paste(suppressWarnings(scan(udhr.file, what=character(), quiet=quiet)), collapse=" "))
       } else {
         udhr.entry[["text"]] <- NA
       }
@@ -1125,7 +1114,10 @@ taggz <- function(tokens, abbrev=NULL, heur.fix=list(pre=c("\u2019","'"), suf=c(
 
   if(length(tokens) > 1){
     tagged.text <- t(unlist(tagged.text))
-  }  else {}
+  }  else {
+    tagged.text <- t(tagged.text)
+    colnames(tagged.text) <- c("token", "tag")
+  }
   # remove the dumb names
   rownames(tagged.text) <- NULL
   
@@ -1270,56 +1262,6 @@ tokenz <- function(txt, split="[[:space:]]", ign.comp="-", heuristics="abbr", ab
   return(tokenized.text)
 } ## end function tokenz()
 
-
-## function set.lang.support()
-# used to upgrade the supported languages
-# - target: one of "hyphen", "kRp.POS.tags", or "treetag", depending on what whould be supported
-# - value: a named list that upholds exactly the structure defined in inst/README.languages
-set.lang.support <- function(target, value){
-
-  all.kRp.env <- as.list(as.environment(.koRpus.env))
-
-  if(identical(target, "hyphen")){
-    recent.pattern <- all.kRp.env[["langSup"]][["hyphen"]][["supported"]]
-    # could be there is no such entries in the environment yet
-    if(is.null(recent.pattern)){
-      recent.pattern <- list()
-    } else {}
-    # to be safe do this as a for loop; this should replace older entries
-    # but keep all other intact or just add new ones
-    for (this.pattern in names(value)){
-      recent.pattern[[this.pattern]] <- value[[this.pattern]]
-    }
-    all.kRp.env[["langSup"]][["hyphen"]][["supported"]] <- recent.pattern
-  } else if(identical(target, "kRp.POS.tags")){
-    recent.tags <- all.kRp.env[["langSup"]][["kRp.POS.tags"]][["tags"]]
-    # could be there is no such entries in the environment yet
-    if(is.null(recent.tags)){
-      recent.tags <- list()
-    } else {}
-    # to be safe do this as a for loop; this should replace older entries
-    # but keep all other intact or just add new ones
-    for (this.tags in names(value)){
-      recent.tags[[this.tags]] <- value[[this.tags]]
-    }
-    all.kRp.env[["langSup"]][["kRp.POS.tags"]][["tags"]] <- recent.tags
-  } else if(identical(target, "treetag")){
-    recent.presets <- all.kRp.env[["langSup"]][["treetag"]][["presets"]]
-    # could be there is no such entries in the environment yet
-    if(is.null(recent.presets)){
-      recent.presets <- list()
-    } else {}
-    # to be safe do this as a for loop; this should replace older entries
-    # but keep all other intact or just add new ones
-    for (this.preset in names(value)){
-      recent.presets[[this.preset]] <- value[[this.preset]]
-    }
-    all.kRp.env[["langSup"]][["treetag"]][["presets"]] <- recent.presets
-  } else {
-    stop(simpleError(paste0("Invalid target for language support: ", target)))
-  }
-  list2env(all.kRp.env, envir=as.environment(.koRpus.env))
-} ## end function set.lang.support()
 
 ## function queryList()
 queryList <- function(obj, var, query, rel, as.df, ignore.case, perl){
@@ -1528,3 +1470,84 @@ checkLangPreset <- function(preset, returnPresetDefinition=TRUE){
   }
 }
 ## end function checkLangPreset()
+
+
+## function checkTTOptions()
+# this helper function does some basic validity checks on provided TT.options
+# if all goes well, returns a named list with valid settings
+checkTTOptions <- function(TT.options, manual.config, TT.tknz=TRUE){
+  if(!is.null(TT.options) & !is.list(TT.options)){
+    warning("You provided \"TT.options\", but not as a list!")
+  } else {}
+  optNames <- names(TT.options)
+  result <- list()
+
+  # basic check for valid element names
+  validOptions <- c(
+    "path",
+    "preset",
+    "tokenizer",
+    "tknz.opts",
+    "tagger",
+    "abbrev",
+    "params",
+    "lexicon",
+    "lookup",
+    "filter",
+    "no.unknown"
+  )
+  undefined.options <- !optNames %in% validOptions
+  if(any(undefined.options)){
+    stop(simpleError(paste0(
+      "You used undefined names in TT.options:\n  \"",
+      paste0(optNames[undefined.options], collapse="\", \""),
+      "\""
+    )))
+  } else {}
+
+  if(isTRUE(manual.config)){
+    if(!"path" %in% optNames){
+      stop(simpleError("Manual TreeTagger configuration demanded, but not even a path was defined!"))
+    } else {
+      # specify basic paths
+      result[["TT.path"]] <- TT.options[["path"]]
+      result[["TT.bin"]] <- file.path(result[["TT.path"]],"bin")
+      result[["TT.cmd"]] <- file.path(result[["TT.path"]],"cmd")
+      result[["TT.lib"]] <- file.path(result[["TT.path"]],"lib")
+      # check if this is really a TreeTagger root directory
+      sapply(c(result[["TT.bin"]], result[["TT.cmd"]], result[["TT.lib"]]), function(chk.dir){check.file(chk.dir, mode="dir")})
+    }
+  } else {}
+
+  # basic options, cannot be toyed with
+  result[["TT.opts"]] <- "-token -lemma -sgml -pt-with-lemma"
+  # allow some dedicated options to be set without jeopardizing the output format
+  if(!is.null(TT.options[["no.unknown"]])){
+    result[["TT.opts"]] <- ifelse(
+      isTRUE(TT.options[["no.unknown"]]),
+      paste0(result[["TT.opts"]], " -no-unknown"),
+      result[["TT.opts"]]
+    )
+  } else {}
+
+  if(!is.null(TT.options[["preset"]])){
+    result[["preset"]] <- checkLangPreset(preset=TT.options[["preset"]])
+  } else {
+    # if no preset was defined, we need some more information
+    if(isTRUE(TT.tknz)){
+      needed.options <- c("tokenizer", "tagger", "params")
+    } else {
+      needed.options <- c("tagger", "params")
+    }
+    missing.options <- !needed.options %in% optNames
+    if(any(missing.options)){
+      stop(simpleError(paste0(
+        "Manual TreeTagger configuration demanded, but not enough optinons given!\n  Missing options: \"",
+        paste0(needed.options[missing.options], collapse="\", \""),
+        "\""
+      )))
+    } else {}
+  }
+
+  return(result)
+} ## end function checkTTOptions()

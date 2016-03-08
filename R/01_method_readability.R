@@ -18,7 +18,7 @@
 
 #' Measure readability
 #'
-#' This function calculates several readability indices.
+#' These methods calculate several readability indices.
 #'
 #' In the following formulae, \eqn{W} stands for the number of words, \eqn{St} for the number of sentences, \eqn{C} for the number of
 #' characters (usually meaning letters), \eqn{Sy} for the number of syllables, \eqn{W_{3Sy}} for the number of words with at least three syllables,
@@ -343,13 +343,29 @@
 #'      31, 397--399.
 #'
 #'    [1] \url{http://strainindex.wordpress.com/2007/09/25/hello-world/}
+#' @import methods
+#' @rdname readability-methods
 #' @export
+#' @examples
+#' \dontrun{
+#' readability(tagged.text)
+#' }
+
+setGeneric("readability", function(txt.file, ...) standardGeneric("readability"))
 
 ##################################################################
 ## if this signature changes, check kRp.rdb.formulae() as well! ##
 ##################################################################
 
-readability <- function(txt.file, hyphen=NULL,
+#' @export
+#' @include 00_class_01_kRp.tagged.R
+#' @include 00_class_03_kRp.txt.freq.R
+#' @include 00_class_04_kRp.txt.trans.R
+#' @include 00_class_05_kRp.analysis.R
+#' @include koRpus-internal.R
+#' @aliases readability,kRp.taggedText-method
+#' @rdname readability-methods
+setMethod("readability", signature(txt.file="kRp.taggedText"), function(txt.file, hyphen=NULL,
       index=c("ARI", "Bormuth", "Coleman", "Coleman.Liau",
         "Dale.Chall", "Danielson.Bryan", "Dickes.Steiwer","DRP",
         "ELF", "Farr.Jenkins.Paterson", "Flesch", "Flesch.Kincaid",
@@ -366,22 +382,64 @@ readability <- function(txt.file, hyphen=NULL,
       nonword.tag=c(),
       quiet=FALSE, ...){
 
-  # all the actual calculations have been moved to an internal function, to be able to re-use
-  # the formulas for calculation without the actual text, but only its key values, in other functions
-  all.results <- kRp.rdb.formulae(
-      txt.file=txt.file,
-      hyphen=hyphen,
-      index=index,
-      parameters=parameters,
-      word.lists=word.lists,
-      fileEncoding=fileEncoding,
-      tagger=tagger,
-      force.lang=force.lang,
-      sentc.tag=sentc.tag,
-      nonword.class=nonword.class,
-      nonword.tag=nonword.tag,
-      quiet=quiet, 
-      analyze.text=TRUE, ...)
+    # all the actual calculations have been moved to an internal function, to be able to re-use
+    # the formulas for calculation without the actual text, but only its key values, in other functions
+    all.results <- kRp.rdb.formulae(
+        txt.file=txt.file,
+        hyphen=hyphen,
+        index=index,
+        parameters=parameters,
+        word.lists=word.lists,
+        fileEncoding=fileEncoding,
+        tagger=tagger,
+        force.lang=force.lang,
+        sentc.tag=sentc.tag,
+        nonword.class=nonword.class,
+        nonword.tag=nonword.tag,
+        quiet=quiet, 
+        analyze.text=TRUE, ...)
 
-  return(all.results)
-}
+    return(all.results)
+  }
+)
+
+#' @export
+#' @aliases readability,character-method
+#' @rdname readability-methods
+setMethod("readability", signature(txt.file="character"), function(txt.file, hyphen=NULL,
+      index=c("ARI", "Bormuth", "Coleman", "Coleman.Liau",
+        "Dale.Chall", "Danielson.Bryan", "Dickes.Steiwer","DRP",
+        "ELF", "Farr.Jenkins.Paterson", "Flesch", "Flesch.Kincaid",
+        "FOG", "FORCAST", "Fucks", "Harris.Jacobson", "Linsear.Write", "LIX", "nWS",
+        "RIX", "SMOG", "Spache", "Strain", "Traenkle.Bailer", "TRI", "Tuldava",
+        "Wheeler.Smith"),
+      parameters=list(),
+      word.lists=list(Bormuth=NULL, Dale.Chall=NULL, Harris.Jacobson=NULL, Spache=NULL),
+      fileEncoding="UTF-8",
+      tagger="kRp.env",
+      force.lang=NULL,
+      sentc.tag="sentc",
+      nonword.class="nonpunct",
+      nonword.tag=c(),
+      quiet=FALSE, ...){
+
+    # all the actual calculations have been moved to an internal function, to be able to re-use
+    # the formulas for calculation without the actual text, but only its key values, in other functions
+    all.results <- kRp.rdb.formulae(
+        txt.file=txt.file,
+        hyphen=hyphen,
+        index=index,
+        parameters=parameters,
+        word.lists=word.lists,
+        fileEncoding=fileEncoding,
+        tagger=tagger,
+        force.lang=force.lang,
+        sentc.tag=sentc.tag,
+        nonword.class=nonword.class,
+        nonword.tag=nonword.tag,
+        quiet=quiet, 
+        analyze.text=TRUE, ...)
+
+    return(all.results)
+  }
+)

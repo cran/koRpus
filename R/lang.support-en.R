@@ -19,6 +19,8 @@
 # this is an internal file providing language support.
 # please refer to inst/README.languages for details
 
+#' @include set.lang.support.R
+
 set.lang.support("hyphen",
   list(
     "en"="en",
@@ -101,6 +103,7 @@ set.lang.support("kRp.POS.tags",
       "NNS", "noun", "Noun, plural",
       "NP", "name", "Proper noun, singular",
       "NPS", "name", "Proper noun, plural",
+      "NS", "noun", "Noun, plural", # undocumented, bug in parameter file?
       "PDT", "predeterminer", "Predeterminer",
       "POS", "possesive", "Possessive ending",
       "PP", "pronoun", "Personal pronoun",

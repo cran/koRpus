@@ -1,7 +1,111 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
-\section{Changes in koRpus version 0.05-6 (2015-06-29)}{
+\section{Changes in koRpus version 0.06-4 (2016-03-07)}{
+  \subsection{fixed}{
+    \itemize{
+      \item workaround for missing POS tag \code{"NS"} for english texts
+      \item made \code{guess.lang()} compatible with recent format of UDHR archives, now
+        using ISO 639-3 codes as language identifier
+      \item \code{tokenize()} and \code{treetag()} weren't able to cope with text that only
+        consisted of a single token
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item updated rkwarddev script according to recent development in the rkwarddev
+        package
+      \item some basic validity checks of treetag()s \code{"TT.options"} moved to an
+        internal function \code{checkTTOptions()}, which is now also called by \code{set.kRp.env()}
+      \item \code{guess.lang()} doesn't warn about missing EOL in the UDHR texts any longer
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item added a README.md file
+      \item new option \code{"no.unknown"} can be passed to the \code{"TT.options"} of \code{treetag()},
+        to toggle the "-no-unknown" switch of TreeTagger
+      \item new option \code{"validate"} for \code{set.kRp.env()} to enable/disable checks
+    }
+  }
+}
+\section{Changes in koRpus version 0.06-3 (2015-11-02)}{
+  \subsection{fixed}{
+    \itemize{
+      \item actually query for supported POS tags in internal function
+        \code{is.supported.lang()}. the function previously looked for supported languages in the
+        available presets, which failed if there was no preset named like the language
+        abberviation
+      \item made \code{hyphen()} not split words after first or before last character,
+        therefore min.length was increased to 4 accordingly
+      \item adjusted test standards to changed hyphen results
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item \code{read.tagged()} does now also accept matrix objects, see
+        https://github.com/unDocUMeantIt/koRpus/issues/1
+    }
+  }
+}
+\section{Changes in koRpus version 0.06-2 (2015-09-21)}{
+  \subsection{fixed}{
+    \itemize{
+      \item \code{read.corp.custom()} calculated the in-document frequency wrong if analysis
+        was performed case insensitive
+      \item updated some more links in the docs (?kRp.POS.tags)
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item \code{correct.tag()} now accepts all objects of class union kRp.taggedText
+      \item \code{query()} now uses "\%in\%" instead of "==" to match character strings
+        against \code{"query"}
+      \item exported the previously internal function \code{set.lang.support()}, to prepare
+        for the possibility of third party package to add new languages
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item initial support to manually extend the languages supported by the
+        package. you can now add new languages on-the-fly in a running session, or in a
+        more sustainable manner by providing a language package (using the same
+        methods, basically). key to this is the now globally available function
+        \code{set.lang.support()}, and there's also two commented template scripts installed
+        with the package, see the \code{"templates"} folder
+    }
+  }
+}
+\section{Changes in koRpus version 0.06-1 (2015-07-08)}{
+  \subsection{fixed}{
+    \itemize{
+      \item \code{read.corp.custom()} was buggy when dealing with tagged objects
+      \item suppress message stating text language in \code{summary()} for readability
+        objects if "flat=TRUE"
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item changed the following functions into S4 methods: \code{readability()},
+        \code{lex.div()}, \code{hyphen()}, \code{read.corp.custom()} and \code{freq.analysis()}
+      \item removed long since deprecated function \code{kRp.freq.analysis()}
+      \item splitted the code of the monolithic internal function for
+        \code{read.corp.custom()} into several subfunctions to get more flexibility
+      \item \code{read.corp.custom()} now also supports analysis of lists of tagged objects
+      \item removed option \code{"fileEncoding"} from the signature of \code{read.corp.custom()},
+        but it can still be used as part of the \code{"..."} options; this was neccessary
+        because \code{treetag()} uses \code{"encoding"} instead
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item new option \code{"tagger"} now also available in \code{read.corp.custom()}
+      \item there is now a mailing list to discuss the koRpus development:
+        https://ml06.ispgateway.de/mailman/listinfo/korpus-dev_r.reaktanz.de
+    }
+  }
+}
+\section{Changes in koRpus version 0.05-6 (2015-06-30)}{
   \subsection{fixed}{
     \itemize{
       \item changed \code{"selected"} values of \code{checkboxGroupInput()} in the shiny file ui.R
@@ -12,6 +116,10 @@
       \item calling readability for \code{"ARI.NRI"} without hyphenation didn't work,
         allthough ARI doesn't need syllables
       \item updated some broken links in the docs (?kRp.POS.tags, ?guess.lang)
+      \item added imports for 'utils' and 'stats' packages to comply with new CRAN
+        checks
+      \item added a otherwise useless definition of \code{"text"} to the body of
+        \code{guess.lang()}, also to satisfy R CMD check
     }
   }
   \subsection{changed}{

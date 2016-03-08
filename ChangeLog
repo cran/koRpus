@@ -1,5 +1,77 @@
 ChangeLog for package koRpus
 
+changes in version 0.06-4 (2016-03-07)
+fixed:
+  - workaround for missing POS tag "NS" for english texts
+  - made guess.lang() compatible with recent format of UDHR archives, now
+    using ISO 639-3 codes as language identifier
+  - tokenize() and treetag() weren't able to cope with text that only
+    consisted of a single token
+  - declared import from graphics package to satisfy CRAN checks
+changed:
+  - updated rkwarddev script according to recent development in the rkwarddev
+    package
+  - some basic validity checks of treetag()s "TT.options" moved to an
+    internal function checkTTOptions(), which is now also called by set.kRp.env()
+  - guess.lang() doesn't warn about missing EOL in the UDHR texts any longer
+added:
+  - added a README.md file
+  - new option "no.unknown" can be passed to the "TT.options" of treetag(),
+    to toggle the "-no-unknown" switch of TreeTagger
+  - new option "validate" for set.kRp.env() to enable/disable checks
+
+changes in version 0.06-3 (2015-11-02)
+fixed:
+  - actually query for supported POS tags in internal function
+    is.supported.lang(). the function previously looked for supported languages in the
+    available presets, which failed if there was no preset named like the language
+    abberviation
+  - made hyphen() not split words after first or before last character,
+    therefore min.length was increased to 4 accordingly
+  - adjusted test standards to changed hyphen results
+added:
+  - read.tagged() does now also accept matrix objects, see
+    https://github.com/unDocUMeantIt/koRpus/issues/1
+
+changes in version 0.06-2 (2015-09-21)
+fixed:
+  - read.corp.custom() calculated the in-document frequency wrong if analysis
+    was performed case insensitive
+  - updated some more links in the docs (?kRp.POS.tags)
+changed:
+  - correct.tag() now accepts all objects of class union kRp.taggedText
+  - query() now uses "%in%" instead of "==" to match character strings
+    against "query"
+  - exported the previously internal function set.lang.support(), to prepare
+    for the possibility of third party package to add new languages
+added:
+  - initial support to manually extend the languages supported by the
+    package. you can now add new languages on-the-fly in a running session, or in a
+    more sustainable manner by providing a language package (using the same
+    methods, basically). key to this is the now globally available function
+    set.lang.support(), and there's also two commented template scripts installed
+    with the package, see the "templates" folder
+
+changes in version 0.06-1 (2015-07-08)
+fixed:
+  - read.corp.custom() was buggy when dealing with tagged objects
+  - suppress message stating text language in summary() for readability
+    objects if "flat=TRUE"
+changed:
+  - changed the following functions into S4 methods: readability(),
+    lex.div(), hyphen(), read.corp.custom() and freq.analysis()
+  - removed long since deprecated function kRp.freq.analysis()
+  - splitted the code of the monolithic internal function for
+    read.corp.custom() into several subfunctions to get more flexibility
+  - read.corp.custom() now also supports analysis of lists of tagged objects
+  - removed option "fileEncoding" from the signature of read.corp.custom(),
+    but it can still be used as part of the "..." options; this was neccessary
+    because treetag() uses "encoding" instead
+added:
+  - new option "tagger" now also available in read.corp.custom()
+  - there is now a mailing list to discuss the koRpus development:
+    https://ml06.ispgateway.de/mailman/listinfo/korpus-dev_r.reaktanz.de
+
 changes in version 0.05-6 (2015-06-30)
 fixed:
   - changed "selected" values of checkboxGroupInput() in the shiny file ui.R
@@ -10,9 +82,10 @@ fixed:
   - calling readability for "ARI.NRI" without hyphenation didn't work,
     allthough ARI doesn't need syllables
   - updated some broken links in the docs (?kRp.POS.tags, ?guess.lang)
-  - added imports for 'utils' and 'stats' packages to comply with new CRAN checks
-  - added a otherwise useless definition of "text" to the body of guess.lang(),
-    also to satisfy R CMD check
+  - added imports for 'utils' and 'stats' packages to comply with new CRAN
+    checks
+  - added a otherwise useless definition of "text" to the body of
+    guess.lang(), also to satisfy R CMD check
 changed:
   - replaced the RKWard plugin with a modularized rewrite (rkwarddev script)
   - some code cleaning in internal function kRp.rdb.formulae() and

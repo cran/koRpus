@@ -17,7 +17,7 @@
 
 
 # this internal function does the real readability calculations,
-# so it's mostly called by kRp.rdb.formulae()
+# so it's mostly called by readability()
 
 ## TODO:
 # lit:

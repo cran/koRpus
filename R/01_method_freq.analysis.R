@@ -51,78 +51,53 @@
 #' @keywords misc
 #' @seealso \code{\link[koRpus:get.kRp.env]{get.kRp.env}}, \code{\link[koRpus]{kRp.tagged-class}},
 #'    \code{\link[koRpus]{kRp.corp.freq-class}}
+#' @import methods
 #' @export
-#' @rdname freq.analysis
+#' @rdname freq.analysis-methods
 #' @examples
 #' \dontrun{
 #' freq.analysis("~/some/text.txt", corp.freq=my.LCC.data)
 #' }
-#' @include 00_class_03_kRp.txt.freq.R
-freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
-                       tagger="kRp.env", corp.rm.class="nonpunct",
-                       corp.rm.tag=c(), tfidf=TRUE, ...){
 
-  if("lang" %in% names(list(...))){
-    # since 'lang' is a valid argument for treetag(), it might have been set
-    stop(simpleError("You defined 'lang' in the '...' argument. This is confusing me! Use 'force.lang' instead."))
-  } else {}
-  # for backward compatibility
-  if("treetagger" %in% names(list(...))){
-    stop(simpleError("The option 'treetagger' is deprecated and was removed. Use 'tagger' instead."))
-  } else {}
+########################################################################
+## if this signature changes, check kRp.freq.analysis.calc() as well! ##
+########################################################################
 
-  # the internal function tag.kRp.txt() will return the object unchanged if it
-  # is already tagged, so it's safe to call it with the lang set here
-  tagged.text <- tag.kRp.txt(txt.file, tagger=tagger, lang=force.lang, objects.only=FALSE, ...)
-  # set the language definition
-  lang <- language.setting(tagged.text, force.lang)
-  commented <- slot(tagged.text, "TT.res")
+setGeneric("freq.analysis", function(txt.file, ...) standardGeneric("freq.analysis"))
 
-  if(identical(corp.rm.class, "nonpunct")){
-    corp.rm.class <- kRp.POS.tags(lang, tags=c("punct","sentc"), list.classes=TRUE)
-  } else {}
-
-  if(!is.null(corp.freq)){
-    # before we even start, check if we're alright:
-    stopifnot(inherits(corp.freq, "kRp.corp.freq"))
-    frequency.pre <- text.freq.analysis(
-      txt.commented=commented,
-      corp.freq=corp.freq,
-      corp.rm.class=corp.rm.class,
-      corp.rm.tag=corp.rm.tag,
-      lang=lang,
-      tfidf=tfidf)
-    # commented will be overwritten with a new version containing percentages for each word
-    commented <- frequency.pre[["commented"]]
-    frequency.res <- frequency.pre[["freq.analysis"]]
-  } else {
-    frequency.res <- list(NA)
-  }
-
-  if(isTRUE(desc.stat)){
-    desc.stat.res <- text.analysis(commented, lang=lang, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag, desc=slot(tagged.text, "desc"))
-  } else {
-    desc.stat.res <- slot(tagged.text, "desc")
-  }
-
-  results <- new("kRp.txt.freq", lang=lang, TT.res=commented, desc=desc.stat.res, freq.analysis=frequency.res)
-  return(results)
-}
-
-# function for backward compatibility
 #' @export
-#' @rdname freq.analysis
-kRp.freq.analysis <- function(txt.file, corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
-                       tagger="kRp.env", corp.rm.class="nonpunct",
-                       corp.rm.tag=c(), ...){
-  warning("kRp.freq.analysis() is deprecated and will be removed from this package. Please use freq.analysis() instead.")
-  return(freq.analysis(
-    txt.file=txt.file,
-    corp.freq=corp.freq,
-    desc.stat=desc.stat,
-    force.lang=force.lang,
-    tagger=tagger,
-    corp.rm.class=corp.rm.class,
-    corp.rm.tag=corp.rm.tag,
-    ...))
-}
+#' @include 00_class_01_kRp.tagged.R
+#' @include 00_class_03_kRp.txt.freq.R
+#' @include 00_class_04_kRp.txt.trans.R
+#' @include 00_class_05_kRp.analysis.R
+#' @include koRpus-internal.R
+#' @aliases freq.analysis,kRp.taggedText-method
+#' @rdname freq.analysis-methods
+setMethod("freq.analysis", signature(txt.file="kRp.taggedText"), function(txt.file,
+                        corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
+                        tagger="kRp.env", corp.rm.class="nonpunct",
+                        corp.rm.tag=c(), tfidf=TRUE, ...){
+
+    results <- kRp.freq.analysis.calc(txt.file=txt.file, corp.freq=corp.freq, desc.stat=desc.stat,
+        force.lang=force.lang, tagger=tagger, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag,
+        tfidf=tfidf, ...)
+
+    return(results)
+  }
+)
+
+#' @export
+#' @aliases freq.analysis,character-method
+#' @rdname freq.analysis-methods
+setMethod("freq.analysis", signature(txt.file="character"), function(txt.file,
+                        corp.freq=NULL, desc.stat=TRUE, force.lang=NULL,
+                        tagger="kRp.env", corp.rm.class="nonpunct",
+                        corp.rm.tag=c(), tfidf=TRUE, ...){
+
+    results <- kRp.freq.analysis.calc(txt.file=txt.file, corp.freq=corp.freq, desc.stat=desc.stat,
+        force.lang=force.lang, tagger=tagger, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag,
+        tfidf=tfidf, ...)
+
+    return(results)
+  }
+)

@@ -723,13 +723,12 @@ setMethod("summary", signature(object="kRp.readability"), function(object, flat=
     }
   } else {}
 
-   if(length(object@lang) > 0){
-     cat("Text language:", object@lang, "\n")
-   } else {}
-
   if(isTRUE(flat)){
     return(round(summary.flat, digits=2))
   } else {
+    if(length(object@lang) > 0){
+      cat("Text language:", object@lang, "\n")
+    } else {}
     # remove the empty first row
     summary.table <- summary.table[-1,]
     dimnames(summary.table)[[1]] <- c(1:dim(summary.table)[[1]])

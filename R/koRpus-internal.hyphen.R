@@ -15,93 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with koRpus.  If not, see <http://www.gnu.org/licenses/>.
 
+# this internal function does the real hyphenations,
+# so it's mostly called by hyphen()
 
-#' Automatic hyphenation
-#'
-#' This function implements word hyphenation, based on Liang's algorithm.
-#'
-#' For this to work the function must be told which pattern set it should use to
-#' find the right hyphenation spots. If \code{words} is already a tagged object,
-#' its language definition might be used. Otherwise, in addition to the words to
-#' be processed you must specify \code{hyph.pattern}. You have two options: If you
-#' want to use one of the built-in language patterns, just set it to the according
-#' language abbrevation. As of this version valid choices are:
-#' \itemize{
-#'  \item {\code{"de"}} {--- German (new spelling, since 1996)}
-#'  \item {\code{"de.old"}} {--- German (old spelling, 1901--1996)}
-#'  \item {\code{"en"}} {--- English (UK)}
-#'  \item {\code{"en.us"}} {--- English (US)}
-#'  \item {\code{"es"}} {--- Spanish}
-#'  \item {\code{"fr"}} {--- French}
-#'  \item {\code{"it"}} {--- Italian}
-#'  \item {\code{"ru"}} {--- Russian}
-#' }
-#' In case you'd rather use your own pattern set, \code{hyph.pattern} can be an
-#' object of class \code{kRp.hyph.pat}, alternatively.
-#'
-#' The built-in hyphenation patterns were derived from the patterns available on CTAN[1]
-#' under the terms of the LaTeX Project Public License[2], see \code{\link[koRpus:hyph.XX]{hyph.XX}}
-#' for detailed information.
-#'
-#' @param words Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.txt.freq-class}} or
-#'    \code{\link[koRpus]{kRp.analysis-class}}, or a character vector with words to be hyphenated.
-#' @param hyph.pattern Either an object of class \code{\link[koRpus]{kRp.hyph.pat-class}}, or
-#'    a valid character string naming the language of the patterns to be used. See details.
-#' @param min.length Integer, number of letters a word must have for considering a hyphenation.
-#' @param rm.hyph Logical, whether appearing hyphens in words should be removed before pattern matching.
-#' @param corp.rm.class A character vector with word classes which should be ignored. The default value
-#'    \code{"nonpunct"} has special meaning and will cause the result of
-#'    \code{kRp.POS.tags(lang, c("punct","sentc"), list.classes=TRUE)} to be used. Relevant only if \code{words}
-#'    is a valid koRpus object.
-#' @param corp.rm.tag A character vector with POS tags which should be ignored. Relevant only if \code{words}
-#'    is a valid koRpus object.
-#' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
-#' @param cache Logical. \code{hyphen()} can cache results to speed up the process. If this option is set to \code{TRUE}, the
-#'    current cache will be queried and new tokens also be added. Caches are language-specific and reside in an environment,
-#'    i.e., they are cleaned at the end of a session. If you want to save these for later use, see the option \code{hyphen.cache.file}
-#'    in \code{\link[koRpus:set.kRp.env]{set.kRp.env}}.
-#' @return An object of class \code{\link[koRpus]{kRp.hyphen-class}}
-#' @keywords hyphenation
-# @author m.eik michalke \email{meik.michalke@@hhu.de}
-#' @seealso
-#'    \code{\link[koRpus:read.hyph.pat]{read.hyph.pat}},
-#'    \code{\link[koRpus:manage.hyph.pat]{manage.hyph.pat}}
-#' @references
-#'  Liang, F.M. (1983). \emph{Word Hy-phen-a-tion by Com-put-er}.
-#'      Dissertation, Stanford University, Dept. of Computer Science.
-#'
-#' [1] \url{http://tug.ctan.org/tex-archive/language/hyph-utf8/tex/generic/hyph-utf8/patterns/}
-#'
-#' [2] \url{http://www.ctan.org/tex-archive/macros/latex/base/lppl.txt}
-#' @export
+########################################################
+## if this signature changes, check hyphen() as well! ##
+########################################################
 
-hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
+# min.length is set to 4 because we'll never hyphenate after the first of before the last letter, so
+# words with three letters or less cannot be hyphenated
+kRp.hyphen.calc <- function(words, hyph.pattern=NULL, min.length=4, rm.hyph=TRUE,
     corp.rm.class="nonpunct",
-    corp.rm.tag=c(), quiet=FALSE, cache=TRUE){
+    corp.rm.tag=c(), quiet=FALSE, cache=TRUE, lang=NULL){
+
+  stopifnot(is.character(words))
 
   # to avoid needless NOTEs from R CMD check
   token <- NULL
 
-  ## global stuff
-  # deal with the words object
-  if(inherits(words, "kRp.tagged")){
-    # get class kRp.tagged from words object
-    # the internal function tag.kRp.txt() will return the object unchanged if it
-    # is already tagged, so it's safe to call it with the lang set here
-    tagged.text <- tag.kRp.txt(words, objects.only=TRUE)
-    words <- tagged.txt.rm.classes(tagged.text@TT.res, lemma=FALSE,
-      lang=tagged.text@lang, corp.rm.class=corp.rm.class, corp.rm.tag=corp.rm.tag)
-    lang.from.tagged <- TRUE
-  } else {
-    lang.from.tagged <- FALSE
-  }
-  stopifnot(is.character(words))
-
   # check for hyphenation pattern.
   if(is.null(hyph.pattern)){
-    if(isTRUE(lang.from.tagged)){
+    if(!is.null(lang)){
       # this way the text object defines pattern language
-      lang <- tagged.text@lang
       hyph.pattern <- load.hyph.pattern(lang)
     } else {
       stop(simpleError("No language definition available. Set \"hyph.pattern\"!"))
@@ -183,9 +118,9 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
     word.dotted <- paste0(".", word, ".")
     word.length <- nchar(word.dotted)
 
-    ## create word fragments ".w", ".wo", ".wor"... "rd."
+    ## create word fragments ".wo", ".wor"... "rd."
     # first, define all possible start values. obviously it starts with the first letter
-    # since minimal patten length is known, the last start value is (last character - min-length + 1)
+    # since minimal patten length is known, the last start value would be (last character - min-length + 1)
     iter.start.points <- c(1:(word.length - min.pat))
 
     word.fragments <- data.frame(sapply(iter.start.points, function(start){
@@ -217,8 +152,8 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 
       # we'll never hyphenate before a word...
       pattern.max <- pattern.max[-c(1, length(pattern.max))]
-      # ... and never after the last letter
-      pattern.max[length(pattern.max)] <- 0
+      # ... never after the first or before the last letter
+      pattern.max[c(1,length(pattern.max)-1,length(pattern.max))] <- 0
 
       # filter odd positions (count syllables)
       possible.hyphs <- (pattern.max %% 2) != 0
@@ -286,3 +221,26 @@ hyphen <- function(words, hyph.pattern=NULL, min.length=3, rm.hyph=TRUE,
 
   return(results)
 }
+
+
+## function load.hyph.pattern()
+load.hyph.pattern <- function(lang){
+  # to avoid needless NOTEs from R CMD check
+  hyph.pat <- NULL
+
+  lang <- is.supported.lang(lang, support="hyphen")
+  # check for additional package information, in case we're
+  # importing hyphen patterns from a third party package
+  lang.names <- names(lang) %in% "package"
+  if(length(lang) > 1 & any(lang.names)){
+    hyph.package <- lang[["package"]]
+    lang <- lang[!lang.names][[1]]
+  } else {
+    hyph.package <- "koRpus"
+  }
+  if(!exists(paste0("hyph.", lang), envir=as.environment(.koRpus.env), inherits=FALSE)){
+    data(list=paste0("hyph.", lang), package=hyph.package, envir=as.environment(.koRpus.env))
+  } else {}
+  hyph.pat <- get(paste0("hyph.", lang), envir=as.environment(.koRpus.env))
+  return(hyph.pat)
+} ## end function load.hyph.pattern()

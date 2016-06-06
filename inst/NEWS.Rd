@@ -9,6 +9,7 @@
         using ISO 639-3 codes as language identifier
       \item \code{tokenize()} and \code{treetag()} weren't able to cope with text that only
         consisted of a single token
+      \item declared import from graphics package to satisfy CRAN checks
     }
   }
   \subsection{changed}{

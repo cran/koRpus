@@ -28,8 +28,8 @@ URL: http://reaktanz.de/?c=hacking&s=koRpus
 Authors@R: c(person(given="m.eik", family="michalke", email="meik.michalke@hhu.de", role=c("aut", "cre")), person(given="Earl",
                family="Brown", email="ekbrown@ksu.edu", role=c("ctb")), person(given="Alberto", family="Mirisola", role=c("ctb")),
                person(given="Alexandre", family="Brulet", role=c("ctb")), person(given="Laura", family="Hauser", role=c("ctb")))
-Version: 0.06-4
-Date: 2016-03-07
+Version: 0.06-5
+Date: 2016-06-05
 RoxygenNote: 5.0.1
 Collate: '00_class_01_kRp.tagged.R' '00_class_02_kRp.TTR.R'
         '00_class_03_kRp.txt.freq.R' '00_class_04_kRp.txt.trans.R'
@@ -73,7 +73,7 @@ Collate: '00_class_01_kRp.tagged.R' '00_class_02_kRp.TTR.R'
         'spache.R' 'strain.R' 'textFeatures.R' 'tokenize.R'
         'traenkle.bailer.R' 'treetag.R' 'tuldava.R' 'wheeler.smith.R'
 NeedsCompilation: no
-Packaged: 2016-03-07 11:47:50 UTC; m
+Packaged: 2016-06-05 21:23:21 UTC; m
 Author: m.eik michalke [aut, cre],
   Earl Brown [ctb],
   Alberto Mirisola [ctb],
@@ -81,4 +81,4 @@ Author: m.eik michalke [aut, cre],
   Laura Hauser [ctb]
 Maintainer: m.eik michalke <meik.michalke@hhu.de>
 Repository: CRAN
-Date/Publication: 2016-03-08 06:22:46
+Date/Publication: 2016-06-06 06:39:53

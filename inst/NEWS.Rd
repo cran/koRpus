@@ -1,6 +1,149 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.10-1 (2017-03-01)}{
+  \subsection{fixed}{
+    \itemize{
+      \item windows users could run into an error of an undefined object
+        (TT.call.file) when using \code{treetag()}
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item CRAN doesn't accept leading zeroes in version numbers any longer and
+        asked me to change 0.07 into 0.7. i'd rather play this safe, so i'm jumping
+        right to 0.10 to keep the versioning consistent fo all users. the reason for
+        this policy change was not explained to me, could be anything from "we
+        think it looks ugly" to "it breaks our build systems".
+      \item allowing \code{treetag()} to run even when a defined lexicon file is not found.
+        this previously resulted in an error and now causes only a warning message.
+    }
+  }
+}
+\section{Changes in koRpus version 0.07-2 (2016-12-21)}{
+  \subsection{fixed}{
+    \itemize{
+      \item the show method for Flesch Brouwer was not working properly
+      \item if a cache file for hyphen is set but not existing, it will be created
+        automatically
+      \item the manual page for the wrapper function \code{ELF()} attributed the index to
+        Farr, when it was in fact Fang (as correctly said in ?readability);
+        vigilantly spotted by Mario Martinez
+      \item calling \code{lex.div()} on untagged character vectors didn't really work yet
+      \item \code{guess.lang()} had problems with newer UDHR files which included comments
+        in the index.xml file
+      \item shiny app: was omitting the row names of tables in newer versions of shiny
+      \item \code{treetag()} appended the abbreviation list two times in english preset
+      \item TT.options checks in \code{treetag()} do no longer ask for mandatory options if
+        TT.cmd is not \code{"manual"}
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item updated shiny app: disabling FOG by default (faster), adding Brouwer and
+        MTLDMA.steps options, adding dutch and portuguese by default, disabled
+        language selection in language guessing tab
+      \item shiny app: using \code{fluidPage()} now
+      \item shiny app: set tables to use bootstrap striped layout
+      \item reaktanz.de supports HTTPS now, updated references
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item new \code{summary()} method for kRp.hyph objects
+      \item new \code{show()} methods for kRp.hyph and kRp.taggedText objects
+      \item new methods \code{tokens()} and \code{types()} to quickly get tokens and types of a text
+    }
+  }
+}
+\section{Changes in koRpus version 0.07-1 (2016-07-11)}{
+  \subsection{fixed}{
+    \itemize{
+      \item the \code{treetag()} function actually omittet options for the tokenizer due to
+        a never updated variable and a wrong setting later on; this has been the
+        case for years -- interesting that no-one ever noticed this
+      \item \code{read.corp.LCC()} can now digest newer LCC archives, omitting the
+        *-meta.txt file if none is present, and also supporting *-words.txt files with
+        duplicate columns
+      \item some typos in the ChangeLog...
+      \item fixed manual page for class kRp.corp.freq
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item the support for non-UTF-8 presets for was removed, since TreeTagger is
+        only endorsing UTF-8 encoding itself for a while; the old preset names will
+        continue to work for the time being, but if possible you should already
+        rename them from "<lang>-utf8" into just "<lang>" in your scripts
+      \item removed options corp.rm.class and corp.rm.tag from method \code{hyphen()} for
+        character strings
+      \item massively improved the speed of hyphen by using a new method for
+        exploding words into their sub-parts. in benchmark tests (text with ~30.000 words)
+        the new method only takes about 15\% of the time without cache, and about
+        50\% with cache
+      \item massively improved the speed of \code{lex.div()} by reducing unnecessary
+        computations. in benchmark tests (see above) the new method is more than 100
+        times faster, which also makes \code{readability()} three times as fast with standard
+        indices. if you disable the FOG index, \code{readability()} is now finished in
+        an instant, too. see the new index=\code{"fast"} option below
+      \item \code{tokenize()} now uses \code{data.table()} instead of \code{data.frame()} internally,
+        leading to an increase in speed of about 20\%
+      \item new slots \code{"bigrams"} and \code{"cooccur"} in S4 class kRp.corp.freq
+      \item cleaned up code
+      \item removed the never used variable TT.tknz.opts.def in the language support
+      \item \code{set.lang.support()} now checks for duplicate tag definitions and throws an
+        error if any were found
+      \item renamed class and method files to set some environment first
+      \item moved several internal hyphenation functions to koRpus-internal.hyphen.R
+      \item moved several internal readability functions to
+        koRpus-internal.rdb.formulae.R
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item \code{read.corp.LCC()} can now import the information on bigrams and
+        co-occurences of tokens in a sentence
+      \item language support now also uses TT.splitter, TT.splitter.opts, and
+        TT.pre.tagger, which was needed mostly to implement the TreeTagger script for
+        portuguese (available in the separate package koRpus.lang.pt), but also for
+        updates of languages that were already supported
+      \item updated the RKWard plugin (UTF-8 defaults, added dutch and portuguese,
+        added Brouwer formula)
+      \item new unit tests for \code{lex.div()}, \code{tokenize()} and \code{readability()}
+      \item new options to set index=\code{"fast"} in \code{readability()} to drop FPG from the
+        defaults for faster calculations
+      \item new option MTLDMA.steps to increase the step size for MTLD-MA. this
+        diverts from the original proposal, but if your text is long enough, you will
+        get a very good estimate and only need a fraction of the computing time
+    }
+  }
+}
+\section{Changes in koRpus version 0.06-5 (2016-06-05)}{
+  \subsection{fixed}{
+    \itemize{
+      \item fixed the Douma formula: based on available literature, the factor for
+        average sentence length was set to 0.33, but the original paper reported it
+        as 0.93
+      \item fixed the documentation for \code{tokenize()}, roxygen2 had problems with an
+        escaped double quote
+      \item corrected some problems with umlauts in the docs
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item new template for a roxyPackage script to make it easy to build packages
+        from language support scripts
+      \item additional validation for ARI, flesch (en), flesch-kincaid, SMOG and FOG,
+        via http://wordscount.info/wc/jsp/clear/analyze_readability.jsp
+      \item new Flesch parameters to calculate readability according to Brouwer (NL),
+        can be invoked as index "Flesch.nl-b", \code{"Flesch.Brouwer"}, or Flesch
+        paremeters set to "nl-b"
+      \item now the manual is actually documenting all the various Flesch formulas,
+        i.e., listing all parameter values, so that it's easier for users to check
+        what is being calculated
+    }
+  }
+}
 \section{Changes in koRpus version 0.06-4 (2016-03-07)}{
   \subsection{fixed}{
     \itemize{

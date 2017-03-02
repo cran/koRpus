@@ -1,5 +1,7 @@
 # koRpus
 
+[![Flattr this git repo](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=m.eik&url=https://github.com/unDocUMeantIt/koRpus&title=koRpus&language=en_GB&tags=github&category=software)
+
 koRpus is an [R](https://r-project.org) package for text analysis. This includes, amongst others,
 a wrapper for the POS tagger [TreeTagger](http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/),
 functions for automatic language detection, hyphenation, several indices of lexical diversity
@@ -9,7 +11,7 @@ koRpus also includes a plugin for [RKWard](https://rkward.kde.org), a powerful G
 IDE for R, providing graphical dialogs for its basic features. To make full use of this feature,
 please install [RKWard](https://rkward.kde.org) (plugins are detected automatically).
 
-More information on koRpus is available on the [project homepage](http://reaktanz.de/?c=hacking&s=koRpus).
+More information on koRpus is available on the [project homepage](https://reaktanz.de/?c=hacking&s=koRpus).
 
 ## Installation
 
@@ -36,14 +38,24 @@ or supposed bug fixes, and get feedback before the next release goes to CRAN.
 Installation is fairly easy, too:
 
 ```
-install.packages("koRpus", repo="http://R.reaktanz.de")
+install.packages("koRpus", repo="https://reaktanz.de/R")
 ```
 
 To automatically get updates, consider adding the repository to your R configuration.  You might also
-want to subscribe to the package's [RSS feed](http://r.reaktanz.de/pckg/koRpus/RSS.xml) to get notified of new releases.
+want to subscribe to the package's [RSS feed](https://reaktanz.de/R/pckg/koRpus/RSS.xml) to get notified of new releases.
 
 If you're running a Debian based operating system, you might be interested in the
-[precompiled *.deb packages](http://r.reaktanz.de/pckg/koRpus/deb_repo.html).
+[precompiled *.deb packages](https://reaktanz.de/R/pckg/koRpus/deb_repo.html).
+
+### Installation via GitHub
+
+To install it directly from GitHub, you can use `install_github()` from the [devtools](https://github.com/hadley/devtools) package:
+
+```
+library(devtools)
+install_github("unDocUMeantIt/koRpus") # stable release
+install_github("unDocUMeantIt/koRpus", ref="develop") # development release
+```
 
 ## Contributing
 
@@ -52,9 +64,14 @@ development of the package, please either subscribe to the
 [koRpus-dev mailing list](https://ml06.ispgateway.de/mailman/listinfo/korpus-dev_r.reaktanz.de), or
 use the issue tracker on GitHub.
 
+### Branches
+
+Please note that all development happens in the `develop` branch. Pull requests against the `master`
+branch will be rejected, as it is reserved for the current stable release.
+
 ## Licence
 
-Copyright 2012-2015 Meik Michalke <meik.michalke@hhu.de>
+Copyright 2012-2017 Meik Michalke <meik.michalke@hhu.de>
 
 koRpus is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

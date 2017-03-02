@@ -1,4 +1,4 @@
-# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2016 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -18,10 +18,13 @@
 
 #' @export
 #' @docType methods
-#' @aliases show,kRp.corp.freq-method
+#' @aliases show,kRp.hyphen-method
 #' @rdname show-methods
-#' @include 00_class_06_kRp.corp.freq.R
-#' @include 01_method_show.kRp.lang.R
-setMethod("show", signature(object="kRp.corp.freq"), function(object){
-  show(slot(object, "words"))
+#' @include 01_class_08_kRp.hyphen.R
+#' @include 02_method_show.kRp.lang.R
+setMethod("show", signature(object="kRp.hyphen"), function(object){
+  hyph <- slot(object, "hyphen")
+  middle <- data.frame(syll=NA, word="[...]    ", row.names="", stringsAsFactors=FALSE)
+  show.mtx <- rbind(head(hyph), middle, tail(hyph))
+  show(show.mtx)
 })

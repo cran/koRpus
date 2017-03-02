@@ -24,8 +24,8 @@
 #' \dontrun{
 #' flesch(tagged.txt)
 #' }
-#' @include 00_class_10_kRp.readability.R
-#' @include 01_method_show.kRp.lang.R
+#' @include 01_class_10_kRp.readability.R
+#' @include 02_method_show.kRp.lang.R
 setMethod("show", signature(object="kRp.readability"), function(object){
 
   if(sum(!is.na(object@ARI)) == 0){
@@ -188,7 +188,7 @@ setMethod("show", signature(object="kRp.readability"), function(object){
   } else {
     prt.Flesch.Brouwer.flavour <- object@Flesch.Brouwer$flavour
     prt.Flesch.Brouwer <- round(object@Flesch.Brouwer$RE, digits=2)
-    prt.Flesch.Brouwer.grade <- round(object@Flesch.Brouwer$grade, digits=2)
+    prt.Flesch.Brouwer.grade <- object@Flesch.Brouwer$grade
     prt.Flesch.Brouwer.age <- round(object@Flesch.Brouwer$age, digits=2)
     show.Flesch.Brouwer <- TRUE
   }

@@ -282,11 +282,11 @@
 #' In case you want to provide different parameters, you must provide a complete set for an index, or special parameters that are
 #' mentioned in the index descriptions above (e.g., "PSK", if appropriate).
 #'
-#' @param txt.file Either an object of class \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.txt.freq-class}},
-#'    \code{\link[koRpus]{kRp.analysis-class}} or \code{\link[koRpus]{kRp.txt.trans-class}}, or a character vector which must be be
+#' @param txt.file Either an object of class \code{\link[koRpus:kRp.tagged-class]{kRp.tagged}}, \code{\link[koRpus:kRp.txt.freq-class]{kRp.txt.freq}},
+#'    \code{\link[koRpus:kRp.analysis-class]{kRp.analysis}} or \code{\link[koRpus:kRp.txt.trans-class]{kRp.txt.trans}}, or a character vector which must be be
 #'    a valid path to a file containing the text to be analyzed. If the latter, \code{force.lang} must be set as well, and
-#'    the language specified must be supported by both \code{\link[koRpus:treetag]{treetag}} and \code{\link[koRpus:hyphen]{hyphen}}
-#' @param hyphen An object of class kRp.hyphen. If \code{NULL}, the text will be hyphenated automatically. All syllable handling will
+#'    the language specified must be supported by both \code{\link[koRpus:treetag]{treetag}} and \code{\link[koRpus]{hyphen}}
+#' @param hyphen An object of class \code{\link[sylly:kRp.hyphen-class]{kRp.hyphen}}. If \code{NULL}, the text will be hyphenated automatically. All syllable handling will
 #'    be skipped automatically if it's not needed for the selected indices.
 #' @param index A character vector, indicating which indices should actually be computed. If set to \code{"all"}, then all available indices
 #'    will be tried (meaning all variations of all measures). If set to \code{"fast"}, a subset of the default values is used that is
@@ -314,7 +314,7 @@
 #' @param quiet Logical. If \code{FALSE}, short status messages will be shown.
 #'    \code{TRUE} will also suppress all potential warnings regarding the validation status of measures.
 #' @param ... Additional options for the specified \code{tagger} function
-#' @return An object of class \code{\link[koRpus]{kRp.readability-class}}.
+#' @return An object of class \code{\link[koRpus:kRp.readability-class]{kRp.readability}}.
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords readability
 #' @references
@@ -366,7 +366,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' readability(tagged.text)
+#' rdb.results <- readability(tagged.text)
+#'
+#' # there is [ and [[ methods for these objects
+#' rdb.results[["ARI"]]
 #' }
 
 setGeneric("readability", function(txt.file, ...) standardGeneric("readability"))
@@ -475,5 +478,31 @@ setMethod("readability", signature(txt.file="missing"), function(txt.file, index
     }
 
     return(invisible(NULL))
+  }
+)
+
+#' @rdname readability-methods
+#' @param x An object of class \code{kRp.readability}.
+#' @param i Defines the row selector (\code{[}) or the name to match (\code{[[}).
+#' @export
+#' @docType methods
+#' @aliases
+#'    [,kRp.readability,ANY-method
+setMethod("[",
+  signature=signature(x="kRp.readability"),
+  function (x, i){
+    return(summary(x, flat=TRUE)[i])
+  }
+)
+
+#' @rdname readability-methods
+#' @export
+#' @docType methods
+#' @aliases
+#'    [[,kRp.readability,ANY-method
+setMethod("[[",
+  signature=signature(x="kRp.readability"),
+  function (x, i){
+    return(summary(x, flat=TRUE)[[i]])
   }
 )

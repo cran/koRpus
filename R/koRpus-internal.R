@@ -1,4 +1,4 @@
-# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2018 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -27,8 +27,6 @@
 #' @include 01_class_04_kRp.txt.trans.R
 #' @include 01_class_05_kRp.analysis.R
 #' @include 01_class_06_kRp.corp.freq.R
-#' @include 01_class_08_kRp.hyphen.R
-#' @include 01_class_07_kRp.hyph.pat.R
 #' @include 01_class_09_kRp.lang.R
 #' @include 01_class_10_kRp.readability.R
 #' @include kRp.filter.wclass.R
@@ -132,21 +130,21 @@ tag.kRp.txt <- function(txt, tagger=NULL, lang, objects.only=TRUE, ...){
 basic.text.descriptives <- function(txt){
   # number of characters, including spaces and punctuation
   # the following vector counts chars per line
-  vct.all.chars <- nchar(txt)
+  vct.all.chars <- nchar(txt, type="width")
   num.lines <- length(vct.all.chars)
   # now count each cluster of spaces as only one space
   txt.trans <- gsub("[[:space:]]+", " ", paste(txt, collapse="\n"))
-  onespace.chars <- nchar(txt.trans)
+  onespace.chars <- nchar(txt.trans, type="width")
   # count without any spaces
   txt.trans <- gsub("[[:space:]]", "", txt.trans)
-  nospace.chars <- nchar(txt.trans)
+  nospace.chars <- nchar(txt.trans, type="width")
   # count without any punctuation, i.e. only letters and digits
   txt.trans <- gsub("[^\\p{L}\\p{M}\\p{N}]", "", txt.trans, perl=TRUE)
-  nopunct.chars <- nchar(txt.trans)
+  nopunct.chars <- nchar(txt.trans, type="width")
   num.punc <- nospace.chars - nopunct.chars
   # fially, get rid of digits as well
   txt.trans <- gsub("[\\p{N}+]", "", txt.trans, perl=TRUE)
-  only.letters <- nchar(txt.trans)
+  only.letters <- nchar(txt.trans, type="width")
   num.digits <- nopunct.chars - only.letters
 
   results <- list(
@@ -164,7 +162,7 @@ basic.text.descriptives <- function(txt){
 
 ## function basic.tagged.descriptives()
 # txt must be an object of class kRp.tagged
-basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL, update.desc=FALSE){
+basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL, update.desc=FALSE, doc_id=NA){
   if(is.null(lang)){
     lang <- txt@lang
   } else {}
@@ -214,8 +212,10 @@ basic.tagged.descriptives <- function(txt, lang=NULL, desc=NULL, txt.vector=NULL
         sentences=txt.stend,
         avg.sentc.length=avg.sentc.length,
         avg.word.length=avg.word.length
-      ))
-   }
+      )
+    )
+  }
+  results[["doc_id"]] <- doc_id
   return(results)
 } ## end function basic.tagged.descriptives()
 
@@ -246,42 +246,108 @@ language.setting <- function(tagged.object, force.lang){
   if(is.null(force.lang)){
     lang <- tagged.object@lang
   } else {
-    ## TODO: language validation!
-    lang <- force.lang
+    lang <- is.supported.lang(lang.ident=force.lang)
   }
   return(lang)
 } ## end function language.setting()
 
 
-## function treetag.com()
-treetag.com <- function(tagged.text, lang){
-
-  tagged.text <- as.data.frame(tagged.text, row.names=1:nrow(tagged.text), stringsAsFactors=FALSE)
-
-  # get are all valid tags
+## function validate_tags()
+# takes a character vector of POS tags and a language identifier
+# checks all tags for validity
+validate_tags <- function(tags, lang){
+  # get all valid tags
   tag.class.def <- kRp.POS.tags(lang)
 
   # only proceed if all tag values are valid
-  all.found.tags <- unique(tagged.text$tag)
+  all.found.tags <- unique(tags)
   invalid.found.tags <- all.found.tags[!all.found.tags %in% tag.class.def[,"tag"]]
   if(length(invalid.found.tags) > 0){
-    TT.res.uniq <- unique(tagged.text)
-    TT.res.invalid <- TT.res.uniq[TT.res.uniq[,"tag"] %in% invalid.found.tags, ]
-    print(TT.res.invalid)
-    stop(simpleError(paste0("Invalid tag(s) found: ", paste(invalid.found.tags, collapse = ", "),
+    warning(paste0("Invalid tag(s) found: ", paste(invalid.found.tags, collapse = ", "),
       "\n  This is probably due to a missing tag in kRp.POS.tags() and",
       "\n  needs to be fixed. It would be nice if you could forward the",
-      "\n  above error dump as a bug report to the package maintaner!\n")))
+      "\n  above warning dump as a bug report to the package maintaner!\n"), 
+      call.=FALSE
+    )
   } else {}
+  # return a logical vector
+  result <- !tags %in% invalid.found.tags
+  return(result)
+}
+## end function validate_tags()
 
+
+## function explain_tags()
+# takes a character vector of POS tags and a language identifier
+# returns either an equivalent character vector with explainations of each tag,
+# or a matrix if 'cols' is > 1
+explain_tags <- function(tags, lang, cols=c("wclass","desc"), valid=rep(TRUE, length(tags))){
+  # get all valid tags
+  tag.class.def <- kRp.POS.tags(lang)
+  tags_explained <- sapply(
+    seq_along(tags),
+    function(tagNum){
+      if(isTRUE(valid[tagNum])){
+        return(tag.class.def[tag.class.def[,"tag"] == tags[tagNum], cols])
+      } else {
+        return(c(wclass="unknown",desc="Unknown (kRp internal)")[cols])
+      }
+    },
+    USE.NAMES=FALSE
+  )
+  if(length(cols) > 1){
+   tags_explained <- as.matrix(t(tags_explained))
+  } else {
+   tags_explained <- as.character(tags_explained)
+  }
+  return(tags_explained)
+}
+## end function explain_tags()
+
+
+## function treetag.com()
+treetag.com <- function(tagged.text, lang, add.desc=TRUE){
+  tagged.text <- as.data.frame(tagged.text, row.names=1:nrow(tagged.text), stringsAsFactors=FALSE)
+  # initialize empty target data.frame to define the order of columns
+  newDf <- init.kRp.tagged.df(rows=nrow(tagged.text))
+  newDf[,c("token","lemma")] <- tagged.text[,c("token","lemma")]
+
+  valid_tags <- validate_tags(tags=tagged.text[["tag"]], lang=lang)
+  # get all valid tags
+  tag.class.def <- kRp.POS.tags(lang)
+ 
+  # make tag a factor with all possible tags for this language as levels
+  newDf[["tag"]] <- factor(
+    tagged.text[["tag"]],
+    # keep invalid tags for debugging
+    levels=unique(c(tag.class.def[,"tag"], tagged.text[!valid_tags,"tag"]))
+  )
   # count number of letters, add column "lttr"
-  tagged.text <- cbind(tagged.text, lttr=as.numeric(nchar(tagged.text[,"token"])))
+  newDf[["lttr"]] <- as.numeric(nchar(tagged.text[,"token"], type="width"))
 
   # add further columns "wclass" and "desc"
-  comments <- as.matrix(t(sapply(tagged.text[,"tag"], function(tag){tag.class.def[tag.class.def[,"tag"] == tag, 2:3]})))
-  commented <- cbind(tagged.text, comments, stringsAsFactors=FALSE)
+  if(isTRUE(add.desc)){
+    tagsExplained <- explain_tags(tags=tagged.text[["tag"]], lang=lang, cols=c("wclass","desc"), valid=valid_tags)
+    tagsExplained.wclass <- factor(
+      tagsExplained[,"wclass"],
+      levels=unique(tag.class.def[,"wclass"])
+    )
+    tagsExplained.desc <- factor(
+      tagsExplained[,"desc"],
+      levels=unique(tag.class.def[,"desc"])
+    )
+  } else {
+    tagsExplained.wclass <- factor(
+      explain_tags(tags=tagged.text[["tag"]], lang=lang, cols="wclass", valid=valid_tags),
+      levels=unique(tag.class.def[,"wclass"])
+    )
+    tagsExplained.desc <- NA
+  }
 
-  return(commented)
+  newDf[["wclass"]] <- tagsExplained.wclass
+  newDf[["desc"]] <- tagsExplained.desc
+    
+  return(newDf)
 } ## end function treetag.com()
 
 
@@ -318,26 +384,59 @@ stopAndStem <- function(tagged.text.df, stopwords=NULL, stemmer=NULL, lowercase=
     } else {}
     # treat all tokens and stopwords in lower case?
     if(isTRUE(lowercase)){
-      this.token <- tolower(tagged.text.df[,"token"])
+      this.token <- tolower(tagged.text.df[["token"]])
       stopwords <- tolower(stopwords)
     } else {
-      this.token <- tagged.text.df[,"token"]
+      this.token <- tagged.text.df[["token"]]
     }
     # check if token is a stopword, add column "lttr"
-    tagged.text.df <- cbind(tagged.text.df, stop=this.token %in% stopwords, stringsAsFactors=FALSE)
+    tagged.text.df[["stop"]] <- this.token %in% stopwords
   } else {
-    tagged.text.df <- cbind(tagged.text.df, stop=NA, stringsAsFactors=FALSE)
+    tagged.text.df[["stop"]] <- NA
   }
 
   # check for stemming
   if(inherits(stemmer, "R_Weka_stemmer_interface") || is.function(stemmer)){
-    tagged.text.df <- cbind(tagged.text.df, stem=stemmer(tagged.text.df[,"token"]), stringsAsFactors=FALSE)
+    tagged.text.df[["stem"]] <- stemmer(tagged.text.df[,"token"])
   } else {
-    tagged.text.df <- cbind(tagged.text.df, stem=NA, stringsAsFactors=FALSE)
+    tagged.text.df[["stem"]] <- NA
   }
 
   return(tagged.text.df)
 } ## end function stopAndStem()
+
+
+## function indexSentenceDoc()
+# after stopAndStem(), add columns "idx", "sntc" and "doc_id" to data.frame
+indexSentenceDoc <- function(tagged.text.df, lang, doc_id=NA){
+  numTokens <- nrow(tagged.text.df)
+  tagged.text.df[["idx"]] <- 1:numTokens
+  sentenceEnding <- kRp.POS.tags(lang=lang, tags=c("sentc"), list.classes=TRUE)
+  endedSentences <- which(tagged.text.df[["wclass"]] %in% sentenceEnding)
+  if(length(endedSentences) > 0){
+    # handle texts that don't end with a sentence ending
+    ## TODO: be smarter here -- if the sentence is a quote, the closing quote comes *after* the fullstop
+    ## we'll just ignore this for now!
+    if(endedSentences[length(endedSentences)] < numTokens){
+      endedSentences[length(endedSentences)] <- numTokens
+    } else {}
+    tagged.text.df[["sntc"]] <- unlist(sapply(
+      seq_along(endedSentences),
+      function(numSentence){
+        if(numSentence > 1){
+          return(rep(numSentence, endedSentences[numSentence] - endedSentences[numSentence - 1]))
+        } else {
+          return(rep(numSentence, endedSentences[numSentence]))
+        }
+      },
+      simplify=FALSE
+    ))
+  } else {
+    tagged.text.df[["sntc"]] <- NA
+  }
+  tagged.text.df[["doc_id"]] <- factor(doc_id)
+  return(tagged.text.df)
+} ## end function indexSentenceDoc()
 
 
 ## function tagged.txt.rm.classes()
@@ -433,7 +532,13 @@ count.sentences <- function(txt, tags){
 ## function value.distribs()
 value.distribs <- function(value.vect, omit.missings=TRUE){
   vector.length <- length(unlist(value.vect))
-  vector.summary <- summary(as.factor(value.vect))
+  # some hard to tokenize texts can end up with really strange values here,
+  # exceeding the threshold of maxsum=100 for summary() on factors.
+  # as a result, the as.numeric(names()) a few lines below will fail because
+  # vector.summary has one last entry called "(Other)".
+  # so we'll dynamically adjust maxsum to the needed value
+  value.factor <- as.factor(value.vect)
+  vector.summary <- summary(value.factor, maxsum=length(levels(value.factor)))
 
   # try to fill up missing values with 0, e.g., found no words with 5 characters
   if(!isTRUE(omit.missings)){
@@ -783,9 +888,58 @@ text.freq.analysis <- function(txt.commented, corp.freq, corp.rm.class, corp.rm.
 # "dscrpt.meta" must be a data.frame with six columns: "tokens" (old: "words"), "types" (old: "dist.words"),
 #   "words.p.sntc", "chars.p.sntc", "chars.p.wform" and "chars.p.word"; if NULL its value is set to an empty default
 # "extra.cols" is an optional data.frame with additional columns, e.g. valence data
+# "casSens" determines whether frequency stats should distinguish between letter cases or consolidate otherwise identical tokens
 create.corp.freq.object <- function(matrix.freq, num.running.words, df.meta, df.dscrpt.meta,
-  matrix.table.bigrams=NULL, matrix.table.cooccur=NULL, extra.cols=NULL){
+  matrix.table.bigrams=NULL, matrix.table.cooccur=NULL, extra.cols=NULL, caseSens=TRUE, quiet=FALSE){
   tokenFreq <- as.numeric(matrix.freq[,"freq"])
+  if(!isTRUE(caseSens)){
+    # first look for tokens that only differ in letter case and
+    # replace freq with sum of all occurances
+    lowerTokens <- tolower(matrix.freq[,"word"])
+#     caseSensTokens <- unique(lowerTokens[duplicated(lowerTokens)])
+#     caseSensFreq <- as.list(rep(0, length(caseSensTokens)))
+#     names(caseSensFreq) <- caseSensTokens
+#     caseSensFreq <- as.environment(caseSensFreq)
+    caseSensFreq <- new.env()
+    if(!isTRUE(quiet)){
+      num.tokens <- length(lowerTokens) # length(caseSensTokens)
+      message(paste0("Re-calculating token frequencies (case insensitve, ", num.tokens, " tokens)"))
+      # just some feedback, so we know the machine didn't just freeze...
+      prgBar <- txtProgressBar(min=0, max=num.tokens, style=3)
+    } else {}
+
+    start.with <- new.env()
+    start.with[["count"]] <- 1
+    # we don't really need this object, sapply updates the environment caseSensFreq
+    tmp <- sapply(
+      seq_along(tokenFreq),
+      function(numToken){
+        if(!isTRUE(quiet)){
+          # update progress bar
+          setTxtProgressBar(prgBar, start.with[["count"]])
+        } else {}
+        thisLowToken <- lowerTokens[numToken]
+        if(is.null(caseSensFreq[[thisLowToken]])){
+          caseSensFreq[[thisLowToken]] <- tokenFreq[numToken]
+        } else {
+          caseSensFreq[[thisLowToken]] <- caseSensFreq[[thisLowToken]] + tokenFreq[numToken]
+        }
+        start.with[["count"]] <- start.with[["count"]] + 1
+      }
+    )
+    tokenFreq <- unlist(sapply(
+      lowerTokens,
+      function(thisToken){
+        caseSensFreq[[thisToken]]
+      },
+      USE.NAMES=FALSE
+    ))
+    if(!isTRUE(quiet)){
+      setTxtProgressBar(prgBar, num.tokens)
+      close(prgBar)
+    } else {}
+  } else {}
+
   # try to work around missing meta information
   if(is.na(num.running.words)){
     num.running.words <- sum(tokenFreq)
@@ -835,7 +989,7 @@ create.corp.freq.object <- function(matrix.freq, num.running.words, df.meta, df.
               lemma=have.lemma,
               tag=have.tag,
               wclass=have.wclass,
-              lttr=nchar(matrix.freq[,"word"], allowNA=TRUE),
+              lttr=nchar(matrix.freq[,"word"], type="width", allowNA=TRUE),
               freq=tokenFreq,
               pct=tokenFreq/num.running.words,
               pmio=words.per.mio,
@@ -853,13 +1007,13 @@ create.corp.freq.object <- function(matrix.freq, num.running.words, df.meta, df.
   } else {}
   # set missing information to a valid defaults
   if(is.null(df.dscrpt.meta)){
-    df.dscrpt.meta <- slot(new("kRp.corp.freq"), "desc")
+    df.dscrpt.meta <- slot(kRp_corp_freq(), "desc")
   } else {}
   if(is.null(df.meta)){
-    df.meta <- slot(new("kRp.corp.freq"), "meta")
+    df.meta <- slot(kRp_corp_freq(), "meta")
   } else {}
   if(is.null(matrix.table.bigrams)){
-    df.table.bigrams <- slot(new("kRp.corp.freq"), "bigrams")
+    df.table.bigrams <- slot(kRp_corp_freq(), "bigrams")
   } else {
     message("Fetching bigram tokens from data... ", appendLF=FALSE)
     df.table.bigrams <- data.frame(
@@ -886,7 +1040,7 @@ create.corp.freq.object <- function(matrix.freq, num.running.words, df.meta, df.
     message("done.")
   }
   if(is.null(matrix.table.cooccur)){
-    df.table.cooccur <- slot(new("kRp.corp.freq"), "cooccur")
+    df.table.cooccur <- slot(kRp_corp_freq(), "cooccur")
   } else {
     message("Fetching co-occurrence tokens from data... ", appendLF=FALSE)
     df.table.cooccur <- data.frame(
@@ -912,13 +1066,13 @@ create.corp.freq.object <- function(matrix.freq, num.running.words, df.meta, df.
     df.table.cooccur <- df.table.cooccur[with(df.table.cooccur, order(freq, decreasing=TRUE)),]
     message("done.")
   }
-  results <- new(
-    "kRp.corp.freq",
+  results <- kRp_corp_freq(
     meta=df.meta,
     words=df.words,
     desc=df.dscrpt.meta,
     bigrams=df.table.bigrams,
-    cooccur=df.table.cooccur
+    cooccur=df.table.cooccur,
+    caseSens=caseSens
   )
   return(results)
 } ## end function create.corp.freq.object()
@@ -939,22 +1093,18 @@ noInf.summary <- function(data, add.sd=FALSE){
 
 ## function is.supported.lang()
 # determins if a language is supported, and returns the correct identifier
-is.supported.lang <- function(lang.ident, support="hyphen"){
-  if(identical(support, "hyphen")){
-    hyphen.supported <- as.list(as.environment(.koRpus.env))[["langSup"]][["hyphen"]][["supported"]]
-    if(lang.ident %in% names(hyphen.supported)){
-      res.ident <- hyphen.supported[[lang.ident]]
-    } else {
-      stop(simpleError(paste0("Unknown language: \"", lang.ident, "\".\nPlease provide a valid hyphenation pattern!")))
-    }
-  } else {}
-
+is.supported.lang <- function(lang.ident, support="treetag"){
   if(identical(support, "treetag")){
     treetag.supported <- as.list(as.environment(.koRpus.env))[["langSup"]][["kRp.POS.tags"]][["tags"]]
     if(lang.ident %in% names(treetag.supported)){
       res.ident <- lang.ident
     } else {
-      stop(simpleError(paste("Unknown tag definition requested:", lang.ident)))
+      stop(simpleError(
+        paste0(
+          "Unknown tag definition requested: ", lang.ident, "\n",
+          "See ?available.koRpus.lang() for a list of supported languages."
+        )
+      ))
     }
   } else {}
 
@@ -1137,6 +1287,7 @@ text.1st.letter <- function(word, case){
 # unicode escapes:
 #   <e2><80><99> -> \u2019 right single quotation mark
 #   <e2><80><93> -> \u2013 en dash
+#' @importFrom data.table data.table :=
 taggz <- function(tokens, abbrev=NULL, heur.fix=list(pre=c("\u2019","'"), suf=c("\u2019","'")), ign.comp="", sntc=c(".","!","?",";",":")){
   # make R CMD check happy...
   token <- tag <- NULL
@@ -1346,13 +1497,13 @@ queryList <- function(obj, var, query, rel, as.df, ignore.case, perl){
 headLine <- function(txt, level=1){
   if(identical(level, 1)){
     headlineTxt <- paste0("## ", txt, " ##")
-    headlineLine <- paste(rep("#", nchar(headlineTxt)), collapse="")
+    headlineLine <- paste(rep("#", nchar(headlineTxt, type="width")), collapse="")
     headlineFull <- paste0(headlineLine, "\n", headlineTxt, "\n", headlineLine)
   } else if(identical(level, 2)){
-    headlineLine <- paste(rep("=", nchar(txt)), collapse="")
+    headlineLine <- paste(rep("=", nchar(txt, type="width")), collapse="")
     headlineFull <- paste0(txt, "\n", headlineLine)
   } else {
-    headlineLine <- paste(rep("-", nchar(txt)), collapse="")
+    headlineLine <- paste(rep("-", nchar(txt, type="width")), collapse="")
     headlineFull <- paste0(txt, "\n", headlineLine)
   }
   return(headlineFull)
@@ -1364,7 +1515,10 @@ headLine <- function(txt, level=1){
 # called by treetag()
 matching.lang <- function(lang, lang.preset){
   if(!identical(lang, lang.preset)){
-    warning("Language \"",lang,"\" doesn't match the preset \"", lang.preset,"\". If you run into errors, you have been warned!" )
+    warning(
+      "Language \"",lang,"\" doesn't match the preset \"", lang.preset,"\". If you run into errors, you have been warned!",
+      call.=FALSE
+    )
   } else {}
 }
 ## end function matching.lang()
@@ -1468,6 +1622,10 @@ checkTTOptions <- function(TT.options, manual.config, TT.tknz=TRUE){
 
     if(!is.null(TT.options[["preset"]])){
       result[["preset"]] <- checkLangPreset(preset=TT.options[["preset"]])
+      if(isTRUE(grepl("tree-tagger-[[:alpha:].]+$|tag-[[:alpha:].]+$|*.bat$", tolower(TT.options[["tagger"]])))){
+        # sometimes users try to combine TreeTagger's batch files with presets, which is doomed to fail
+        stop(simpleError("If you're using a language preset, you must not set TreeTagger's batch files as 'tagger'! "))
+      } else {}
     } else {
       # if no preset was defined, we need some more information
       if(isTRUE(TT.tknz)){
@@ -1488,3 +1646,119 @@ checkTTOptions <- function(TT.options, manual.config, TT.tknz=TRUE){
 
   return(result)
 } ## end function checkTTOptions()
+
+
+## function winPath()
+# all of sudden, the constructions of file paths stopped working for some windows users,
+# so we're forced to do something really, really ugly and replace all R-like "/"
+# file separators with the windows-like "\\" manually.
+winPath <- function(path){
+  return(gsub("/", "\\\\", path))
+}
+# just for the record: i really *hate* windows!
+## end function winPath()
+
+
+## function check_lang_packages()
+# checks what koRpus.lang.* packages are currently installed or loaded
+# returns a named list with a list for each installed package, providing
+# entries named "available", "installed", "loaded", and "title"
+# availabe: also check for all available packages in 'repos'
+# available.only: omit all installed packages which cannot be found in 'repos'
+#' @importFrom utils available.packages packageDescription
+check_lang_packages <- function(
+  available=FALSE,
+  repos="https://undocumeantit.github.io/repos/l10n/",
+  available.only=FALSE,
+  pattern="^koRpus.lang.*"
+){
+  ### this function should be kept close to identical to the respective function
+  ### in the 'sylly' package, except for the pattern
+  result <- list()
+  if(isTRUE(available)){
+    available_packages <- utils::available.packages(repos=repos)
+    available_koRpus_lang <- grepl(pattern, available_packages[,"Package"])
+    supported_lang <- unique(available_packages[available_koRpus_lang,"Package"])
+  } else {
+    available_koRpus_lang <- FALSE
+    supported_lang <- NULL
+  }
+
+  loaded_packages <- loadedNamespaces()
+  loaded_koRpus_lang <- grepl(pattern, loaded_packages)
+  installed_packages <- unique(dir(.libPaths()))
+  installed_koRpus_lang <- grepl(pattern, installed_packages)
+
+  have_koRpus_lang <- any(installed_koRpus_lang, available_koRpus_lang)
+
+  if(isTRUE(have_koRpus_lang)){
+    if(isTRUE(available.only)){
+      all_packages <- supported_lang
+    } else {
+      all_packages <- unique(c(installed_packages[installed_koRpus_lang], supported_lang))
+    }
+    for (this_package in all_packages){
+      result[[this_package]] <- list(available=NA, installed=FALSE, loaded=FALSE, title="(unknown)")
+      if(all(isTRUE(available), this_package %in% supported_lang)){
+        result[[this_package]][["available"]] <- TRUE
+      } else {}
+      if(this_package %in% unique(installed_packages[installed_koRpus_lang])){
+        result[[this_package]][["installed"]] <- TRUE
+        this_package_index <- which.min(!installed_packages %in% this_package)
+        result[[this_package]][["title"]] <- utils::packageDescription(installed_packages[this_package_index])[["Title"]]
+      } else {}
+      if(this_package %in% unique(loaded_packages[loaded_koRpus_lang])){
+        result[[this_package]][["loaded"]] <- TRUE
+      } else {}
+    }
+  } else {}
+  
+  return(result)
+} ## end function check_lang_packages()
+
+
+## function check_toggle_utf8()
+# used in treetag() to work around inconsistent naming of parameter
+# files over the releases; some have "utf8-" or "-utf8" in their name,
+# both earlier and later versions don't. so we'll first try with these
+# pre- and suffixes, then without, and use whatever is found first.
+# returns either a validated path or throws an error.
+#
+# - file_utf8: file to check for existance, the variant including "utf8" in its name
+# - dir: full path to expected file (directory only)
+check_toggle_utf8 <- function(file_utf8, dir=NA){
+  if(is.na(dir)){
+    dir <- dirname(normalizePath(file_utf8, mustWork=FALSE))
+    file_utf8 <- basename(file_utf8)
+  } else {
+    dir <- normalizePath(dir, mustWork=FALSE)
+  }
+  check.file(filename=dir, mode="dir", stopOnFail=TRUE)
+  path_file_utf8 <- file.path(dir, file_utf8)
+  # first check for the utf8 version
+  file_exists <- check.file(filename=path_file_utf8, mode="exist", stopOnFail=FALSE)
+  if(isTRUE(file_exists)){
+    return(path_file_utf8)
+  } else {
+    if(isTRUE(grepl("utf8", file_utf8))){
+      file_non_utf8 <- gsub("-utf8", "", gsub("^utf8-", "", file_utf8))
+      path_file_non_utf8 <- file.path(dir, file_non_utf8)
+      file_exists <- check.file(filename=path_file_non_utf8, mode="exist", stopOnFail=FALSE)
+      if(isTRUE(file_exists)){
+        return(path_file_non_utf8)
+      } else {
+        stop(simpleError(
+          paste0(
+            "None of the following files were found, please check your TreeTagger installation!\n ",
+            path_file_utf8, "\n ",
+            path_file_non_utf8
+          )
+        ))
+      }
+    } else {
+      stop(simpleError(
+        paste0("The following file cannot be found, please check your TreeTagger installation!\n ", path_file_utf8)
+      ))
+    }
+  }
+} ## end function check_toggle_utf8()

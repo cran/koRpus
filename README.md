@@ -1,7 +1,5 @@
 # koRpus
 
-[![Flattr this git repo](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=m.eik&url=https://github.com/unDocUMeantIt/koRpus&title=koRpus&language=en_GB&tags=github&category=software)
-
 koRpus is an [R](https://r-project.org) package for text analysis. This includes, amongst others,
 a wrapper for the POS tagger [TreeTagger](http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/),
 functions for automatic language detection, hyphenation, several indices of lexical diversity
@@ -38,7 +36,7 @@ or supposed bug fixes, and get feedback before the next release goes to CRAN.
 Installation is fairly easy, too:
 
 ```
-install.packages("koRpus", repo="https://reaktanz.de/R")
+install.packages("koRpus", repo=c(getOption("repos"), reaktanz="https://reaktanz.de/R"))
 ```
 
 To automatically get updates, consider adding the repository to your R configuration.  You might also
@@ -56,6 +54,22 @@ library(devtools)
 install_github("unDocUMeantIt/koRpus") # stable release
 install_github("unDocUMeantIt/koRpus", ref="develop") # development release
 ```
+
+### Installing language support
+
+koRpus does not support any particular language out-of-the-box. Therefore, after installing the package you'll have
+to also install at least one language support package to really make use of it.
+You can find these in the [l10n](https://undocumeantit.github.io/repos) repository, they're called `koRpus.lang.*`.
+
+The most straight forward way to get these packages is to use the function `install.koRpus.lang()`.
+Here's an example how to install support for English and German:
+
+```
+library(koRpus)
+install.koRpus.lang(lang=c("en", "de"))
+```
+
+There's also precompiled [Debian packages](https://undocumeantit.github.io/repos/l10n/pckg/koRpus.lang.en/deb_repo.html).
 
 ## Contributing
 

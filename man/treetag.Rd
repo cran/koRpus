@@ -4,10 +4,11 @@
 \alias{treetag}
 \title{A function to call TreeTagger}
 \usage{
-treetag(file, treetagger = "kRp.env", rm.sgml = TRUE, lang = "kRp.env",
-  apply.sentc.end = TRUE, sentc.end = c(".", "!", "?", ";", ":"),
-  encoding = NULL, TT.options = NULL, debug = FALSE, TT.tknz = TRUE,
-  format = "file", stopwords = NULL, stemmer = NULL)
+treetag(file, treetagger = "kRp.env", rm.sgml = TRUE,
+  lang = "kRp.env", apply.sentc.end = TRUE, sentc.end = c(".", "!",
+  "?", ";", ":"), encoding = NULL, TT.options = NULL, debug = FALSE,
+  TT.tknz = TRUE, format = "file", stopwords = NULL,
+  stemmer = NULL, doc_id = NA, add.desc = "kRp.env")
 }
 \arguments{
 \item{file}{Either a connection or a character vector, valid path to a file,
@@ -25,8 +26,9 @@ parameter.}
 
 \item{rm.sgml}{Logical, whether SGML tags should be ignored and removed from output}
 
-\item{lang}{A character string naming the language of the analyzed corpus. See \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} for all supported languages.
-If set to \code{"kRp.env"} this is got from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}.}
+\item{lang}{A character string naming the language of the analyzed corpus. See \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}} and
+\code{\link[koRpus:available.koRpus.lang]{available.koRpus.lang}}for all supported languages. If set to \code{"kRp.env"} this is
+fetched from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}.}
 
 \item{apply.sentc.end}{Logical,
       whethter the tokens defined in \code{sentc.end} should be searched and set to a sentence ending tag.}
@@ -44,15 +46,9 @@ the encoding will either be taken from a preset (if defined in \code{TT.options}
    \itemize{
      \item {\code{path}} {Mandatory: The absolute path to the TreeTagger root directory. That is where its subfolders \code{bin},
       \code{cmd} and \code{lib} are located.}
-     \item {\code{preset}} {Optional: If you choose one of the pre-defined presets here:
-     \itemize{
-       \item {\code{"de"}} {German}
-       \item {\code{"en"}} {English}
-       \item {\code{"es"}} {Spanish}
-       \item {\code{"fr"}} {French}
-       \item {\code{"it"}} {Italian}
-       \item {\code{"ru"}} {Russian}
-     }
+     \item {\code{preset}} {Optional: If you choose one of the pre-defined presets of one of the available language packages (like \code{"de"} for German,
+      see
+       \code{\link[koRpus:available.koRpus.lang]{available.koRpus.lang}} for details),
        you can omit all the following elements,
       because they will be filled with defaults. Of course this only makes sense if you have a
        working default installation. Note that since koRpus 0.07-1,
@@ -79,7 +75,7 @@ the encoding will either be taken from a preset (if defined in \code{TT.options}
      \item {\code{filter}} {Optional: A character string,
       naming the output filter to be used. Interpreted relative to \code{path/cmd/}.}
      \item {\code{no.unknown}} {Optional: Logical,
-      can be used to toggle the \code{"-no-unknown"} option of TreeTagger (defaults of \code{FALSE}.}
+      can be used to toggle the \code{"-no-unknown"} option of TreeTagger (defaults to \code{FALSE}).}
      \item {\code{splitter}} {Optional: A character string,
       naming the splitter to be called (before the tokenizer). Interpreted relative to \code{path/cmd/}.}
      \item {\code{splitter.opts}} {Optional: A character string with the options to hand over to the splitter.}
@@ -112,9 +108,17 @@ a character vector. If the latter,
       you can set \code{SnowballC::wordStem} if you have
 the \code{SnowballC} package installed. As of now,
       you cannot provide further arguments to this function.}
+
+\item{doc_id}{Character string,
+      optional identifier of the particular document. Will be added to the \code{desc} slot, and as a factor to the \code{"doc_id"} column
+of the \code{TT.res} slot.}
+
+\item{add.desc}{Logical. If \code{TRUE},
+      the tag description (column \code{"desc"} of the data.frame) will be added directly
+to the resulting object. If set to \code{"kRp.env"} this is fetched from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}.}
 }
 \value{
-An object of class \code{\link[koRpus]{kRp.tagged-class}}. If \code{debug=TRUE},
+An object of class \code{\link[koRpus:kRp.tagged-class]{kRp.tagged}}. If \code{debug=TRUE},
       prints internal variable settings and attempts to return the
    original output if the TreeTagger system call in a matrix.
 }
@@ -170,7 +174,7 @@ Schmid, H. (1994). Probabilistic part-of-speec tagging using decision trees. In
 \seealso{
 \code{\link[koRpus:freq.analysis]{freq.analysis}},
       \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
-\code{\link[koRpus]{kRp.tagged-class}}
+\code{\link[koRpus:kRp.tagged-class]{kRp.tagged}}
 }
 \author{
 m.eik michalke \email{meik.michalke@hhu.de},

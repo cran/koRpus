@@ -1,4 +1,4 @@
-# Copyright 2010-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2010-2018 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package koRpus.
 #
@@ -19,9 +19,15 @@
 #'
 #' This class is used for objects that are returned by \code{\link[koRpus:read.corp.LCC]{read.corp.LCC}} and \code{\link[koRpus:read.corp.celex]{read.corp.celex}}.
 #'
-#' The slot \code{meta} simply contains all information from the "meta.txt" of the LCC[1] data and remains empty for data from a Celex[2] DB.
+#' The slot \code{meta} simply contains all information from the "meta.txt" of the LCC[1] data and remains
+#' empty for data from a Celex[2] DB.
 #'
-#' @slot meta Metadata on the corpora (dee details).
+#' @section Contructor function:
+#' Should you need to manually generate objects of this class (which should rarely be the case), the contructor function 
+#' \code{kRp_corp_freq(...)} can be used instead of
+#' \code{new("kRp.corp.freq", ...)}.
+#'
+#' @slot meta Metadata on the corpora (see details).
 #' @slot words Absolute word frequencies. It has at least the following columns:
 #'    \describe{
 #'      \item{\code{num}:}{Some word ID from the DB, integer}
@@ -66,24 +72,29 @@
 #'      \item{\code{freq}:}{How often the co-occurrance was present}
 #'      \item{\code{sig}:}{Log-likelihood significance of the co-occurrende}
 #'    }
+#' @slot caseSens A single logical value, whether the frequency statistics were calculated case sensitive
+#'    or not.
 #' @name kRp.corp.freq,-class
-#' @aliases kRp.corp.freq,-class kRp.corp.freq-class
+#' @aliases kRp.corp.freq-class
 #' @import methods
 #' @keywords classes
 # @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @references
 #' [1] \url{http://corpora.informatik.uni-leipzig.de/download.html}
 #' [2] \url{http://celex.mpi.nl}
-#' @export
+#' @export kRp_corp_freq
+#' @exportClass kRp.corp.freq
 #' @rdname kRp.corp.freq-class
 
-setClass("kRp.corp.freq",
+kRp_corp_freq <- setClass("kRp.corp.freq",
     representation=representation(
       meta="data.frame",
       words="data.frame",
       desc="data.frame",
       bigrams="data.frame",
-      cooccur="data.frame"),
+      cooccur="data.frame",
+      caseSens="logical"
+    ),
     prototype(
       meta=data.frame(
           meta=NA,
@@ -126,7 +137,8 @@ setClass("kRp.corp.freq",
           token2=NA,
           freq=NA,
           sig=NA
-        )
+        ),
+      caseSens=FALSE
     )
 )
 

@@ -5,8 +5,9 @@
 \title{Import already tagged texts}
 \usage{
 read.tagged(file, lang = "kRp.env", encoding = NULL,
-  tagger = "TreeTagger", apply.sentc.end = TRUE, sentc.end = c(".", "!",
-  "?", ";", ":"), stopwords = NULL, stemmer = NULL, rm.sgml = TRUE)
+  tagger = "TreeTagger", apply.sentc.end = TRUE, sentc.end = c(".",
+  "!", "?", ";", ":"), stopwords = NULL, stemmer = NULL,
+  rm.sgml = TRUE, doc_id = NA, add.desc = "kRp.env")
 }
 \arguments{
 \item{file}{Either a matrix, a connection or a character vector. If the latter,
@@ -47,10 +48,17 @@ have the \code{Snowball} package installed (or \code{SnowballC::wordStem}). As o
       you cannot provide further arguments to
 this function.}
 
-\item{rm.sgml}{Logical, whether SGML tags should be ignored and removed from output}
+\item{rm.sgml}{Logical, whether SGML tags should be ignored and removed from output.}
+
+\item{doc_id}{Character string,
+      optional identifier of the particular document. Will be added to the \code{desc} slot.}
+
+\item{add.desc}{Logical. If \code{TRUE},
+      the tag description (column \code{"desc"} of the data.frame) will be added directly
+to the resulting object. If set to \code{"kRp.env"} this is fetched from \code{\link[koRpus:get.kRp.env]{get.kRp.env}}. Only needed if \code{tag=TRUE}.}
 }
 \value{
-An object of class \code{\link[koRpus]{kRp.tagged-class}}. If \code{debug=TRUE},
+An object of class \code{\link[koRpus:kRp.tagged-class]{kRp.tagged}}. If \code{debug=TRUE},
       prints internal variable settings and
    attempts to return the original output if the TreeTagger system call in a matrix.
 }
@@ -79,6 +87,6 @@ Schmid, H. (1994). Probabilistic part-of-speec tagging using decision trees. In
 \code{\link[koRpus:treetag]{treetag}},
    \code{\link[koRpus:freq.analysis]{freq.analysis}},
    \code{\link[koRpus:get.kRp.env]{get.kRp.env}},
-   \code{\link[koRpus]{kRp.tagged-class}}
+   \code{\link[koRpus:kRp.tagged-class]{kRp.tagged}}
 }
 \keyword{misc}

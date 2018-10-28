@@ -1,6 +1,238 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.11-5 (2018-10-27)}{
+  \subsection{changed}{
+    \itemize{
+      \item \code{set.kRp.env()}/treetag(): now throws an error if you try to combine a
+        language preset with TreeTagger's batch files as the tagger to use; some users
+        seem to be confused about what to configure, and this error message
+        hopefully helps them to understand why \code{treetag()} must fail in these cases
+      \item \code{treetag()}: newer versions of TreeTagger will no longer have \code{"utf8"} in
+        their parameter and abbreviation files. since we never know what version of
+        TreeTagger we're dealing with, \code{treetag()} will from now on look for files
+        with \code{"utf8"} if specified in the language package, but not fail if none is
+        found, but also try for a non-labelled file and replace the file name on the
+        fly if one is found
+      \item grapheme clusters: in UTF-8, certain characters in some languages are
+        shown as a single character, but technically are several characters combined.
+        \code{nchar()} counts all combined parts individially, which in most use cases
+        for this package is not what one expects. it now uses nchar(type=\code{"width"})
+        for a letter count that is much closer to user's expectations
+      \item package depends on koRpus.lang.en now, to have a setup ready to at least
+        analyze english texts
+    }
+  }
+  \subsection{fixed}{
+    \itemize{
+      \item \code{set.lang.support()}: explicitly set the sorting method for factor levels
+        to \code{"radix"} as the new default \code{"auto"} (R >= 3.5) produced unstable results
+        with different setups; hence some of the test standards also had to be
+        updated
+    }
+  }
+}
+\section{Changes in koRpus version 0.11-4 (2018-07-29)}{
+  \subsection{fixed}{
+    \itemize{
+      \item templates: incomplete package name in license header
+      \item \code{read.BAWL()}: updated download URL and added DOI
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item the startup check for available language packages was reduced to short
+        hints to \code{available.koRpus.lang()} and \code{install.koRpus.lang()}
+      \item the startup message can now be suppressed by adding
+        "noStartupMessage=TRUE" to the koRpus options in .Rprofile
+    }
+  }
+}
+\section{Changes in koRpus version 0.11-3 (2018-03-07)}{
+  \subsection{fixed}{
+    \itemize{
+      \item \code{treetag()}/tokenize(): fixed an issue with sentence numbering which was
+        triggered if all sentences were of equal length
+      \item \code{query()}: method failed for columns which are now factors
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item \code{treetag()}: koRpus no longer fails with an error if unknown tags are
+        found. there will be a warning, but you can continue to work with the object
+      \item depends on R >= 3.0.0 now
+      \item improved \code{available.koRpus.lang()} to make it more obvious how to install
+        language support packages, and which
+      \item session settings done with \code{set.kRp.env()} or queried by \code{get.kRp.env()} are
+        no longer stored in an internal environment but the global .Options; this
+        also allows for setting defaults in an .Rprofile file using \code{options()}
+      \item in the docs, improved the link format for classes, omitting the "-class"
+        suffix
+      \item \code{set.lang.support()}: the levels of tag, wclass, and desc are now
+        automatically sorted; test standards had to be adjusted accordingly
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item \code{set.lang.support()}: new argument \code{"merge"}; it is now possible to add or
+        update single POS tag definitions
+      \item new class object contructors \code{kRp_tagged()}, \code{kRp_TTR()}, \code{kRp_txt_freq()},
+        \code{kRp_txt_trans()}, \code{kRp_analysis()}, \code{kRp_corp_freq()}, \code{kRp_lang()}, and
+        \code{kRp_readability()} can be used instead of new(\code{"kRp.tagged"}, ...) etc.
+    }
+  }
+}
+\section{Changes in koRpus version 0.11-2 (2018-01-07)}{
+  \subsection{attention}{
+    \itemize{
+      \item this is a testing release introducing major changes in the way language
+        support is handled (see other changes in this log). tl;dr: you must install
+        additional koRpus.lang.** packages to fully restore the previous
+        functionality, i.e., all supported languages. see ?install.koRpus.lang
+    }
+  }
+  \subsection{fixed}{
+    \itemize{
+      \item \code{treetag()}: with TT.tknz=FALSE, the last letter of a text was truncated
+        due to a missing newline at the end of the tempfile (thanks to adam
+        spannbauer for both reporting and fixing it)
+      \item \code{treetag()}: hopefully fixed a nasty encoding issue on windows, again
+      \item \code{treetag()}: fixed an issue that could be triggered by hard to tokenize
+        texts exceeding a default limit of \code{summary()} for factors
+      \item \code{treetag()}/tokenize(): silenced warnings of \code{readLines()} for missing final
+        EOL of input files
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item language support: while the sylly package is released on CRAN now, its
+        separate language packages were not allowed to be published there as well. a
+        special repository was therefore set up on gitub and added via the
+        \code{"Additional_repositories"} field to the DESCRIPTION file. however, not having the
+        sylly.XX packages on CRAN made it necessary to further modularize the
+        package and complete remove all out-of-the-box language support (see removed
+        section). all these support packages for language are now being resolved
+        by installing from that repo instead of CRAN.
+      \item package loading: when koRpus is being loaded, it now checks for available
+        (i.e. already installed) language packages. if none are found, it asks
+        you to install one. i'm sorry for the unconvenience
+      \item vignette is now in RMarkdown/HTML format; the SWeave/PDF version was
+        dropped
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item \code{tif_as_tokens_df()}: new method to get TT.res in fully TIF compliant format
+      \item new functions \code{available.koRpus.lang()} and \code{install.koRpus.lang()} for more
+        convenient handling of language support packages.
+    }
+  }
+  \subsection{removed}{
+    \itemize{
+      \item language support: koRpus previously supported some languages directly
+        (de, en, es, fr, it, and ru). this support had to be removed and is now
+        available as separate language packages via
+        https://undocumeantit.github.io/repos/l10n
+    }
+  }
+}
+\section{Changes in koRpus version 0.11-1 (2017-06-20)}{
+  \subsection{fixed}{
+    \itemize{
+      \item kRp.lang: fixed the \code{show()} and \code{summary()} methods to omit country
+        information which was dropped from the UDHR data a while ago
+      \item \code{treetag()}: windows users might run into problems because of differences
+        between the file separators R uses internally when they are also used in
+        \code{shell()} calls. this hasn't been an issue earlier, but is worked around now
+        anyway. hope this doesn't cause new issues...
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item kRp.tagged: the TT.res data.frame of the object class has new columns
+        \code{"doc_id"}, \code{"idx"} (index), and \code{"sntc"} (sentence), with \code{"doc_id"} now being the
+        first column before \code{"token"} to comply with the Text Interchange Formats
+        proposed by rOpenSci
+      \item kRp.tagged: in TT.res, the columns \code{"tag"}, \code{"wclass"} and \code{"desc"} are no
+        longer character vectors but factors. this doesn't actually change the class
+        definition, as TT.res just has to be a data.frame, but it reduces the
+        object size especially for larger texts, and makes it much simpler to do
+        analysis with these objects
+      \item \code{tokenize()}/treetag()/\code{read.tagged()}: these functions now add token index
+        and sentence number to the resulting objects; document ID is added if
+        provided
+      \item kRp.lang: depending on the information available in the UDHR data, the
+        \code{show()} and \code{summary()} methods' output is now dynamically adjusted; \code{summary()}
+        now also lists the columns "iso639-3" and \code{"bcp47"} by default
+      \item \code{treetag()}: debug output for \code{tokenize()} looks a little nicer
+      \item \code{kRp.text.transform()}: the old function is now deprecated and was replaced
+        by a proper S4 method called \code{textTransform()}. the old one will work for
+        the moment, but you'll get a warning
+      \item the tt slot in class kRp.TTR gained two new entries called \code{"type.in.txt"}
+        and \code{"type.in.result"}, which will contain a list of all types with the
+        index where it is to be found in the original text or the \code{lex.div()} results
+        respectively, if type.index=TRUE; the indices might differ because the
+        result might be stripped of certain word classes
+      \item \code{treetag()}/tokenize(): internal workflow for adding word class and
+        description of tags was modularized for more detailed control. you can now toggle
+        whether you want the verbose description of each tag added directly to
+        objects with the new argument \code{"add.desc"}. it is set in the environment by
+        \code{set.kRp.env()} and defaults to FALSE, making the objects about 5\% smaller in
+        memory.
+      \item kRp.corp.freq: the class gained a new slot called \code{"caseSens"}, documenting
+        whether the frequency statistics were calculated case sensitive (see
+        read.corp.*() below).
+      \item validity check for objects of class kRp.tagged is a bit more liberal when
+        TT.res doesn't have all expected columns and suggests to call \code{fixObject()}
+        (see below) instead of failing with an error
+      \item adjusted unit tests
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item \code{summary()}: method for class kRp.TTR now also supports the logical \code{"flat"}
+        argument
+      \item new "[" and "[[" methods can be used to directly address the data.frames
+        in tagged or hyphenated objects. that is, you don't have to call
+        \code{taggedText()} or \code{hyphenText()} first, it will be done internally
+      \item new "[" and "[[" methods have also been added for objects of classes
+        kRp.TTR and kRp.readability for quick access to their \code{summary()} results (index
+        by measure)
+      \item \code{treetag()}: a new check will throw an informative error message if
+        TreeTagger didn't return something the function can use
+      \item \code{lex.div()} et al.: new option \code{"type.index"} to produce the indices
+        described above in the \code{"changed"} section
+      \item \code{hyphen()}: new option \code{"as"} to set the return value class, still defaults
+        to \code{"kRp.hyph"}, but can also be \code{"data.frame"} or \code{"numeric"}
+      \item new shortcut methods \code{hyphen_df()} and \code{hyphen_c()} use different defaults
+        for \code{"as"}
+      \item \code{treetag()}/tokenize(): new option \code{"add.desc"} (see changed section)
+      \item \code{taggedText()}: new option \code{"add.desc"} to (re-)write the \code{"desc"} column in
+        the data.frame, useful if it was omitted during \code{treetag()}/tokenize() but you
+        want to add it later without retagging everything
+      \item \code{read.corp.LCC()}/read.\code{corp.celex()}: added new option \code{"caseSens"} to toggle
+        whether frequency statistics should be calculated case sensitive or
+        insensitive
+      \item new method \code{fixObject()} can upgrade old tagged objects from previous
+        koRpus releases, i.e. add missing columns and adjust data types where needed
+    }
+  }
+  \subsection{removed}{
+    \itemize{
+      \item \code{hyphen()}: all parts of the package that were specific for hyphenation
+        were removed as they are now part of the new sylly package. this includes the
+        class definitions (kRp.hyph.pat and kRp.hyphen) and methods (\code{correct()},
+        \code{hyphen()}, \code{show()} and \code{summary()}) for those classes, as long as they in turn
+        are not specific to koRpus. the hyphenation definitions were also removed
+        from the language support files, as they are now part of individual
+        language packages for the sylly package (sylly.en, sylly.de, etc.) that this
+        package now depends on. you should, however, notice no difference in using
+        the package, everything should just work like it did before this split.
+      \item the standard generics for \code{describe()} and \code{language()} were removed because
+        they are now defined in the sylly package
+    }
+  }
+}
 \section{Changes in koRpus version 0.10-2 (2017-04-04)}{
   \subsection{fixed}{
     \itemize{

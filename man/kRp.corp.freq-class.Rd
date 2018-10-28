@@ -3,18 +3,20 @@
 \docType{class}
 \name{kRp.corp.freq,-class}
 \alias{kRp.corp.freq,-class}
+\alias{kRp_corp_freq}
 \alias{kRp.corp.freq-class}
 \title{S4 Class kRp.corp.freq}
 \description{
 This class is used for objects that are returned by \code{\link[koRpus:read.corp.LCC]{read.corp.LCC}} and \code{\link[koRpus:read.corp.celex]{read.corp.celex}}.
 }
 \details{
-The slot \code{meta} simply contains all information from the "meta.txt" of the LCC[1] data and remains empty for data from a Celex[2] DB.
+The slot \code{meta} simply contains all information from the "meta.txt" of the LCC[1] data and remains
+empty for data from a Celex[2] DB.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{meta}}{Metadata on the corpora (dee details).}
+\item{\code{meta}}{Metadata on the corpora (see details).}
 
 \item{\code{words}}{Absolute word frequencies. It has at least the following columns:
 \describe{
@@ -65,7 +67,19 @@ The slot might have additional columns, depending on the input material.}
   \item{\code{freq}:}{How often the co-occurrance was present}
   \item{\code{sig}:}{Log-likelihood significance of the co-occurrende}
 }}
+
+\item{\code{caseSens}}{A single logical value,
+      whether the frequency statistics were calculated case sensitive
+or not.}
 }}
+
+\section{Contructor function}{
+
+Should you need to manually generate objects of this class (which should rarely be the case),
+      the contructor function 
+\code{kRp_corp_freq(...)} can be used instead of
+\code{new("kRp.corp.freq", ...)}.
+}
 
 \references{
 [1] \url{http://corpora.informatik.uni-leipzig.de/download.html}

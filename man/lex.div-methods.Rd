@@ -4,20 +4,24 @@
 \name{lex.div}
 \alias{lex.div}
 \alias{lex.div,kRp.taggedText-method}
-\alias{lex.div}
 \alias{lex.div,character-method}
 \alias{lex.div,missing-method}
+\alias{[,kRp.TTR-method}
+\alias{[,kRp.TTR,ANY-method}
+\alias{[[,kRp.TTR-method}
+\alias{[[,kRp.TTR,ANY-method}
 \title{Analyze lexical diversity}
 \usage{
 lex.div(txt, ...)
 
-\S4method{lex.div}{kRp.taggedText}(txt, segment = 100, factor.size = 0.72,
-  min.tokens = 9, MTLDMA.steps = 1, rand.sample = 42, window = 100,
-  case.sens = FALSE, lemmatize = FALSE, detailed = FALSE,
-  measure = c("TTR", "MSTTR", "MATTR", "C", "R", "CTTR", "U", "S", "K",
-  "Maas", "HD-D", "MTLD", "MTLD-MA"), char = c("TTR", "MATTR", "C", "R",
-  "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD", "MTLD-MA"), char.steps = 5,
-  log.base = 10, force.lang = NULL, keep.tokens = FALSE,
+\S4method{lex.div}{kRp.taggedText}(txt, segment = 100,
+  factor.size = 0.72, min.tokens = 9, MTLDMA.steps = 1,
+  rand.sample = 42, window = 100, case.sens = FALSE,
+  lemmatize = FALSE, detailed = FALSE, measure = c("TTR", "MSTTR",
+  "MATTR", "C", "R", "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD",
+  "MTLD-MA"), char = c("TTR", "MATTR", "C", "R", "CTTR", "U", "S", "K",
+  "Maas", "HD-D", "MTLD", "MTLD-MA"), char.steps = 5, log.base = 10,
+  force.lang = NULL, keep.tokens = FALSE, type.index = FALSE,
   corp.rm.class = "nonpunct", corp.rm.tag = c(), quiet = FALSE)
 
 \S4method{lex.div}{character}(txt, segment = 100, factor.size = 0.72,
@@ -25,16 +29,21 @@ lex.div(txt, ...)
   case.sens = FALSE, lemmatize = FALSE, detailed = FALSE,
   measure = c("TTR", "MSTTR", "MATTR", "C", "R", "CTTR", "U", "S", "K",
   "Maas", "HD-D", "MTLD", "MTLD-MA"), char = c("TTR", "MATTR", "C", "R",
-  "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD", "MTLD-MA"), char.steps = 5,
-  log.base = 10, force.lang = NULL, keep.tokens = FALSE,
+  "CTTR", "U", "S", "K", "Maas", "HD-D", "MTLD", "MTLD-MA"),
+  char.steps = 5, log.base = 10, force.lang = NULL,
+  keep.tokens = FALSE, type.index = FALSE,
   corp.rm.class = "nonpunct", corp.rm.tag = c(), quiet = FALSE)
 
 \S4method{lex.div}{missing}(txt, measure)
+
+\S4method{[}{kRp.TTR}(x, i)
+
+\S4method{[[}{kRp.TTR}(x, i)
 }
 \arguments{
-\item{txt}{An object of either class \code{\link[koRpus]{kRp.tagged-class}},
-      \code{\link[koRpus]{kRp.txt.freq-class}},
-\code{\link[koRpus]{kRp.analysis-class}} or \code{\link[koRpus]{kRp.txt.trans-class}},
+\item{txt}{An object of either class \code{\link[koRpus:kRp.tagged-class]{kRp.tagged}},
+      \code{\link[koRpus:kRp.txt.freq-class]{kRp.txt.freq}},
+\code{\link[koRpus:kRp.analysis-class]{kRp.analysis}} or \code{\link[koRpus:kRp.txt.trans-class]{kRp.txt.trans}},
       containing the tagged text to be analyzed.
 If \code{txt} is of class character, it is assumed to be the raw text to be analyzed.}
 
@@ -88,9 +97,14 @@ and \code{"MTLD-MA"}. You can also set it to \code{"validation"} to get informat
 \item{force.lang}{A character string defining the language to be assumed for the text,
       by force. See details.}
 
-\item{keep.tokens}{Logical. If \code{TRUE} all raw tokens and types will be preserved in the resulting object,
-      in a slot called 
+\item{keep.tokens}{Logical. If \code{TRUE},
+      all raw tokens and types will be preserved in the resulting object, in a slot called 
 \code{tt}. For the types, also their frequency in the analyzed text will be listed.}
+
+\item{type.index}{Logical. If \code{TRUE},
+      the \code{tt} slot will contain two named lists of all types with the indices where that particular
+type is to be found in the original tagged text (\code{type.in.txt}) or the list of tokens in these results (\code{type.in.result}),
+respectively.}
 
 \item{corp.rm.class}{A character vector with word classes which should be dropped. The default value
 \code{"nonpunct"} has special meaning and will cause the result of
@@ -100,9 +114,13 @@ and \code{"MTLD-MA"}. You can also set it to \code{"validation"} to get informat
 
 \item{quiet}{Logical. If \code{FALSE}, short status messages will be shown.
 \code{TRUE} will also suppress all potential warnings regarding the validation status of measures.}
+
+\item{x}{An object of class \code{kRp.TTR}.}
+
+\item{i}{Defines the row selector (\code{[}) or the name to match (\code{[[}).}
 }
 \value{
-An object of class \code{\link[koRpus]{kRp.TTR-class}}.
+An object of class \code{\link[koRpus:kRp.TTR-class]{kRp.TTR}}.
 }
 \description{
 These methods analyze the lexical diversity/complexity of a text corpus.
@@ -201,7 +219,10 @@ default behaviour,
 }
 \examples{
 \dontrun{
-lex.div(tagged.text)
+ld.results <- lex.div(tagged.text)
+
+# there is [ and [[ methods for these objects
+ld.results[["MSTTR"]]
 }
 }
 \references{
@@ -226,6 +247,7 @@ Covington, M.A. & McFall,
 }
 \seealso{
 \code{\link[koRpus:kRp.POS.tags]{kRp.POS.tags}},
-   \code{\link[koRpus]{kRp.tagged-class}}, \code{\link[koRpus]{kRp.TTR-class}}
+   \code{\link[koRpus:kRp.tagged-class]{kRp.tagged}},
+      \code{\link[koRpus:kRp.TTR-class]{kRp.TTR}}
 }
 \keyword{LD}

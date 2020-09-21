@@ -1,9 +1,9 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 header_con <- file("vignette_header.html")
 writeLines('<meta name="flattr:id" content="4zdzgd" />', header_con)
 close(header_con)
 
-## ---- include=FALSE, cache=FALSE-----------------------------------------
+## ---- include=FALSE, cache=FALSE----------------------------------------------
 library(koRpus)
 # manually add tag definition, the koRpus.lang.en package might be missing
 koRpus::set.lang.support("kRp.POS.tags",

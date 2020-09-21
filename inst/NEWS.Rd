@@ -1,6 +1,175 @@
 \name{NEWS}
 \title{News for Package 'koRpus'}
 \encoding{UTF-8}
+\section{Changes in koRpus version 0.13-1 (2020-09-20)}{
+  \subsection{unreleased}{
+    \itemize{
+      \item this release is under development
+    }
+  }
+  \subsection{fixed}{
+    \itemize{
+      \item \code{docTermMatrix()}: numbers were calculated correctly, but possibly added to
+        the wrong columns, leading to a completely wrong document term matrix
+      \item \code{treetag()}: a dumb misorderig of calls suppressed the \code{"utf8"} check for
+        abbreviation files introduced with 0.11-5
+      \item \code{treetag()}: also added a \code{"utf8"} check for lexicon files and \code{".txt"} file
+        extensions (which might be missing in newer versions of TreeTagger)
+      \item \code{correct.tag()}: stopped method from adding tag descriptions to objects
+        that didn't have them yet
+      \item \code{kRp_readability()}/kRp_corp_freq(): properly initialize the slots
+      \item \code{readability()} wrapper functions: fixed a bunch of \code{readability.num()} calls
+        including an unused hyphen argument
+      \item \code{readability()}: HTML documentation had a wrong formula for LIX (LaTeX was
+        correct)
+      \item \code{textTransform()}: now recounting letters when scheme is \code{"normalize"} as it
+        might have altered word lengths; the calculations of some data in the desc
+        slot (all.chars, lines, normalized.space) as now also done relative to
+        the old values, because they can't be correctly recalculated from a mere
+        vector of tokens
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item \code{docTermMatrix()}: optimzed calculation speed drastically
+      \item \code{read.corp.custom()}: re-wrote most of the code, now based on
+        \code{docTermMatrix()} and thereby up to 50 times faster; also removed the now unused quiet
+        argument, as well as methods using the directory path or lists of tagged
+        texts, because using methods of the tm.plugin.koRpus package instead is much
+        more efficient now
+      \item \code{show()}: simplified the code for kRp.text class objects and unified the
+        horizontal positioning of resulting values
+      \item \code{show()}: generalized the handling of factor columns to be able to deal
+        with unexpected columns
+      \item \code{tokenize()}, \code{treetag()}: always generate a doc_id if none was given; also
+        improved the examples
+      \item \code{readability()}: added some ASCII versions of the formulae to the
+        documentation
+      \item \code{readability()}: the code of the internal workhorse \code{kRp.rdb.formulae()} was
+        cleaned up, now using the new helper functions \code{validate_parameters()},
+        \code{check_parameters()} and \code{rdb_parameters()}, saving ~350 lines of code
+      \item updated unit test
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item kRp.text: new replacement class for kRp.tagged, kRp.txt.freq,
+        kRp.txt.trans; the TT.res slot was renamed into \code{"tokens"}, additional columns in the
+        data frame are now ok, new slots \code{"features"} and \code{"feat_list"} to host
+        analysis results like readability or lexical diversity, and the \code{"desc"} slot now
+        always contains elements named by doc_id
+      \item \code{docTermMatrix()}: new method to calculate document term matrices from TIF
+        compliant token data frames and koRpus objects
+      \item \code{doc_id()}, \code{hasFeatures()}, \code{hasFeatures()}<-, \code{features()}, \code{features()}<-,
+        \code{corpusReadability()}, \code{corpusReadability()}<-, \code{corpusHyphen()}, \code{corpusHyphen()}<-,
+        \code{corpusLexDiv()}, \code{corpusLexDiv()}<-, \code{corpusFreq()}, \code{corpusFreq()}<-,
+        \code{corpusCorpFreq()}, \code{corpusCorpFreq()}<-, \code{corpusStopwords()}, \code{corpusStopwords()}<-: new
+        getter/setter methods for kRp.text objects
+      \item dependencies: the Matrix package was added to imports for \code{docTermMatrix()}
+      \item \code{validate_df()}: new internal method to check data frames for expected
+        columns
+      \item \code{readability()}: new argument \code{"keep.input"} to define whether hyphen objects
+        should be preserved in the output or dropped
+      \item \code{hyphen()}, \code{lex.div()}: new argument \code{"as.feature"} to store results in the
+        new \code{"feat_list"} slot of the input object rather than returning it directly
+      \item \code{fixObject()}: new methods to convert old objects of deprecated classes
+        kRp.tagged, kRp.txt.freq, kRp.txt.trans, and kRp.analysis
+      \item \code{split_by_doc_id()}: new method transforms a kRp.text object with multiple
+        doc_ids into a list of single-document kRp.text objects
+      \item [[/[[<-: gained new argument \code{"doc_id"} to limit the scope to particular
+        documents
+      \item \code{describe()}/describe()<-: now support filtering by doc_id
+    }
+  }
+  \subsection{removed}{
+    \itemize{
+      \item kRp.tagged, kRp.txt.freq, kRp.txt.trans, kRp.analysis: these classes were
+        special cases of kRp.text, and since all their information can now be
+        part of kRp.text objects, they are no longer used; they are actually still
+        present, but considered deprecated and should be converted using \code{fixObject()}
+      \item \code{readability()}, \code{freq.analysis()}: removed the methods that could be called
+        on files directly instead of objects of class kRp.text. this simplifies
+        the code and it's probably not too much to ask users to call \code{tokenize()} or
+        \code{treetag()} directly instead of doing this internally with less control
+      \item \code{freq.analysis()}: removed the \code{"tfidf"} argument; as it turned out, its
+        value was never effectively used, the tf-idf was always calculated, and it
+        seemed like a reasonable default anyway
+      \item \code{kRp.text.analysis()}: now deprecated, just use \code{lex.div()} and
+        \code{freq.analysis()} to the same effect
+    }
+  }
+}
+\section{Changes in koRpus version 0.12-1 (2019-05-13)}{
+  \subsection{fixed}{
+    \itemize{
+      \item \code{query()}: method was broken for tagged objects
+      \item \code{textTransform()}: method was broken
+      \item class kRp.txt.trans: renamed column \code{"token.old"} into \code{"token.orig"}, which
+        is what was actually used by \code{textTransform()}; also added a validity test
+        for those column names to prevent confusion
+      \item \code{readTagged()}: adjusted default encoding
+    }
+  }
+  \subsection{added}{
+    \itemize{
+      \item \code{query()}: new method for objects of class data.frame, which is now used if
+        \code{query()} is being called on koRpus class objects
+      \item \code{query()}: now also supports all numerical queries for tagged texts that
+        were previously only available for frequency objects
+      \item \code{filterByClass()}: a new method for tagged text objects, replacing the
+        \code{kRp.filter.wclass()} function, which is now deprecated
+      \item \code{pasteText()}: like \code{filterByClass()}, but replacing \code{kRp.text.paste()}
+      \item \code{readTagged()}: like \code{filterByClass()}, but replacing \code{read.tagged()}
+      \item \code{readTagged()}: new argument mtx_cols for new tagger=\code{"manual"} setting,
+        allowing to import data POS tagged with third party tools
+      \item \code{textTransform()}: new scheme \code{"normalize"} to replace tokens by given query
+        rules with a defined value or the result of a provided function
+      \item \code{diffText()}/diffText()<-: new getter/setter methods for the \code{"diff"} slot of
+        transformed text objects
+      \item \code{originalText()}: new method to revert text transformations and get the
+        original text
+      \item \code{kRp.POS.tags()}: now includes universal POS tags by default
+      \item new unit tests for many methods, including \code{query()}, \code{textTransform()},
+        \code{readTagged()}, \code{filterByClass()}, \code{pasteText()}, \code{diffText()}, \code{originalText()},
+        \code{jumbleWords()}, and \code{clozeDelete()}
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item \code{tokenize()}: now a S4 method for objects of class character and connections
+      \item \code{treetag()}: now a S4 method for objects of class character and connections
+      \item class kRp.txt.trans: \code{"diff"} slot now also lists the transformations done
+        to the tokens in a new list element called \code{"transfmt"}, the changed tokens
+        in a data frame called \code{"transfmt.equal"} and normalization details in a
+        list called \code{"transfmt.normalize"}
+      \item language support: if you try using a preset but the langauge package
+        wasn't loaded or even installed, a more elaborate error message is returned
+        with hopefully useful hints to what to try next
+      \item \code{jumbleWords()}: now a S4 method, no longer a function; the resulting
+        object is now also of class kRp.txt.trans if the input was a tagged text
+        object, preserving the original tokens
+      \item \code{clozeDelete()}: now returns an object of class kRp.txt.trans, dropping the
+        additional data frame in \code{"desc"}; this ist much more consistent with other
+        text transformations in the packahe
+      \item \code{cTest()}: like \code{clozeDelete()} now returns an object of class kRp.txt.trans,
+        dropping the additional data frame in \code{"desc"}
+      \item moved class union definition kRp.taggedText to its own file and updated
+        the import calls on a number of files accordingly
+      \item \code{textTransform()}: moved the whole code segment that combines the
+        transformed text into the returned object to a separate internal function so it can
+        be re-used by other text transforming methods
+      \item \code{cTest()}: changed method signature from kRp.tagged to class union
+        kRp.taggedText
+      \item \code{summary()}: changed method signature from kRp.tagged to class union
+        kRp.taggedText
+      \item \code{plot()}: changed method signature from kRp.tagged to class union
+        kRp.taggedText
+      \item \code{lex.div()}: removed the validation warning for MATTR, implementation has
+        been validated by kevin cunningham and katarina haley
+      \item restructured source code files
+    }
+  }
+}
 \section{Changes in koRpus version 0.11-5 (2018-10-27)}{
   \subsection{changed}{
     \itemize{
@@ -19,8 +188,6 @@
         \code{nchar()} counts all combined parts individially, which in most use cases
         for this package is not what one expects. it now uses nchar(type=\code{"width"})
         for a letter count that is much closer to user's expectations
-      \item package depends on koRpus.lang.en now, to have a setup ready to at least
-        analyze english texts
     }
   }
   \subsection{fixed}{

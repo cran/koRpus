@@ -1,5 +1,5 @@
-d2e3bb493727757404227b52e3302075 *ChangeLog
-37c5d593546bcd891686150008fb84f6 *DESCRIPTION
+2e9d1dcb532abb8a73634b009c2ebdeb *ChangeLog
+45358127dbaad31943b50abb9a247e38 *DESCRIPTION
 580dfc783bfde8f3b092d52279efed98 *NAMESPACE
 df4e124e8fe08bcf73dda5cf8dae7799 *R/00_environment.R
 d4780b191afe543db2b0f44176308d64 *R/01_class_01_kRp.text.R
@@ -23,7 +23,7 @@ caeea21adacc2bf86a7c88b751869074 *R/02_method_jumbleWords.R
 833c910c06ebd9ae49a02f66ac0f144d *R/02_method_plot.kRp.text.R
 ea540788027c36b2e7fff9031646152b *R/02_method_query.R
 290389581b3b697d38e4c09c21bb5300 *R/02_method_read.corp.custom.R
-ce7c0000b86d83b95804964bb843a00e *R/02_method_readTagged.R
+c7176424de22604b23b6205a0ec5a882 *R/02_method_readTagged.R
 e8b3df9007987675eec3f931fea00776 *R/02_method_readability.R
 d9846ae01b55da122f1666676761933c *R/02_method_show.kRp.TTR.R
 d0c8d412451a5a8efdaf75b04aa4997d *R/02_method_show.kRp.corp.freq.R
@@ -53,7 +53,7 @@ ab3ebeee45839b22ee109ecdad8b50b0 *R/koRpus-internal.lexdiv.formulae.R
 32a6d9e83cd72e0908c8004a0c36bb0b *R/koRpus-internal.rdb.formulae.R
 b43bd55ce59454acd558549ea0450078 *R/koRpus-internal.rdb.params.grades.R
 27bfb606693e455282ce59ab9f8a3f5a *R/koRpus-internal.read.corp.custom.R
-5f0f27c8e670ed0ae7348ac105019b74 *R/koRpus-package.R
+73c04bd2d645fe7003183eaef0a52b1f *R/koRpus-package.R
 5c3456e8edde695674cdf5723628aaac *R/lex.div.num.R
 539e9165008fd333baa6652b50d4f13f *R/read.BAWL.R
 4f4fdbdcba309af6e425cbb3f352a2e7 *R/read.corp.LCC.R
@@ -67,15 +67,15 @@ aa0fdb2cfe84aeb4a8c45b4b7a6b4458 *R/set.lang.support.R
 6ce9fb6ba3fb2118caad7c45b138e753 *R/wrapper_functions_readability.R
 c3481bb4d3f2a77f1cf1c2f8bb4578f6 *README.md
 aa291538e5b71d52b5d2120602dbd6d2 *TODO
-352d5d15859fcd84dbb64d0b81867e21 *build/partial.rdb
+c34d43be7bfda3cc648e30ca6cbf44a5 *build/partial.rdb
 19fea82d727ff7b2baaea7f69715889f *build/vignette.rds
-bf1679e494931c472a310baa6753a95c *inst/CITATION
+f73e06bae2dd069819c6a238f67b3684 *inst/CITATION
 07b8eda6b2bea93ad4f246ff2989d71e *inst/NEWS.Rd
 750a6eff616d8396114723d524ec1700 *inst/README.languages
 badb6f0d233082730cad681fe441d7f1 *inst/doc/koRpus_lit.bib
 88f7afe67ecc7ab1c1ab5f4e14c975e7 *inst/doc/koRpus_vignette.R
 ba4e59f711cd0e4ef865b1076fc2cb70 *inst/doc/koRpus_vignette.Rmd
-8fc741729222426bb089f102e25df46b *inst/doc/koRpus_vignette.html
+700a9bb2d4caa89b247517625571a044 *inst/doc/koRpus_vignette.html
 129cffe4579e8358cad77e3739dd15ba *inst/rkward/koRpus.pluginmap
 99be8c5a4182568c16d6664772110af4 *inst/rkward/plugins/FrequencyAnalysis.js
 ba2ba00ae1f26105019f2492c1ee2e20 *inst/rkward/plugins/FrequencyAnalysis.xml
@@ -148,7 +148,7 @@ fe0a34c6df1dcf96278cecd18aa68fdb *man/kRp.readability-class.Rd
 61271614eff53a3b75856629ecfa8dde *man/kRp.text-class.Rd
 3af69ff551719cd095f551f9b5e3035f *man/kRp.text_get-methods.Rd
 a368bc17d448d15f34bab974d9e006fd *man/koRpus-deprecated.Rd
-54762e3b87045c6c9a83a35ad8a03bd8 *man/koRpus-package.Rd
+73b1860f6cd1b186d8324400d8cecd62 *man/koRpus-package.Rd
 1c9312e5ed364bc25789ad90b3aa4d9a *man/lex.div-methods.Rd
 212805d99bf08eb97bb91b0376b0d383 *man/lex.div.num.Rd
 8d7d939ceb29ed2ebb9f08613d11b5ea *man/linsear.write.Rd
@@ -161,7 +161,7 @@ e20bbd5b37b422de63ba61a9dd9956eb *man/pasteText-methods.Rd
 0b1ab8696cd725843532095708767a4b *man/read.corp.LCC.Rd
 bbcb8a605123106fe742283ea3c28d64 *man/read.corp.celex.Rd
 01e79d5aaa28ca4455c0c4c0bffcfdc6 *man/read.corp.custom-methods.Rd
-6776574612d648d8d324654200edf7a9 *man/readTagged-methods.Rd
+37b1445a131de9818991d6f9b2349bea *man/readTagged-methods.Rd
 e85d9c5d28208885f3f4c0d83b472e64 *man/readability-methods.Rd
 95b12cb1118fa44ffd40d492c5024536 *man/readability.num.Rd
 445847bb59a549e4b8bbcd9217ae6846 *man/segment.optimizer.Rd
@@ -197,7 +197,7 @@ a5535e4aad12d69d20e5411540677472 *tests/testthat/sample_text_hyphen_dput.txt
 14d5aeda101020ae64dc25701c2901f2 *tests/testthat/sample_text_tokenized_no_desc_dput.txt
 23225a43eeddbf206831b086ae93202a *tests/testthat/sample_text_treetagged.txt
 a5be3c1ccb27a3eb829f7663cf843a41 *tests/testthat/sample_text_treetagged_dput.txt
-11cd67ea7049d62b33795464f9d7f50a *tests/testthat/test_tokenizing_POS_tagging.R
+6ecb45088c617bcf2256327bdfdad259 *tests/testthat/test_tokenizing_POS_tagging.R
 f4148be649450cf344cce65e0c53feda *tests/testthat/tokenized_single_token_dput.txt
 e50014296064808159d777d40efb42af *vignettes/apa.csl
 badb6f0d233082730cad681fe441d7f1 *vignettes/koRpus_lit.bib

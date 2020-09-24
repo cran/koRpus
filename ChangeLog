@@ -1,5 +1,12 @@
 ChangeLog for package koRpus
 
+changes in version 0.13-2 (2020-09-23)
+fixed:
+  - unit tests: jumbledWords() randomly created false positives, fixed by
+    setting a seed
+todo:
+  - #freeRealityWinner
+
 changes in version 0.13-1 (2020-09-21)
 fixed:
   - docTermMatrix(): numbers were calculated correctly, but possibly added to

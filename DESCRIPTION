@@ -1,6 +1,6 @@
 Package: koRpus
 Type: Package
-Title: Text Analysis with Emphasis on POS Tagging, Readability and
+Title: Text Analysis with Emphasis on POS Tagging, Readability, and
         Lexical Diversity
 Description: A set of tools to analyze texts. Includes, amongst others, functions for
           automatic language detection, hyphenation, several indices of lexical diversity
@@ -37,8 +37,8 @@ Authors@R: c(person(given="Meik", family="Michalke", email="meik.michalke@hhu.de
           email="ekbrown@ksu.edu", role=c("ctb")), person(given="Alberto",
           family="Mirisola", role=c("ctb")), person(given="Alexandre", family="Brulet",
           role=c("ctb")), person(given="Laura", family="Hauser", role=c("ctb")))
-Version: 0.13-4
-Date: 2020-12-11
+Version: 0.13-5
+Date: 2021-02-02
 RoxygenNote: 7.1.1
 Collate: '01_class_01_kRp.text.R' '02_method_filterByClass.R'
         'koRpus-internal.R' '00_environment.R' '01_class_02_kRp.TTR.R'
@@ -63,7 +63,7 @@ Collate: '01_class_01_kRp.text.R' '02_method_filterByClass.R'
         '02_method_tokenize.R' '02_method_treetag.R'
         '02_method_types_tokens.R' 'available.koRpus.lang.R'
         'get.kRp.env.R' 'guess.lang.R' 'install.koRpus.lang.R'
-        'kRp.POS.tags.R' 'kRp.cluster.R' 'kRp.text.analysis.R'
+        'kRp.POS.tags.R' 'kRp.cluster.R'
         'koRpus-internal.freq.analysis.R' 'koRpus-internal.import.R'
         'koRpus-internal.lexdiv.formulae.R'
         'koRpus-internal.rdb.formulae.R'
@@ -74,7 +74,7 @@ Collate: '01_class_01_kRp.text.R' '02_method_filterByClass.R'
         'set.kRp.env.R' 'set.lang.support.R' 'textFeatures.R'
         'wrapper_functions_lex.div.R' 'wrapper_functions_readability.R'
 NeedsCompilation: no
-Packaged: 2020-12-11 15:22:52 UTC; m
+Packaged: 2021-02-02 15:02:18 UTC; m
 Author: Meik Michalke [aut, cre],
   Earl Brown [ctb],
   Alberto Mirisola [ctb],
@@ -82,4 +82,4 @@ Author: Meik Michalke [aut, cre],
   Laura Hauser [ctb]
 Maintainer: Meik Michalke <meik.michalke@hhu.de>
 Repository: CRAN
-Date/Publication: 2020-12-11 22:50:06 UTC
+Date/Publication: 2021-02-02 16:00:02 UTC

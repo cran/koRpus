@@ -20,6 +20,12 @@ Description: A set of tools to analyze texts. Includes, amongst others, function
           only available from the project homepage. To ask for help, report bugs, request
           features, or discuss the development of the package, please subscribe to the
           koRpus-dev mailing list (<https://korpusml.reaktanz.de>).
+Author: Meik Michalke [aut, cre],
+  Earl Brown [ctb],
+  Alberto Mirisola [ctb],
+  Alexandre Brulet [ctb],
+  Laura Hauser [ctb]
+Maintainer: Meik Michalke <meik.michalke@hhu.de>
 Depends: R (>= 3.0.0),sylly (>= 0.1-6)
 Imports: data.table,methods,Matrix
 Enhances: rkward
@@ -37,8 +43,8 @@ Authors@R: c(person(given="Meik", family="Michalke", email="meik.michalke@hhu.de
           email="ekbrown@ksu.edu", role=c("ctb")), person(given="Alberto",
           family="Mirisola", role=c("ctb")), person(given="Alexandre", family="Brulet",
           role=c("ctb")), person(given="Laura", family="Hauser", role=c("ctb")))
-Version: 0.13-7
-Date: 2021-05-13
+Version: 0.13-8
+Date: 2021-05-17
 RoxygenNote: 7.1.1
 Collate: '01_class_01_kRp.text.R' '02_method_filterByClass.R'
         'koRpus-internal.R' '00_environment.R' '01_class_02_kRp.TTR.R'
@@ -74,12 +80,6 @@ Collate: '01_class_01_kRp.text.R' '02_method_filterByClass.R'
         'set.kRp.env.R' 'set.lang.support.R' 'textFeatures.R'
         'wrapper_functions_lex.div.R' 'wrapper_functions_readability.R'
 NeedsCompilation: no
-Packaged: 2021-05-13 17:05:49 UTC; m
-Author: Meik Michalke [aut, cre],
-  Earl Brown [ctb],
-  Alberto Mirisola [ctb],
-  Alexandre Brulet [ctb],
-  Laura Hauser [ctb]
-Maintainer: Meik Michalke <meik.michalke@hhu.de>
+Packaged: 2021-05-17 16:26:12 UTC; m
 Repository: CRAN
-Date/Publication: 2021-05-14 05:20:06 UTC
+Date/Publication: 2021-05-17 21:50:07 UTC

@@ -3,7 +3,7 @@ header_con <- file("vignette_header.html")
 writeLines('<meta name="flattr:id" content="4zdzgd" />', header_con)
 close(header_con)
 
-## ---- include=FALSE, cache=FALSE----------------------------------------------
+## ----include=FALSE, cache=FALSE-----------------------------------------------
 library(koRpus)
 # manually add tag definition, the koRpus.lang.en package might be missing
 koRpus::set.lang.support("kRp.POS.tags",
@@ -91,28 +91,28 @@ fake.hyph.en <- new(
 )
 set.hyph.support(list("en"=fake.hyph.en))
 
-## ---- set-options, echo=FALSE, cache=FALSE-----------------------------------------
+## ----set-options, echo=FALSE, cache=FALSE------------------------------------------
 options(width=85)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  # install the language support package
-#  install.koRpus.lang("en")
-#  # load the package
-#  library(koRpus.lang.en)
+## ----eval=FALSE--------------------------------------------------------------------
+# # install the language support package
+# install.koRpus.lang("en")
+# # load the package
+# library(koRpus.lang.en)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  tagged.text <- treetag(
-#    "sample_text.txt",
-#    treetagger="manual",
-#    lang="en",
-#    TT.options=list(
-#      path="~/bin/treetagger/",
-#      preset="en"
-#    ),
-#    doc_id="sample"
-#  )
+## ----eval=FALSE--------------------------------------------------------------------
+# tagged.text <- treetag(
+#   "sample_text.txt",
+#   treetagger="manual",
+#   lang="en",
+#   TT.options=list(
+#     path="~/bin/treetagger/",
+#     preset="en"
+#   ),
+#   doc_id="sample"
+# )
 
-## ---- include=FALSE, cache=FALSE---------------------------------------------------
+## ----include=FALSE, cache=FALSE----------------------------------------------------
 tagged.text <- dget("sample_text_treetagged_dput.txt")
 
 ## ----------------------------------------------------------------------------------
@@ -134,21 +134,21 @@ head(tagged.text[["lttr"]], n=50)
 ## ----------------------------------------------------------------------------------
 tagged.text[1:5,]
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  describe(tagged.text)
+## ----eval=FALSE--------------------------------------------------------------------
+# describe(tagged.text)
 
-## ---- echo=FALSE-------------------------------------------------------------------
+## ----echo=FALSE--------------------------------------------------------------------
 (txt_desc <- describe(tagged.text))
 txt_desc_lttr <- txt_desc[["lttr.distrib"]]
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  lex.div(
-#    tagged.text,
-#    measure=c("TTR", "MSTTR", "MATTR","HD-D", "MTLD", "MTLD-MA"),
-#    char=c("TTR", "MATTR","HD-D", "MTLD", "MTLD-MA")
-#  )
+## ----eval=FALSE--------------------------------------------------------------------
+# lex.div(
+#   tagged.text,
+#   measure=c("TTR", "MSTTR", "MATTR","HD-D", "MTLD", "MTLD-MA"),
+#   char=c("TTR", "MATTR","HD-D", "MTLD", "MTLD-MA")
+# )
 
-## ---- echo=FALSE-------------------------------------------------------------------
+## ----echo=FALSE--------------------------------------------------------------------
 lex.div(
   tagged.text,
   measure=c("TTR", "MSTTR", "MATTR","HD-D", "MTLD", "MTLD-MA"),
@@ -159,42 +159,42 @@ lex.div(
 ## ----------------------------------------------------------------------------------
 maas(tagged.text)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  ttr.res <- TTR(tagged.text, char=TRUE)
-#  plot(ttr.res@TTR.char, type="l", main="TTR degredation over text length")
+## ----eval=FALSE--------------------------------------------------------------------
+# ttr.res <- TTR(tagged.text, char=TRUE)
+# plot(ttr.res@TTR.char, type="l", main="TTR degredation over text length")
 
-## ---- echo=FALSE-------------------------------------------------------------------
+## ----echo=FALSE--------------------------------------------------------------------
 ttr.res <- TTR(tagged.text, char=TRUE, quiet=TRUE)
 plot(ttr.res@TTR.char, type="l", main="TTR degredation over text length")
 
 ## ----------------------------------------------------------------------------------
 MSTTR(tagged.text, segment=92)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  LCC.en <- read.corp.LCC("~/downloads/corpora/eng_news_2010_1M-text.tar")
+## ----eval=FALSE--------------------------------------------------------------------
+# LCC.en <- read.corp.LCC("~/downloads/corpora/eng_news_2010_1M-text.tar")
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  query(LCC.en, "word", "what")
+## ----eval=FALSE--------------------------------------------------------------------
+# query(LCC.en, "word", "what")
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  query(LCC.en, "pmio", c(780, 790))
+## ----eval=FALSE--------------------------------------------------------------------
+# query(LCC.en, "pmio", c(780, 790))
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  freq.analysis.res <- freq.analysis(tagged.text, corp.freq=LCC.en)
+## ----eval=FALSE--------------------------------------------------------------------
+# freq.analysis.res <- freq.analysis(tagged.text, corp.freq=LCC.en)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  taggedText(freq.analysis.res)
+## ----eval=FALSE--------------------------------------------------------------------
+# taggedText(freq.analysis.res)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  describe(freq.analysis.res)[["sentc.length"]]
+## ----eval=FALSE--------------------------------------------------------------------
+# describe(freq.analysis.res)[["sentc.length"]]
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  describe(freq.analysis.res)$classes
+## ----eval=FALSE--------------------------------------------------------------------
+# describe(freq.analysis.res)$classes
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  (hyph.txt.en <- hyphen(tagged.text))
+## ----eval=FALSE--------------------------------------------------------------------
+# (hyph.txt.en <- hyphen(tagged.text))
 
-## ---- include=FALSE, cache=FALSE---------------------------------------------------
+## ----include=FALSE, cache=FALSE----------------------------------------------------
 hyph.txt.en <- dget("sample_text_hyphenated_dput.txt")
 
 ## ----------------------------------------------------------------------------------
@@ -203,16 +203,16 @@ hyph.txt.en
 ## ----------------------------------------------------------------------------------
 head(hyphenText(hyph.txt.en))
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  hyph.txt.en <- correct.hyph(hyph.txt.en)
+## ----eval=FALSE--------------------------------------------------------------------
+# hyph.txt.en <- correct.hyph(hyph.txt.en)
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  hyph.txt.en <- correct.hyph(hyph.txt.en, word="mech-a-nisms", hyphen="mech-a-ni-sms")
+## ----eval=FALSE--------------------------------------------------------------------
+# hyph.txt.en <- correct.hyph(hyph.txt.en, word="mech-a-nisms", hyphen="mech-a-ni-sms")
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  readbl.txt <- readability(tagged.text, hyphen=hyph.txt.en)
+## ----eval=FALSE--------------------------------------------------------------------
+# readbl.txt <- readability(tagged.text, hyphen=hyph.txt.en)
 
-## ---- echo=FALSE-------------------------------------------------------------------
+## ----echo=FALSE--------------------------------------------------------------------
 suppressWarnings(readbl.txt <- readability(tagged.text, hyphen=hyph.txt.en))
 
 ## ----------------------------------------------------------------------------------
@@ -229,10 +229,45 @@ flesch.res <- flesch(tagged.text, hyphen=hyph.txt.en)
 lix.res <- LIX(tagged.text)   # LIX doesn't need syllable count
 lix.res
 
-## ---- eval=FALSE-------------------------------------------------------------------
-#  guessed <- guess.lang(
-#    file.path(find.package("koRpus"),"tests","testthat","sample_text.txt"),
-#    udhr.path="~/downloads/udhr_txt.zip"
-#  )
-#  summary(guessed)
+## ----eval=FALSE--------------------------------------------------------------------
+# guessed <- guess.lang(
+#   file.path(find.package("koRpus"),"tests","testthat","sample_text.txt"),
+#   udhr.path="~/downloads/udhr_txt.zip"
+# )
+# summary(guessed)
+
+## ----eval=FALSE--------------------------------------------------------------------
+# library(udpipe)
+# model <- udpipe_download_model(language="english")
+# ud_en <- udpipe_load_model(model$file_model)
+# x <- udpipe_annotate(
+#   ud_en,
+#   x="This is my sample text."
+# )
+
+## ----eval=FALSE--------------------------------------------------------------------
+# x_kRp <- readTagged(
+#   as.data.frame(x),
+#   lang="en",
+#   tagger="manual",
+#   doc_id=as.data.frame(x)[1,"doc_id"],
+#   mtx_cols=c(
+#     token="token",
+#     tag="xpos",
+#     lemma="lemma"
+#   )
+# )
+
+## ----eval=FALSE--------------------------------------------------------------------
+# x_kRp <- readTagged(
+#   as.data.frame(x),
+#   lang="en",
+#   tagger="manual",
+#   doc_id=as.data.frame(x)[1,"doc_id"],
+#   mtx_cols=c(
+#     token="token",
+#     tag="upos",
+#     lemma="lemma"
+#   )
+# )
 
